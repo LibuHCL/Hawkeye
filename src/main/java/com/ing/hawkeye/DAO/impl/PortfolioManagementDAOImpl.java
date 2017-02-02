@@ -21,18 +21,15 @@ public class PortfolioManagementDAOImpl implements PortfolioManagementDAO {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 	
-	//Here i am just taking the Cost object as example to return the data.
-	// And i used here postgresql DB connection. change to Mysql or whatever it may be
 	@Override
 	public Cost getPortfolioData() {
 		logger.info("Request to get the data of portfolio");
 		Cost cost = null;
-		//String sql = "select key,value,postfix,symbo from at_portfolio";
-		String sql = "select id, username, city, email from at_user where id='286eff81-bf0f-4377-b135-97a3636aa6a2'::uuid";
+		String sql = "select id, username, city, email from at_portfolio where id='47e7d6d2-e93d-11e6-aaf4-3417eb808af4'";
 		try {
 			cost = jdbcTemplate.queryForObject(sql, FORTFOLIOROWMAPPER);
 		} catch (Exception e) {
-			logger.error("Exception while getting the fortfolio details from table");
+			logger.error("Exception while getting the fortfolio details from table", e);
 		}
 		return cost;
 	}
