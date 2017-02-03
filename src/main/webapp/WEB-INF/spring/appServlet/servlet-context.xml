@@ -8,6 +8,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	<context:annotation-config/>
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
@@ -21,7 +22,7 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="com.ing.hawkeye" />
+	<context:component-scan base-package="com.hcl.hawkeye" />
 	
 	<beans:bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -37,6 +38,12 @@
 		<beans:property name="dataSource" ref="dataSource"/> 
 	</beans:bean>  
 	
+	<beans:bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<beans:property name="basename">
+			<beans:value>messages</beans:value>
+		</beans:property>
+	</beans:bean>
 	
 	
 </beans:beans>
