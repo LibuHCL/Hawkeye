@@ -34,7 +34,7 @@ public class PortfolioManagementDAOImpl implements PortfolioManagementDAO {
 		Cost cost = null;
 		String sql = "select id, username, city, email from at_portfolio where id='47e7d6d2-e93d-11e6-aaf4-3417eb808af4'";
 		try {
-			cost = jdbcTemplate.queryForObject(sql, FORTFOLIOROWMAPPER);
+			cost = jdbcTemplate.queryForObject(sql, ForfolioRowMapper);
 		} catch (DataAccessException dae) {
 			Locale locale=new Locale("en", "IN");
 			String errorMsg=messageSource.getMessage("error.get.portfolio", new Object[] {}, locale);
@@ -44,7 +44,7 @@ public class PortfolioManagementDAOImpl implements PortfolioManagementDAO {
 		return cost;
 	}
 	
-	RowMapper<Cost> FORTFOLIOROWMAPPER = new RowMapper<Cost>() {
+	RowMapper<Cost> ForfolioRowMapper = new RowMapper<Cost>() {
 
 		@Override
 		public Cost mapRow(ResultSet rSet, int arg1) throws SQLException {
