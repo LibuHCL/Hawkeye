@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectDetails;
+import com.hcl.hawkeye.projectmanagement.DO.Velocityinfo;
 import com.hcl.hawkeye.projectmanagement.service.ProjectManagementService;
 
 @RestController
@@ -34,6 +35,14 @@ public class ProjectManagementController {
 	public DashBoardDetails getDashBoardData() {
 		logger.info("Rquesting api to get the dasboard information");
 		DashBoardDetails dashBInfo = pmService.getDashBoardInfo();
+		return dashBInfo;
+	}
+	
+	@RequestMapping(value="/getVelocity/project/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public Velocityinfo getVelocityOfProject(@PathVariable("id") int projectId) {
+		logger.info("Rquesting api to get the dasboard information");
+		Velocityinfo dashBInfo = pmService.getVelocityOfProject(projectId);
 		return dashBInfo;
 	}
 

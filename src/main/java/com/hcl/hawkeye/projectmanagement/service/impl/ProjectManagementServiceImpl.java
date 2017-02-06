@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.hcl.hawkeye.projectmanagement.DAO.ProjectManagementDAO;
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectDetails;
+import com.hcl.hawkeye.projectmanagement.DO.Velocityinfo;
 import com.hcl.hawkeye.projectmanagement.service.ProjectManagementService;
 
 @Service
@@ -22,8 +23,14 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 
 	@Override
 	public DashBoardDetails getDashBoardInfo() {
-		DashBoardDetails data = pmDAO.getDashBoardInfo();
-		return data;
+		DashBoardDetails dashBoardInfo = pmDAO.getDashBoardInfo();
+		return dashBoardInfo;
+	}
+
+	@Override
+	public Velocityinfo getVelocityOfProject(int projectId) {
+		Velocityinfo vInfo = pmDAO.getVelocityOfProject(projectId);
+		return vInfo;
 	}
 
 }
