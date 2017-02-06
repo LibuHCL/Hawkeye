@@ -29,9 +29,9 @@
 
 		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<!-- <beans:property name="url" value="jdbc:postgresql://192.168.99.100:5432/postgres" /> -->
-		<beans:property name="url" value="jdbc:mysql://localhost:3306/hawkeye" />
+		<beans:property name="url" value="jdbc:mysql://labs.hclets.com:33306/HawkEye_Schema" />
 		<beans:property name="username" value="root" />
-		<beans:property name="password" value="mysql" />
+		<beans:property name="password" value="Hcl123$" />
 	</beans:bean>
 	
 	 <beans:bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">  
