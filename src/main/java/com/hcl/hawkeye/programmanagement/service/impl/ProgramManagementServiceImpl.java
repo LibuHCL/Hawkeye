@@ -10,6 +10,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.hcl.hawkeye.Exceptions.ProgramCreationException;
+import com.hcl.hawkeye.escalationmanagement.DO.EscalationDetails;
 import com.hcl.hawkeye.portfolio.DO.Program;
 import com.hcl.hawkeye.portfolio.DO.Project;
 import com.hcl.hawkeye.programmanagement.DAO.ProgramManagementDAO;
@@ -56,14 +57,14 @@ public class ProgramManagementServiceImpl implements ProgramManagementService {
 	}
 	
 	@Override
-	public Integer noOfProgramsInQuarter() {
+	public EscalationDetails noOfProgramsInQuarter() {
 		logger.info("Inside noOfProgramsInQuarter method in ProgramManagemetServiceImpl");
 		
 		try {
 			return ProgramManagementDAO.noOfProgramsInQuarter();
 		} catch (DataAccessException dae) {
 			Locale locale=new Locale("en", "IN");
-			String errorMsg=messageSource.getMessage("error.get.noofprograminquarte", new Object[] {}, locale);
+			String errorMsg=messageSource.getMessage("error.get.noofprograminquarter", new Object[] {}, locale);
 			logger.error(errorMsg, dae);			
 			throw new ProgramCreationException(errorMsg, dae);
 		}

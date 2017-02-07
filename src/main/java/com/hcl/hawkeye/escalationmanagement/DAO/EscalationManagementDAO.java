@@ -9,4 +9,6 @@ public interface EscalationManagementDAO {
 
 	Escalation capEscalationDetails(Escalation escalation);
 
+	EscalationDetails noOfEscPerQtAtProgram(Integer programId);
+
 }
