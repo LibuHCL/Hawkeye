@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hcl.hawkeye.escalationmanagement.DO.Escalation;
 import com.hcl.hawkeye.escalationmanagement.DO.EscalationDetails;
 import com.hcl.hawkeye.escalationmanagement.service.EscalationManagementService;
+import com.hcl.hawkeye.portfolio.DO.Project;
 
 @RestController
 public class EscalationManagementController {
@@ -36,21 +37,21 @@ public class EscalationManagementController {
 	}
 	
 	@RequestMapping(value = "/noOfEscPerQtProject", method = RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<EscalationDetails>  noOfEscPerQtProject(@RequestBody Integer projectId) {
+	public ResponseEntity<EscalationDetails>  noOfEscPerQtProject(@RequestBody Escalation esc) {
 		
-		logger.info("Inside noOfEscAtProject method in Controller:"+projectId);
-		EscalationDetails noofEscalations= escMgmtService.noOfEscAtProject(projectId);
+		logger.info("Inside noOfEscAtProject method in Controller:"+esc.getProjId());
+		EscalationDetails noofEscalations= escMgmtService.noOfEscAtProject(esc.getProjId());
 		
 		logger.info("Escalation Details recieved: " +noofEscalations);
 		
 		return new ResponseEntity<EscalationDetails>(noofEscalations, HttpStatus.CREATED);
 	}
 	
-	@RequestMapping(value = "/noOfEscPerQtAtProfile", method = RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<EscalationDetails>  noOfEscPerQtAtProfile(@RequestBody Integer profileId) {
+	@RequestMapping(value = "/noOfEscPerQtAtProgram", method = RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<EscalationDetails>  noOfEscPerQtAtProgram(@RequestBody Project proj) {
 		
-		logger.info("Inside noOfEscPerQtAtProfile method in Controller:"+profileId);
-		EscalationDetails noofEscalations= escMgmtService.noOfEscAtProject(profileId);
+		logger.info("Inside noOfEscPerQtAtProfile method in Controller:"+proj.getProgId());
+		EscalationDetails noofEscalations= escMgmtService.noOfEscPerQtAtProgram(proj.getProgId());
 		
 		logger.info("Escalation Details recieved: " +noofEscalations);
 		

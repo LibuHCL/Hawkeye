@@ -2,24 +2,24 @@ package com.hcl.hawkeye.escalationmanagement.DO;
 
 public class EscalationDetails {
 	
-	private Integer qurter;
+	private Integer quarter;
 	private Integer count;
 	
 	public EscalationDetails(){
 		
 	}
 	
-	public EscalationDetails(Integer qurter,Integer count){
-		this.qurter=qurter;
+	public EscalationDetails(Integer quarter,Integer count){
+		this.quarter=quarter;
 		this.count=count;
 		}
 
-	public Integer getQurter() {
-		return qurter;
+	public Integer getQuarter() {
+		return quarter;
 	}
 
-	public void setQurter(Integer qurter) {
-		this.qurter = qurter;
+	public void setQuarter(Integer quarter) {
+		this.quarter = quarter;
 	}
 
 	public Integer getCount() {

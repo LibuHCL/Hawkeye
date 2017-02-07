@@ -9,4 +9,6 @@ public interface EscalationManagementService {
 
 	EscalationDetails noOfEscAtProject(Integer projectId);
 
+	EscalationDetails noOfEscPerQtAtProgram(Integer programId);
+
 }
