@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.hcl.hawkeye.portfolio.DO.EscalationDetails;
+import com.hcl.hawkeye.escalationmanagement.DO.EscalationDetails;
 import com.hcl.hawkeye.portfolio.DO.Program;
 import com.hcl.hawkeye.portfolio.DO.Project;
 import com.hcl.hawkeye.programmanagement.DAO.ProgramManagementDAO;
@@ -41,6 +41,7 @@ public class ProgramManagementDAOImpl implements ProgramManagementDAO {
 		logger.info("Inside addProjectsToProgram method in PortfolioManagementDAOImpl before insertion");
 		
 		String sql_update_project = "UPDATE PROJECT SET PROGRAM_ID =? WHERE PROJECTID=?";
+		
 		String sql_insert_project = "INSERT INTO PROJECT (PROJECT_NAME,PROGRAM_ID,CLIENT_ID,VENDOR_ID,PROJECT_TYPE,SUBTYPE"
 				+ "TECHNICAL_PROJECT_MANAGER_ID,CREATION_DATE,END_DATE,PROJECT_STATUS) VALUES(?,?,?,?,?,?,?,?,?,?)";
 		
@@ -50,6 +51,7 @@ public class ProgramManagementDAOImpl implements ProgramManagementDAO {
 		logger.info("Inside addProjectsToProgram method in PortfolioManagementDAOImpl after insertion");
 		
 		jdbcTemplate.update(sql_update_project,new Object[]{proj.getProgId(),HawkEyeUtils.geMaxId("PROJECT")});
+		
 		return null;
 	}
 
