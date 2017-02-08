@@ -43,9 +43,9 @@ public class ProjectManagementController {
 	
 	@RequestMapping(value="/getVelocity/project/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public Double getVelocityOfProject(@PathVariable("id") int projectId) {
+	public int getVelocityOfProject(@PathVariable("id") int projectId) {
 		logger.info("Rquesting api to get the dasboard information");
-		Double velocityInfo = pmService.getVelocityOfProject(projectId);
+		int velocityInfo = pmService.getVelocityOfProject(projectId);
 		return velocityInfo;
 	}
 	

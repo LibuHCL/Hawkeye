@@ -35,7 +35,7 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 	}
 
 	@Override
-	public Double getVelocityOfProject(int projectId) {
+	public int getVelocityOfProject(int projectId) {
 		Velocityinfo vInfo = pmDAO.getVelocityOfProject(projectId);
 		List<VelocityOfProject> velocityList = new ArrayList<VelocityOfProject>();
 		if (null != vInfo && !vInfo.getSprints().isEmpty()) {
@@ -68,15 +68,20 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 		Double estimated = 0.0;
 		Double completed = 0.0;
 		for (VelocityOfProject velocityOfProject : velocityList) {
-			System.out.println("@@@"+velocityOfProject.getEstimatedValue()+"$$$"+velocityOfProject.getCompletedValue());
 			estimated +=  velocityOfProject.getEstimatedValue();
 			completed +=  velocityOfProject.getCompletedValue();
 		}
 		
-		System.out.println(estimated);
-		System.out.println(completed);
 		Double totalVelocity = (completed/estimated)*100;
-		return totalVelocity;
+		int val = 0;
+		if (totalVelocity == 100) {
+			val = 1;
+		} else if (totalVelocity <= 90) {
+			val = 1;
+		} else if (totalVelocity <= 85) {
+			val =-1;
+		}
+		return val;
 	}
 
 	@Override

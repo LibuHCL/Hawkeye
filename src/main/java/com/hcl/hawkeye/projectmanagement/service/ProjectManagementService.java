@@ -11,7 +11,7 @@ public interface ProjectManagementService {
 	
 	DashBoardDetails getDashBoardInfo();
 	
-	Double getVelocityOfProject(int projectId);
+	int getVelocityOfProject(int projectId);
 	
 	Map<String, Integer> getIssuesOfProject(int projectId, String issueType);
 	
