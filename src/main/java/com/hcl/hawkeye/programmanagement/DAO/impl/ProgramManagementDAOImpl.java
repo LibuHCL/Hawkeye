@@ -1,5 +1,6 @@
 package com.hcl.hawkeye.programmanagement.DAO.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -61,25 +62,31 @@ public class ProgramManagementDAOImpl implements ProgramManagementDAO {
 	}
 
 	@Override
-	public EscalationDetails noOfProgramsInQuarter() {
+	public List<Project>  noOfProgramsInQuarter() {
 		logger.info("Inside noOfProgramsInQuarter method in PortfolioManagementDAOImpl");	
 		
-		EscalationDetails escDet = new EscalationDetails();
+		List<Project> projDetList = new ArrayList<Project>();
 			
-		String sql_nofProgms = "SELECT QUARTER(CREATION_DATE) AS quarter, COUNT(PROGRAMID) AS count FROM PROGRAM"+
-				" GROUP BY YEAR(CREATION_DATE), QUARTER(CREATION_DATE) ORDER BY YEAR(CREATION_DATE), QUARTER(CREATION_DATE)";
+		String sql_nofProgms = "SELECT QUARTER(CREATION_DATE) AS quarter,PROJECT_TYPE as projType, SUBTYPE as subType, COUNT(PROJECTID) AS count FROM PROJECT"+
+				"  WHERE CREATION_DATE >= DATE_FORMAT( curdate() - INTERVAL 12 MONTH, '%Y/%m/01' ) "
+				+ "GROUP BY QUARTER(CREATION_DATE),PROJECT_TYPE,SUBTYPE ORDER BY YEAR(CREATION_DATE) DESC, QUARTER(CREATION_DATE) DESC";
 		
 		List<Map<String, Object>> resultList =jdbcTemplate.queryForList(sql_nofProgms);
 		
 		if(resultList  != null && resultList.size() >0){
 			for (Map<String, Object> row : resultList) {
+				Project proj = new Project();
 				logger.info(" Qurter:"+row.get("quarter"));
-	            escDet.setQuarter((Integer)row.get("quarter"));
-	            escDet.setCount(Integer.valueOf(row.get("count").toString()));
+				proj.setQuarter((Integer)row.get("quarter"));
+				proj.setProjType("projType");
+				proj.setSubType("subType");
+				proj.setCount(Integer.valueOf(row.get("count").toString()));
+				
+				projDetList.add(proj);
 	        } 
 		}
 
-		return escDet;
+		return projDetList;
 		
 	}
 }

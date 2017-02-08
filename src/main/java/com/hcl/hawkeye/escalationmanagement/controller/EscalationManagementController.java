@@ -1,5 +1,7 @@
 package com.hcl.hawkeye.escalationmanagement.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,25 +39,25 @@ public class EscalationManagementController {
 	}
 	
 	@RequestMapping(value = "/noOfEscPerQtProject", method = RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<EscalationDetails>  noOfEscPerQtProject(@RequestBody Escalation esc) {
+	public ResponseEntity<List<EscalationDetails>>  noOfEscPerQtProject(@RequestBody Escalation esc) {
 		
 		logger.info("Inside noOfEscAtProject method in Controller:"+esc.getProjId());
-		EscalationDetails noofEscalations= escMgmtService.noOfEscAtProject(esc.getProjId());
+		List<EscalationDetails> noofEscalations= escMgmtService.noOfEscAtProject(esc);
 		
 		logger.info("Escalation Details recieved: " +noofEscalations);
 		
-		return new ResponseEntity<EscalationDetails>(noofEscalations, HttpStatus.CREATED);
+		return new ResponseEntity<List<EscalationDetails>>(noofEscalations, HttpStatus.CREATED);
 	}
 	
 	@RequestMapping(value = "/noOfEscPerQtAtProgram", method = RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<EscalationDetails>  noOfEscPerQtAtProgram(@RequestBody Project proj) {
+	public ResponseEntity<List<EscalationDetails>>  noOfEscPerQtAtProgram(@RequestBody Project proj) {
 		
 		logger.info("Inside noOfEscPerQtAtProfile method in Controller:"+proj.getProgId());
-		EscalationDetails noofEscalations= escMgmtService.noOfEscPerQtAtProgram(proj.getProgId());
+		List<EscalationDetails> noofEscalations= escMgmtService.noOfEscPerQtAtProgram(proj.getProgId());
 		
 		logger.info("Escalation Details recieved: " +noofEscalations);
 		
-		return new ResponseEntity<EscalationDetails>(noofEscalations, HttpStatus.CREATED);
+		return new ResponseEntity<List<EscalationDetails>>(noofEscalations, HttpStatus.CREATED);
 	}
 	
 	

@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.hcl.hawkeye.portfolio.DO.Portfolio;
 import com.hcl.hawkeye.portfolio.DO.Program;
+import com.hcl.hawkeye.valueaddmanagement.DO.Value;
 
 
 public class HawkEyeUtils {
@@ -74,5 +75,13 @@ public class HawkEyeUtils {
 		}
 		else return 0;
 		
+	}
+
+	public static Value populateValueId(Value value, int valueId) {
+		//Value createdValue=new Value();
+		//BeanUtils.copyProperties(value, createdValue);
+		//createdpfolio.setPortfolioId(portFolioId);
+		value.setValueId(valueId);
+		return value;
 	}
 }
