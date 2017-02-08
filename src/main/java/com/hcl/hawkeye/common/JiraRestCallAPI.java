@@ -41,7 +41,7 @@ public class JiraRestCallAPI {
 	            }
 	            catch (IOException ex) {
 	            	Locale locale=new Locale("en", "IN");
-	    			String errorMsg=messageSource.getMessage("error.get.project.details", new Object[] {}, locale);
+	    			String errorMsg=messageSource.getMessage("error.get.project", new Object[] {}, locale);
 	    			logger.error(errorMsg, ex);
 	    			throw new NoProjectDetailsException(errorMsg, ex);
 	            }
@@ -55,7 +55,7 @@ public class JiraRestCallAPI {
 		}
 		catch (IOException e) {
 			Locale locale=new Locale("en", "IN");
-			String errorMsg=messageSource.getMessage("error.get.project.details", new Object[] {}, locale);
+			String errorMsg=messageSource.getMessage("error.get.project", new Object[] {}, locale);
 			logger.error(errorMsg, e);
 			throw new NoProjectDetailsException(errorMsg, e);
 		}
