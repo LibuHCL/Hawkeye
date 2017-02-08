@@ -55,6 +55,14 @@ public class ProjectManagementController {
 		Map<String, Integer> dashBInfo = pmService.getIssuesOfProject(projectId, issueType);
 		return dashBInfo;
 	}
+	
+	@RequestMapping(value="/getIssues/project/{id}/issuePriority/{issuePriority}", method = RequestMethod.GET)
+	@ResponseBody
+	public Integer getPriorityOfIssues(@PathVariable("id") int projectId, @PathVariable("issuePriority") String issuePriority) {
+		logger.info("Rquesting api to get the issues of project");
+		Integer priorityIssues = pmService.getPriorityOfIssue(projectId, issuePriority);
+		return priorityIssues;
+	}
 
 
 }

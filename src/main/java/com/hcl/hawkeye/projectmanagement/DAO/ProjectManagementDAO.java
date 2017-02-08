@@ -15,5 +15,7 @@ public interface ProjectManagementDAO {
 	Velocityinfo getVelocityOfProject( int projectId);
 	
 	Map<String, Integer> getIssuesOfProject( int projectId, String issueType);
+	
+	Integer getPriorityOfIssue( int projectId, String issuePriority);
 
 }

@@ -41,4 +41,10 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 		return issues;
 	}
 
+	@Override
+	public Integer getPriorityOfIssue(int projectId, String issuePriority) {
+		Integer priorityIssue = pmDAO.getPriorityOfIssue(projectId, issuePriority);
+		return priorityIssue;
+	}
+
 }

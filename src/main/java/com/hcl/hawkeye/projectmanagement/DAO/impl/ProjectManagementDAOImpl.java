@@ -20,6 +20,7 @@ import com.hcl.hawkeye.common.JiraRestCallAPI;
 import com.hcl.hawkeye.projectmanagement.DAO.ProjectManagementDAO;
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
 import com.hcl.hawkeye.projectmanagement.DO.Issues;
+import com.hcl.hawkeye.projectmanagement.DO.PriorityOfIssue;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectDetails;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectIssues;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectValues;
@@ -113,7 +114,7 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 
 	@Override
 	public Map<String, Integer> getIssuesOfProject(int projectId, String issueType) {
-		logger.info("Request to get dashboard info");
+		logger.info("Request to get issues of projects");
 		Locale locale=new Locale("en", "IN");
 		ProjectDetails pDetails = getProjectDetailsOfSprints(projectId);
 		List<ProjectValues> pValues = pDetails.getValues();
@@ -121,24 +122,49 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 		String url = messageSource.getMessage("jira.agile.rest.api.board.url", new Object[]{}, locale);
 		for (ProjectValues projectValues : pValues) {
 			int count = 0;
+			int criticalIssues = 0;
+			int highPriorityIssues = 0;
 			String issuesInfo = jrCall.callRestAPI(url+projectId+"/sprint/"+projectValues.getId()+"/issue?fields=issuetype");
 			ProjectIssues pIssues = gson.fromJson(issuesInfo, ProjectIssues.class);
 			
 			for (Issues issue : pIssues.getIssues()) {
 				if (null != issue.getFields().getIssuetype() && issueType.equals(issue.getFields().getIssuetype().getName()) && !"UAT".equals(projectValues.getName())) {
 					count++;
+				}
+				
+				if (null != issue.getFields().getPriorityIssues() && !"UAT".equals(projectValues.getName()) && "High".equals(issue.getFields().getPriorityIssues().getName())) {
 					
 				}
 			}
+			
 			Integer issueCount = new Integer(count);
 			if (!"UAT".equals(projectValues.getName())) {
 				issuesMap.put(projectValues.getName(), issueCount);
 			}
-			
 		}
-		
-		
 		return issuesMap;
 	}
+
+	@Override
+	public Integer getPriorityOfIssue(int projectId, String issuePriority) {
+		logger.info("Request to get issues of projects");
+		Locale locale=new Locale("en", "IN");
+		ProjectDetails pDetails = getProjectDetailsOfSprints(projectId);
+		List<ProjectValues> pValues = pDetails.getValues();
+		String url = messageSource.getMessage("jira.agile.rest.api.board.url", new Object[]{}, locale);
+		int priorityIssues = 0;
+		for (ProjectValues projectValues : pValues) {
+			String issuesInfo = jrCall.callRestAPI(url+projectId+"/sprint/"+projectValues.getId()+"/issue?fields=priority");
+			ProjectIssues pIssues = gson.fromJson(issuesInfo, ProjectIssues.class);
+			
+			for (Issues issue : pIssues.getIssues()) {
+				if (null != issue.getFields().getPriorityIssues() && !"UAT".equals(projectValues.getName()) && issuePriority.equals(issue.getFields().getPriorityIssues().getName())) {
+					priorityIssues++;
+				}
+			}
+		}
+		return priorityIssues;
+	}
+	
 
 }
