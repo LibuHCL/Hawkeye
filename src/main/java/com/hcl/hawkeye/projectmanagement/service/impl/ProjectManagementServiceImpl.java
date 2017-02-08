@@ -1,6 +1,5 @@
 package com.hcl.hawkeye.projectmanagement.service.impl;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.hcl.hawkeye.projectmanagement.DAO.ProjectManagementDAO;
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
-import com.hcl.hawkeye.projectmanagement.DO.ProjectDetails;
+import com.hcl.hawkeye.projectmanagement.DO.SprintDetailsOfProject;
 import com.hcl.hawkeye.projectmanagement.DO.Velocityinfo;
 import com.hcl.hawkeye.projectmanagement.service.ProjectManagementService;
 
@@ -19,8 +18,8 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 	ProjectManagementDAO pmDAO;
 	
 	@Override
-	public ProjectDetails getProjectDetails(int projectId) {
-		ProjectDetails proDetails = pmDAO.getProjectDetails(projectId);
+	public SprintDetailsOfProject getProjectDetails(int projectId) {
+		SprintDetailsOfProject proDetails = pmDAO.getProjectDetails(projectId);
 		return proDetails;
 	}
 

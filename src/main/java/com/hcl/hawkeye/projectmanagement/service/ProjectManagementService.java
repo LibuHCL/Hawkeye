@@ -3,12 +3,12 @@ package com.hcl.hawkeye.projectmanagement.service;
 import java.util.Map;
 
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
-import com.hcl.hawkeye.projectmanagement.DO.ProjectDetails;
+import com.hcl.hawkeye.projectmanagement.DO.SprintDetailsOfProject;
 import com.hcl.hawkeye.projectmanagement.DO.Velocityinfo;
 
 public interface ProjectManagementService {
 	
-	ProjectDetails getProjectDetails(int projectID);
+	SprintDetailsOfProject getProjectDetails(int projectID);
 	
 	DashBoardDetails getDashBoardInfo();
 	

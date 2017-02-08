@@ -23,6 +23,7 @@ import com.hcl.hawkeye.projectmanagement.DO.Issues;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectDetails;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectIssues;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectValues;
+import com.hcl.hawkeye.projectmanagement.DO.SprintDetailsOfProject;
 import com.hcl.hawkeye.projectmanagement.DO.StoryPoint;
 import com.hcl.hawkeye.projectmanagement.DO.Velocityinfo;
 
@@ -40,13 +41,33 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 	Gson gson = null;
 
 	@Override
-	public ProjectDetails getProjectDetails(int projectId) {
+	public SprintDetailsOfProject getProjectDetails(int projectId) {
+		logger.info("Request to get project details with project id: {}", projectId);
+		ProjectDetails pDetails = getProjectDetailsOfSprints(projectId);
+		int countOfSprints = 0;
+		SprintDetailsOfProject sProject = new SprintDetailsOfProject();
+		if (null != pDetails && !pDetails.getValues().isEmpty()) {
+			for (ProjectValues pValue : pDetails.getValues()) {
+				if ("active".equals(pValue.getState())) {
+					sProject.setCurrentSprint(pValue.getName());
+					countOfSprints++;
+				} else {
+					countOfSprints++;
+				}
+			}
+		}
+		sProject.setNoOfSprintPerProject(countOfSprints);
+		
+		return sProject;
+	}
+	
+	private ProjectDetails getProjectDetailsOfSprints(int projectId) {
 		logger.info("Request to get project details with project id: {}", projectId);
 		Locale locale=new Locale("en", "IN");
 		String url = messageSource.getMessage("jira.agile.rest.api.board.url", new Object[]{}, locale);
 		String projectInfo = jrCall.callRestAPI(url+projectId+"/sprint/");
 		gson = new Gson();
-		ProjectDetails pDetails = gson.fromJson(projectInfo, ProjectDetails.class);
+		ProjectDetails pDetails = gson.fromJson(projectInfo, ProjectDetails.class);		
 		return pDetails;
 	}
 
@@ -94,7 +115,7 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 	public Map<String, Integer> getIssuesOfProject(int projectId, String issueType) {
 		logger.info("Request to get dashboard info");
 		Locale locale=new Locale("en", "IN");
-		ProjectDetails pDetails = getProjectDetails(projectId);
+		ProjectDetails pDetails = getProjectDetailsOfSprints(projectId);
 		List<ProjectValues> pValues = pDetails.getValues();
 		Map<String, Integer> issuesMap = new TreeMap<String, Integer>();
 		String url = messageSource.getMessage("jira.agile.rest.api.board.url", new Object[]{}, locale);
