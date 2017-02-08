@@ -74,9 +74,9 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 		
 		Double totalVelocity = (completed/estimated)*100;
 		int val = 0;
-		if (totalVelocity == 100) {
+		if (totalVelocity <= 100 && totalVelocity >= 90) {
 			val = 1;
-		} else if (totalVelocity <= 90) {
+		} else if (totalVelocity <= 90 && totalVelocity >=85) {
 			val = 1;
 		} else if (totalVelocity <= 85) {
 			val =-1;
