@@ -34,9 +34,9 @@ public class ValueAddManagementServiceImpl implements ValueAddManagementService 
 	}
 
 	@Override
-	public ValueAdd getValueAddByProgram(Integer programID) {
+	public ValueAdd getValueAddByIds(Integer programId, Integer portfolioId) {
 		logger.info("Request in getNumberOfValueAddByProgram of ValueAddManagementServiceImpl");
-		ValueAdd valueAdd = valueAddManagementDAO.getValueAddByProgram(programID);
+		ValueAdd valueAdd = valueAddManagementDAO.getValueAddByIds(programId, portfolioId);
 		return valueAdd;
 	}
 

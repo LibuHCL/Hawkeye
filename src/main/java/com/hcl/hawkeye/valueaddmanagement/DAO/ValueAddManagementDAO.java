@@ -7,7 +7,7 @@ public interface ValueAddManagementDAO {
 
 	ValueAdd getNumbersOfValueAdd();
 	
-	ValueAdd getValueAddByProgram(Integer programID);
+	ValueAdd getValueAddByIds(Integer programId, Integer portfolioId);
 
 	Value createValueAdd(Value value);
 

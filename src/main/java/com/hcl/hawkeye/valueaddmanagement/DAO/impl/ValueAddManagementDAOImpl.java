@@ -31,37 +31,37 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 
 	@Autowired
 	MessageSource messageSource;
-	
 
 	@Override
 	public Value createValueAdd(Value value) {
-		String createValueAddQuery = "INSERT INTO VALUEADD (PROJECTID, PROGRAMID, PORTFOLIOID, DESCRIPTION, PROPOSED_DATE, VALUEADD_STATUS, STATUS_UPDATE_DATE, ECONOMIC_VALUE) " +
-									 "VALUES (?,?,?,?,?,?,?,?)";
-		jdbcTemplate.update(createValueAddQuery,new Object[]{value.getProjectId(),
-				value.getProgramId(),value.getPortfolioId(), value.getDescription(),HawkEyeUtils.getTimeStamp(value.getProposedDate()), value.getValueAddStatu()
-				,HawkEyeUtils.getTimeStamp(value.getStatusUpdateDate()),value.getEconomicValue()});
+		String createValueAddQuery = "INSERT INTO VALUEADD (PROJECTID, PROGRAMID, PORTFOLIOID, DESCRIPTION, PROPOSED_DATE, VALUEADD_STATUS, STATUS_UPDATE_DATE, ECONOMIC_VALUE) "
+				+ "VALUES (?,?,?,?,?,?,?,?)";
+		jdbcTemplate.update(createValueAddQuery,
+				new Object[] { value.getProjectId(), value.getProgramId(), value.getPortfolioId(),
+						value.getDescription(), HawkEyeUtils.getTimeStamp(value.getProposedDate()),
+						value.getValueAddStatu(), HawkEyeUtils.getTimeStamp(value.getStatusUpdateDate()),
+						value.getEconomicValue() });
 		int valueId = getValueId();
-	 logger.info("Portfolio added with portfolio id :"+ valueId);
+		logger.info("Portfolio added with portfolio id :" + valueId);
 		return HawkEyeUtils.populateValueId(value, valueId);
 	}
 
 	private int getValueId() {
-		String highestValueIdQuery="SELECT MAX(VALUEID) FROM VALUEADD";
-		Integer id=jdbcTemplate.queryForObject(highestValueIdQuery, Integer.class);
-		if(id == null){
+		String highestValueIdQuery = "SELECT MAX(VALUEID) FROM VALUEADD";
+		Integer id = jdbcTemplate.queryForObject(highestValueIdQuery, Integer.class);
+		if (id == null) {
 			return 1000;
 		}
-		return id+1;
+		return id + 1;
 	}
 
 	@Override
 	public ValueAdd getNumbersOfValueAdd() {
 		logger.info("Request to get the data of number of Value Add");
 		ValueAdd valueAdd = new ValueAdd();
-		String numbersOfValueAddQuery = "SELECT PROJECTID, VALUEADD_STATUS, MONTHNAME(PROPOSED_DATE) as MON, YEAR(PROPOSED_DATE) AS YEARS," + 
-				"QUARTER(PROPOSED_DATE) AS QUARTERS,COUNT(MONTHNAME(PROPOSED_DATE))" +
-				"FROM VALUEADD" +
-				"GROUP BY PROJECTID, VALUEADD_STATUS, MON, QUARTERS, YEARS;";
+		String numbersOfValueAddQuery = "SELECT PROJECTID, VALUEADD_STATUS, MONTHNAME(PROPOSED_DATE) as MON, YEAR(PROPOSED_DATE) AS YEARS,"
+				+ "QUARTER(PROPOSED_DATE) AS QUARTERS,COUNT(MONTHNAME(PROPOSED_DATE))" + "FROM VALUEADD"
+				+ "GROUP BY PROJECTID, VALUEADD_STATUS, MON, QUARTERS, YEARS;";
 		try {
 			valueAdd = jdbcTemplate.queryForObject(numbersOfValueAddQuery, VALUEADDROWMAPPER);
 		} catch (DataAccessException dae) {
@@ -85,17 +85,26 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 	};
 
 	@Override
-	public ValueAdd getValueAddByProgram(Integer programID) {
+	public ValueAdd getValueAddByIds(Integer programId, Integer portfolioId) {
 		logger.info("Request to get the data of number of Value Add at program level");
 		ValueAdd valueAdd = new ValueAdd();
-		String numbersOfValueAddProgQuery = "SELECT PROGRAMID, VALUEADD_STATUS, COUNT(1) AS TOTAL" +
-				"FROM VALUEADD" +
-				"WHERE PROGRAMID = ? AND" +
-                "PROPOSED_DATE >= CURDATE() - INTERVAL DAYOFWEEK(CURDATE())+364 DAY AND" +
-				"PROPOSED_DATE < CURDATE() - INTERVAL DAYOFWEEK(CURDATE())-1 DAY" +
-				"GROUP BY PROJECTID, VALUEADD_STATUS;";
+
 		try {
-			valueAdd = jdbcTemplate.queryForObject(numbersOfValueAddProgQuery, VALUEADDROWMAPPER,new Object[]{programID});
+			if (0 != programId) {
+				String numbersOfValueAddProgQuery = "SELECT PROGRAMID, VALUEADD_STATUS, MONTHNAME(PROPOSED_DATE) as MON, COUNT(1) AS TOTAL "
+						+ "FROM VALUEADD " + "WHERE " + "PROGRAMID = ? "
+						+ "AND PROPOSED_DATE >= DATE_SUB(NOW(),INTERVAL 1 YEAR) "
+						+ "GROUP BY PROJECTID, VALUEADD_STATUS, MON; ";
+				valueAdd = jdbcTemplate.queryForObject(numbersOfValueAddProgQuery, VALUEADDROWMAPPER,
+						new Object[] { programId });
+			} else {
+				String numbersOfValueAddProgQuery = "SELECT PORTFOLIOID, VALUEADD_STATUS, MONTHNAME(PROPOSED_DATE) as MON, COUNT(1) AS TOTAL "
+						+ "FROM VALUEADD " + "WHERE " + "PORTFOLIOID = ? "
+						+ "AND PROPOSED_DATE >= DATE_SUB(NOW(),INTERVAL 1 YEAR) "
+						+ "GROUP BY PORTFOLIOID, VALUEADD_STATUS, MON; ";
+				valueAdd = jdbcTemplate.queryForObject(numbersOfValueAddProgQuery, VALUEADDROWMAPPER,
+						new Object[] { portfolioId });
+			}
 		} catch (DataAccessException dae) {
 			Locale locale = new Locale("en", "IN");
 			String errorMsg = messageSource.getMessage("error.get.getvalueadd", new Object[] {}, locale);
@@ -104,6 +113,5 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 		}
 		return valueAdd;
 	}
-
 
 }

@@ -7,7 +7,7 @@ public interface ValueAddManagementService {
 
 	ValueAdd getNumberOfValueAdd();
 
-	ValueAdd getValueAddByProgram(Integer programID);
+	ValueAdd getValueAddByIds(Integer programId, Integer portfolioId);
 	
 	Value createValue(Value value);
 }
