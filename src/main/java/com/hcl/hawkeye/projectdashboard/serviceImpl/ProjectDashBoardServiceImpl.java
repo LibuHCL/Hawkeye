@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hcl.hawkeye.codequality.service.CodeQualityService;
 import com.hcl.hawkeye.portfolio.DO.Project;
 import com.hcl.hawkeye.programmanagement.service.ProgramManagementService;
 import com.hcl.hawkeye.projectcost.service.ProjectCostService;
@@ -15,9 +16,10 @@ import com.hcl.hawkeye.projectdashboard.DO.DashBoardProjectslist;
 import com.hcl.hawkeye.projectdashboard.DO.ProjectDashBoard;
 import com.hcl.hawkeye.projectdashboard.DO.Projects;
 import com.hcl.hawkeye.projectdashboard.DO.DashBoardResource;
-import com.hcl.hawkeye.projectdashboard.controller.ProjectDashBoardController;
 import com.hcl.hawkeye.projectdashboard.service.ProjectDashBoardService;
 import com.hcl.hawkeye.projectmanagement.service.ProjectManagementService;
+import com.hcl.hawkeye.resourcemanagement.service.ResourceManagementService;
+
 @Service
 public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 	
@@ -32,7 +34,11 @@ public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 	@Autowired
 	ProjectCostService projCostService;
 	
+	@Autowired
+	ResourceManagementService resMgmtService;
 	
+	@Autowired
+	CodeQualityService codeQService;
 
 	@Override
 	public ProjectDashBoard getProjectDashBoard(Integer programId) {
@@ -45,6 +51,7 @@ public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 		for(Project proj1 :listOfProjects){
 			DashBoardProjectslist projList =new DashBoardProjectslist();
 			logger.info("Project"+proj1);
+			//resMgmtService.getResourcesCountByProject(Integer.toString(proj1.getProjectId()));
 			projList.setId(proj1.getProjectId());
 			projList.setName(proj1.getProjName());
 			projList.setStartdate(proj1.getCreationDate());
@@ -52,7 +59,7 @@ public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 			projList.setRisks(0);
 			projList.setCost(projCostService.getProjectCostData(proj1.getProjectId()));
 			projList.setSchedule(projMgmtService.getVelocityOfProject(proj1.getProjectId()));
-			projList.setQuality(0);
+			projList.setQuality(codeQService.getCodeQualityRAGStatus());
 			projList.setTechmanager("NULL");
 			projList.setProgrammanager("NULL");
 			projList.setCurrentsprint(1);

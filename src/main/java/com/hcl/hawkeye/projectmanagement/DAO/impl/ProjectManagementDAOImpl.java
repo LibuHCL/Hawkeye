@@ -95,16 +95,17 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 			velInfo = gson.fromJson(velocityInfo, Velocityinfo.class);
 			Type type = new TypeToken<Map<String, Object>>() {}.getType();
 			Map<String, Object> velocityData = new Gson().fromJson(velocityInfo, type);
-			
-			for (String key : velocityData.keySet()) {
-				if ("velocityStatEntries".equals(key.trim().toString())) {
-					Map<String, Map<String, Map<String, Double>>> velData  = (Map<String, Map<String, Map<String, Double>>>) velocityData.get(key);
-					velInfo.setVelocityStatEntries(velData);
+			if(velocityData != null){
+				for (String key : velocityData.keySet()) {
+					if ("velocityStatEntries".equals(key.trim().toString())) {
+						Map<String, Map<String, Map<String, Double>>> velData  = (Map<String, Map<String, Map<String, Double>>>) velocityData.get(key);
+						velInfo.setVelocityStatEntries(velData);
+					}
 				}
 			}
 		} catch (Exception e) {
 			Locale locale=new Locale("en", "IN");
-			String errorMsg=messageSource.getMessage("error.get.velocity.", new Object[] {}, locale);
+			String errorMsg=messageSource.getMessage("error.get.velocity", new Object[] {}, locale);
 			logger.error(errorMsg, e);
 			throw new NoProjectDetailsException(errorMsg, e);
 		}
