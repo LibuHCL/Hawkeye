@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.hcl.hawkeye.escalationmanagement.DO.EscalationDetails;
 import com.hcl.hawkeye.portfolio.DO.Program;
 import com.hcl.hawkeye.portfolio.DO.Project;
 import com.hcl.hawkeye.programmanagement.DAO.ProgramManagementDAO;
@@ -88,5 +87,35 @@ public class ProgramManagementDAOImpl implements ProgramManagementDAO {
 
 		return projDetList;
 		
+	}
+
+
+	@Override
+	public List<Project> getProjectsPerProgramId(int progId) {
+		logger.info("Inside getProjectsPerProgramId method in ProgramManagementDAOImpl");	
+		List<Project> projectsList = new ArrayList<Project>();
+		String sql_getProjects = "SELECT PROJECTID,PROJECT_NAME,PROGRAM_ID,CLIENT_ID,VENDOR_ID,PROJECT_TYPE,"
+				+ "SUBTYPE,TECHNICAL_PROJECT_MANAGER_ID,CREATION_DATE,END_DATE,PROJECT_STATUS FROM PROJECT WHERE PROGRAM_ID=?";
+		List<Map<String, Object>> projList = jdbcTemplate.queryForList(sql_getProjects,new Object[]{progId});
+		
+		if(projList  != null && projList.size() >0){
+			for (Map<String, Object> row : projList) {
+				Project proj = new Project();
+				proj.setProjectId(Integer.parseInt(row.get("projectId").toString()));
+				proj.setProjName(row.get("PROJECT_NAME").toString());
+				proj.setProgId(Integer.parseInt(row.get("PROGRAM_ID").toString()));
+				//proj.setClientId((Integer)row.get("CLIENT_ID"));
+				//proj.setVendorId((Integer)row.get("VENDOR_ID"));
+				proj.setProjType(row.get("PROJECT_TYPE").toString());
+				proj.setSubType(row.get("SUBTYPE").toString());				
+				//proj.setTechProjectManager((Integer)row.get("TECHNICAL_PROJECT_MANAGER_ID"));
+				proj.setCreationDate(row.get("CREATION_DATE").toString());				
+				proj.setEndDate(row.get("END_DATE").toString());
+				proj.setStatus(row.get("PROJECT_STATUS").toString());
+				projectsList.add(proj);
+	        } 
+		}
+		
+		return projectsList;
 	}
 }
