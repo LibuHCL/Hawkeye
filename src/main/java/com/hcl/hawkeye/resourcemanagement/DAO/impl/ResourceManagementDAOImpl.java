@@ -2,6 +2,7 @@ package com.hcl.hawkeye.resourcemanagement.DAO.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,11 +12,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.hcl.hawkeye.Exceptions.ResourceManagementException;
+import com.hcl.hawkeye.projectcost.DO.ProjectCostDetails;
+import com.hcl.hawkeye.resourcemanagement.DO.ProgramResourceCount;
 import com.hcl.hawkeye.resourcemanagement.DO.Resource;
 import com.hcl.hawkeye.resourcemanagement.DAO.ResourceManagementDAO;
 
@@ -105,8 +109,8 @@ public class ResourceManagementDAOImpl implements ResourceManagementDAO {
 	}
 
 	@Override
-	public HashMap<String, Long> getResourcesCountByProject(String projectId) {
-		String sql = "SELECT ROLE,COUNT(*) FROM RESOURCE WHERE PROJECTID ='"+projectId+"' group by role";
+	public HashMap<String, Long> getResourcesCountByProject(int projectId) {
+		String sql = "SELECT ROLE,COUNT(*) FROM RESOURCE WHERE PROJECTID ="+projectId+" group by role";
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
 		HashMap<String,Long> countsList = new HashMap<>();
 		for (Map<String, Object> row : list) {
@@ -117,7 +121,7 @@ public class ResourceManagementDAOImpl implements ResourceManagementDAO {
 
 	@Override
 	public HashMap<String, Long> getResourceAttritionByQuarter(String attritionYear) {
-		String sql = "SELECT QUARTER(PROJECT_JOINING_DATE) AS quarter, (COUNT(RESOURCEID) *100/(SELECT count(*) FROM RESOURCE WHERE QUARTER(PROJECT_JOINING_DATE) = quarter)) AS attrition_percent FROM RESOURCE WHERE ING_AGREEMENT='Y' and YEAR(PROJECT_JOINING_DATE)='"+attritionYear+"' and EXIT_DATE< PLANNED_RELEASE_DATE GROUP BY YEAR(PROJECT_JOINING_DATE), QUARTER(PROJECT_JOINING_DATE) ORDER BY YEAR(PROJECT_JOINING_DATE), QUARTER(PROJECT_JOINING_DATE)";
+		String sql = "SELECT QUARTER(PROJECT_JOINING_DATE) AS quarter, (COUNT(RESOURCEID) *100/(SELECT count(*) FROM RESOURCE WHERE QUARTER(PROJECT_JOINING_DATE) = quarter)) AS attrition_percent FROM RESOURCE WHERE ING_AGREEMENT='N' and YEAR(PROJECT_JOINING_DATE)='"+attritionYear+"' and EXIT_DATE< PLANNED_RELEASE_DATE GROUP BY YEAR(PROJECT_JOINING_DATE), QUARTER(PROJECT_JOINING_DATE) ORDER BY YEAR(PROJECT_JOINING_DATE), QUARTER(PROJECT_JOINING_DATE)";
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
 		HashMap<String,Long> attritionList = new HashMap<>();
 		for (Map<String, Object> row : list) {
@@ -126,8 +130,18 @@ public class ResourceManagementDAOImpl implements ResourceManagementDAO {
 		return attritionList;
 	}
 	@Override
-	public void getResourcesCountByProgram(String programId)
+	public List<ProgramResourceCount> getResourcesCountByProgram(String programId)
 	{
-		
+		String projectListQuery = "SELECT PROJECTID FROM PROJECT WHERE PROGRAM_ID = '"+programId+"'";
+		List<String> projectIdList = jdbcTemplate.queryForList(projectListQuery,String.class);
+		List<ProgramResourceCount> resourceCountList = new ArrayList<>();
+		for (String projectId: projectIdList) {
+			String resourceCountListQuery = "select count(*) as count,PROJECTID, (select PROJECT_NAME from PROJECT where PROJECTID='"+projectId+"') as project_name,WORK_LOCATION as location, RESOURCE_STATUS  from RESOURCE where PROJECTID = '"+projectId+"' group by location,RESOURCE_STATUS";
+
+			List<ProgramResourceCount> resultsList = jdbcTemplate.query(resourceCountListQuery,
+					new BeanPropertyRowMapper<ProgramResourceCount>(ProgramResourceCount.class));
+			resourceCountList.addAll(resultsList);
+		}
+		return resourceCountList;
 	}
 }

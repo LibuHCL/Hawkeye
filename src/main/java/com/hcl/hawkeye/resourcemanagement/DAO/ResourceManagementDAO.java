@@ -1,7 +1,9 @@
 package com.hcl.hawkeye.resourcemanagement.DAO;
 
 import java.util.HashMap;
+import java.util.List;
 
+import com.hcl.hawkeye.resourcemanagement.DO.ProgramResourceCount;
 import com.hcl.hawkeye.resourcemanagement.DO.Resource;
 
 public interface ResourceManagementDAO {
@@ -9,8 +11,8 @@ public interface ResourceManagementDAO {
 	Resource getResourceData();
 	int getResourcesCount(String roleName);
 	void createResource(Resource resource);
-	HashMap<String,Long> getResourcesCountByProject(String projectId);
+	HashMap<String,Long> getResourcesCountByProject(int projectId);
 	HashMap<String,Long> getResourceAttritionByQuarter(String attritionYear);
-	void getResourcesCountByProgram(String programId);
+	List<ProgramResourceCount> getResourcesCountByProgram(String programId);
 	
 }
