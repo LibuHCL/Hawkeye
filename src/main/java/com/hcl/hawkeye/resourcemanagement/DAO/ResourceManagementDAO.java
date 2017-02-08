@@ -13,6 +13,6 @@ public interface ResourceManagementDAO {
 	void createResource(Resource resource);
 	HashMap<String,Long> getResourcesCountByProject(int projectId);
 	HashMap<String,Long> getResourceAttritionByQuarter(String attritionYear);
-	List<ProgramResourceCount> getResourcesCountByProgram(String programId);
+	List<ProgramResourceCount> getResourcesCountByProgram(int programId);
 	
 }

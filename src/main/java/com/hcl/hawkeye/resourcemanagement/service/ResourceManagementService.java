@@ -11,6 +11,6 @@ public interface ResourceManagementService {
 	int getResourcesCount(String roleName);
 	void createResource(Resource resource);
 	HashMap<String,Long> getResourcesCountByProject(int projectId);
-	List<ProgramResourceCount> getResourcesCountByProgram(String programId);
+	List<ProgramResourceCount> getResourcesCountByProgram(int programId);
 	HashMap<String, Long> getResourceAttritionByQuarter(String attritionYear);
 }

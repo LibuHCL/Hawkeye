@@ -49,7 +49,7 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
 		return response;
 	}
 	@Override
-	public List<ProgramResourceCount> getResourcesCountByProgram(String programId) {
+	public List<ProgramResourceCount> getResourcesCountByProgram(int programId) {
 		logger.info("Request in getResourcesCountByProgram of ResourceServiceImpl");
 		List<ProgramResourceCount> response = resourceDAO.getResourcesCountByProgram(programId);
 		return response;

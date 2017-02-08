@@ -130,13 +130,13 @@ public class ResourceManagementDAOImpl implements ResourceManagementDAO {
 		return attritionList;
 	}
 	@Override
-	public List<ProgramResourceCount> getResourcesCountByProgram(String programId)
+	public List<ProgramResourceCount> getResourcesCountByProgram(int programId)
 	{
-		String projectListQuery = "SELECT PROJECTID FROM PROJECT WHERE PROGRAM_ID = '"+programId+"'";
-		List<String> projectIdList = jdbcTemplate.queryForList(projectListQuery,String.class);
+		String projectListQuery = "SELECT PROJECTID FROM PROJECT WHERE PROGRAM_ID = "+programId;
+		List<Integer> projectIdList = jdbcTemplate.queryForList(projectListQuery,Integer.class);
 		List<ProgramResourceCount> resourceCountList = new ArrayList<>();
-		for (String projectId: projectIdList) {
-			String resourceCountListQuery = "select count(*) as count,PROJECTID, (select PROJECT_NAME from PROJECT where PROJECTID='"+projectId+"') as project_name,WORK_LOCATION as location, RESOURCE_STATUS  from RESOURCE where PROJECTID = '"+projectId+"' group by location,RESOURCE_STATUS";
+		for (int projectId: projectIdList) {
+			String resourceCountListQuery = "select count(*) as count,PROJECTID, (select PROJECT_NAME from PROJECT where PROJECTID="+projectId+") as project_name,WORK_LOCATION as location, RESOURCE_STATUS  from RESOURCE where PROJECTID = "+projectId+" group by location,RESOURCE_STATUS";
 
 			List<ProgramResourceCount> resultsList = jdbcTemplate.query(resourceCountListQuery,
 					new BeanPropertyRowMapper<ProgramResourceCount>(ProgramResourceCount.class));

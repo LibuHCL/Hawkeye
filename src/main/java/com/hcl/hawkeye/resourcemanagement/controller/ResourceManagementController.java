@@ -48,4 +48,12 @@ private static final Logger logger = LoggerFactory.getLogger(ResourceManagementC
 		return response;
 	}
 	
+	@RequestMapping(value="/getResourcesCount/count/{programId}", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public List<ProgramResourceCount> getResourcesCountByProgram(@PathVariable("programId") int programId) {
+		logger.info("Requested to get the resources count based on programId");
+		List<ProgramResourceCount> response = resourceManagementService.getResourcesCountByProgram(programId);
+		return response;
+	}
+	
 }
