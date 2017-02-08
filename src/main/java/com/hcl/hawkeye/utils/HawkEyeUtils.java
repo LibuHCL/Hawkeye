@@ -102,5 +102,5 @@ public class HawkEyeUtils {
 			BeanUtils.copyProperties(cost, projectCost);
 			projectCost.setProjectID(projectID);
 			return projectCost;
-			}
+	}
 }
