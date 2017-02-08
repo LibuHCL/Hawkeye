@@ -1,5 +1,6 @@
 package com.hcl.hawkeye.projectmanagement.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
 import com.hcl.hawkeye.projectmanagement.DO.SprintDetailsOfProject;
-import com.hcl.hawkeye.projectmanagement.DO.Velocityinfo;
+import com.hcl.hawkeye.projectmanagement.DO.VelocityOfProject;
 import com.hcl.hawkeye.projectmanagement.service.ProjectManagementService;
 
 @RestController
@@ -42,10 +43,18 @@ public class ProjectManagementController {
 	
 	@RequestMapping(value="/getVelocity/project/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public Velocityinfo getVelocityOfProject(@PathVariable("id") int projectId) {
+	public int getVelocityOfProject(@PathVariable("id") int projectId) {
 		logger.info("Rquesting api to get the dasboard information");
-		Velocityinfo dashBInfo = pmService.getVelocityOfProject(projectId);
-		return dashBInfo;
+		int velocityInfo = pmService.getVelocityOfProject(projectId);
+		return velocityInfo;
+	}
+	
+	@RequestMapping(value="/getVelocityOfSprint/project/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public List<VelocityOfProject> getVelocityOfSprint(@PathVariable("id") int projectId) {
+		logger.info("Rquesting api to get the dasboard information");
+		List<VelocityOfProject> velocityInfo = pmService.getVelocityOfSprint(projectId);
+		return velocityInfo;
 	}
 	
 	@RequestMapping(value="/getIssues/project/{id}/issueType/{issueType}", method = RequestMethod.GET)
@@ -58,9 +67,9 @@ public class ProjectManagementController {
 	
 	@RequestMapping(value="/getIssues/project/{id}/issuePriority/{issuePriority}", method = RequestMethod.GET)
 	@ResponseBody
-	public Integer getPriorityOfIssues(@PathVariable("id") int projectId, @PathVariable("issuePriority") String issuePriority) {
+	public Map<String, Integer> getPriorityOfIssues(@PathVariable("id") int projectId, @PathVariable("issuePriority") String issuePriority) {
 		logger.info("Rquesting api to get the issues of project");
-		Integer priorityIssues = pmService.getPriorityOfIssue(projectId, issuePriority);
+		Map<String, Integer> priorityIssues = pmService.getPriorityOfIssue(projectId, issuePriority);
 		return priorityIssues;
 	}
 

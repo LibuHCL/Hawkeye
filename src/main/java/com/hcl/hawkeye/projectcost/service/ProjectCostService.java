@@ -8,5 +8,5 @@ public interface ProjectCostService {
 
 	ProjectCostDetails addProjectCostDetails(ProjectCostDetails cost);
 	List<ProjectCostDetails> getAllProjectCostData();
-	ProjectCostDetails getProjectCostData(int projectID);
+	Integer getProjectCostData(int projectID);
 }

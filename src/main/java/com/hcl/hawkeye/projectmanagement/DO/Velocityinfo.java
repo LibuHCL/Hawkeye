@@ -6,7 +6,7 @@ import java.util.Map;
 public class Velocityinfo {
 
 	private List<Sprints> sprints;
-	private Map<String, Map<String, StoryPoint>> velocityStatEntries;
+	private Map<String, Map<String, Map<String, Double>>> velocityStatEntries;
 
 	/**
 	 * @return the sprints
@@ -26,7 +26,7 @@ public class Velocityinfo {
 	/**
 	 * @return the velocityStatEntries
 	 */
-	public Map<String, Map<String, StoryPoint>> getVelocityStatEntries() {
+	public Map<String, Map<String, Map<String, Double>>> getVelocityStatEntries() {
 		return velocityStatEntries;
 	}
 
@@ -34,7 +34,7 @@ public class Velocityinfo {
 	 * @param velData
 	 *            the velocityStatEntries to set
 	 */
-	public void setVelocityStatEntries(Map<String, Map<String, StoryPoint>> velData) {
+	public void setVelocityStatEntries(Map<String, Map<String, Map<String, Double>>> velData) {
 		this.velocityStatEntries = velData;
 	}
 

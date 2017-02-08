@@ -103,4 +103,21 @@ public class HawkEyeUtils {
 			projectCost.setProjectID(projectID);
 			return projectCost;
 	}
+	
+	/** This method is used to calculate RAG Status based on thresholds
+	 * @param value
+	 * @return
+	 */
+	public static int getRAGStatus(int value){		
+		
+		if (value <= HawkEyeConstants.MODERATE && value >= HawkEyeConstants.GOOD) {
+			return HawkEyeConstants.GREEN;
+		} else if (value <= HawkEyeConstants.GOOD && value <= HawkEyeConstants.POOR) {
+			return HawkEyeConstants.AMBER;
+		} else if (value <= HawkEyeConstants.POOR) {
+			return HawkEyeConstants.POOR;
+		}
+		
+		return HawkEyeConstants.GREEN;
+	}
 }

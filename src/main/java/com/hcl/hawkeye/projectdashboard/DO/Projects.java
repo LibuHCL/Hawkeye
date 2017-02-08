@@ -1,9 +1,11 @@
 package com.hcl.hawkeye.projectdashboard.DO;
 
+import java.util.List;
+
 public class Projects {
 	private int runnningprojects;
 
-    private Projectslist[] projectslist;
+    private List<DashBoardProjectslist> projectslist;
 
     public int getRunnningprojects ()
     {
@@ -15,17 +17,16 @@ public class Projects {
         this.runnningprojects = runnningprojects;
     }
 
-    public Projectslist[] getProjectslist ()
-    {
-        return projectslist;
-    }
+   
+    public List<DashBoardProjectslist> getProjectslist() {
+		return projectslist;
+	}
 
-    public void setProjectslist (Projectslist[] projectslist)
-    {
-        this.projectslist = projectslist;
-    }
+	public void setProjectslist(List<DashBoardProjectslist> projectslist) {
+		this.projectslist = projectslist;
+	}
 
-    @Override
+	@Override
     public String toString()
     {
         return "ClassPojo [runnningprojects = "+runnningprojects+", projectslist = "+projectslist+"]";
