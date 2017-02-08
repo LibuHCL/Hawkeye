@@ -1,9 +1,11 @@
 package com.hcl.hawkeye.projectmanagement.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
 import com.hcl.hawkeye.projectmanagement.DO.SprintDetailsOfProject;
+import com.hcl.hawkeye.projectmanagement.DO.VelocityOfProject;
 
 public interface ProjectManagementService {
 	
@@ -13,8 +15,10 @@ public interface ProjectManagementService {
 	
 	int getVelocityOfProject(int projectId);
 	
+	List<VelocityOfProject> getVelocityOfSprint(int ProjectId);
+	
 	Map<String, Integer> getIssuesOfProject(int projectId, String issueType);
 	
-	Integer getPriorityOfIssue(int projectId, String issuePriority);
+	Map<String, Integer> getPriorityOfIssue(int projectId, String issuePriority);
 
 }

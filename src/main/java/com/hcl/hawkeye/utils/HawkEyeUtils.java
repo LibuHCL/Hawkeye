@@ -107,9 +107,9 @@ public class HawkEyeUtils {
 	public static int getRAGStatus(int value){
 		
 		int retVal = 0;
-		if (value == HawkEyeConstants.GREEN) {
+		if (value <= HawkEyeConstants.GREEN && value >= HawkEyeConstants.AMBER) {
 			retVal = 1;
-		} else if (value <= HawkEyeConstants.AMBER) {
+		} else if (value <= HawkEyeConstants.AMBER && value <= HawkEyeConstants.RED) {
 			retVal = 0;
 		} else if (value <= HawkEyeConstants.RED) {
 			retVal =-1;

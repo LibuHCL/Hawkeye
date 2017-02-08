@@ -122,8 +122,6 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 		String url = messageSource.getMessage("jira.agile.rest.api.board.url", new Object[]{}, locale);
 		for (ProjectValues projectValues : pValues) {
 			int count = 0;
-			int criticalIssues = 0;
-			int highPriorityIssues = 0;
 			String issuesInfo = jrCall.callRestAPI(url+projectId+"/sprint/"+projectValues.getId()+"/issue?fields=issuetype");
 			ProjectIssues pIssues = gson.fromJson(issuesInfo, ProjectIssues.class);
 			
@@ -146,10 +144,11 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 	}
 
 	@Override
-	public Integer getPriorityOfIssue(int projectId, String issuePriority) {
+	public Map<String, Integer> getPriorityOfIssue(int projectId, String issuePriority) {
 		logger.info("Request to get issues of projects");
 		Locale locale=new Locale("en", "IN");
 		ProjectDetails pDetails = getProjectDetailsOfSprints(projectId);
+		Map<String, Integer> priorityMap = new TreeMap<String, Integer>();
 		List<ProjectValues> pValues = pDetails.getValues();
 		String url = messageSource.getMessage("jira.agile.rest.api.board.url", new Object[]{}, locale);
 		int priorityIssues = 0;
@@ -162,8 +161,13 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 					priorityIssues++;
 				}
 			}
+			
+			if (!"UAT".equals(projectValues.getName())) {
+				priorityMap.put(projectValues.getName(), priorityIssues);
+			}
+			
 		}
-		return priorityIssues;
+		return priorityMap;
 	}
 	
 

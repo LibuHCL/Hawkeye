@@ -11,7 +11,6 @@ import com.hcl.hawkeye.projectmanagement.DAO.ProjectManagementDAO;
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
 import com.hcl.hawkeye.projectmanagement.DO.SprintDetailsOfProject;
 import com.hcl.hawkeye.projectmanagement.DO.Sprints;
-import com.hcl.hawkeye.projectmanagement.DO.StoryPoint;
 import com.hcl.hawkeye.projectmanagement.DO.VelocityOfProject;
 import com.hcl.hawkeye.projectmanagement.DO.Velocityinfo;
 import com.hcl.hawkeye.projectmanagement.service.ProjectManagementService;
@@ -38,6 +37,41 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 	@Override
 	public int getVelocityOfProject(int projectId) {
 		Velocityinfo vInfo = pmDAO.getVelocityOfProject(projectId);
+		List<VelocityOfProject> velocityList = getVelocityList(vInfo);
+		Double estimated = 0.0;
+		Double completed = 0.0;
+		if(!velocityList.isEmpty()){
+			for (VelocityOfProject velocityOfProject : velocityList) {
+				estimated +=  velocityOfProject.getEstimatedValue();
+				completed +=  velocityOfProject.getCompletedValue();
+			}
+		}else{
+			return 0;
+		}
+		
+		return HawkEyeUtils.getRAGStatus( (int)(completed/estimated)*100);
+	}
+
+	@Override
+	public Map<String, Integer> getIssuesOfProject(int projectId, String issueType) {
+		Map<String, Integer> issues = pmDAO.getIssuesOfProject(projectId, issueType);
+		return issues;
+	}
+
+	@Override
+	public Map<String, Integer> getPriorityOfIssue(int projectId, String issuePriority) {
+		Map<String, Integer> priorityIssue = pmDAO.getPriorityOfIssue(projectId, issuePriority);
+		return priorityIssue;
+	}
+
+	@Override
+	public List<VelocityOfProject> getVelocityOfSprint(int projectId) {
+		Velocityinfo vInfo = pmDAO.getVelocityOfProject(projectId);
+		List<VelocityOfProject> velocityList = getVelocityList(vInfo);
+		return velocityList;
+	}
+	
+	private List<VelocityOfProject> getVelocityList(Velocityinfo vInfo) {
 		List<VelocityOfProject> velocityList = new ArrayList<VelocityOfProject>();
 		if (null != vInfo && !vInfo.getSprints().isEmpty()) {
 			for ( Sprints sprint  : vInfo.getSprints()) {
@@ -66,41 +100,7 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 				velocityList.add(velocityOfProject);
 			}
 		}
-		
-		Double estimated = 0.0;
-		Double completed = 0.0;
-		if(velocityList.size()>0){
-			for (VelocityOfProject velocityOfProject : velocityList) {
-				estimated +=  velocityOfProject.getEstimatedValue();
-				completed +=  velocityOfProject.getCompletedValue();
-			}
-		}else{
-			return 0;
-		}
-		/*Double totalVelocity = (completed/estimated)*100;
-		int val = 0;
-		if (totalVelocity == 100) {
-			val = 1;
-		} else if (totalVelocity <= 90) {
-			val = 1;
-		} else if (totalVelocity <= 85) {
-			val =-1;
-		}
-		return val;*/
-		
-		return HawkEyeUtils.getRAGStatus( (int)(completed/estimated)*100);
-	}
-
-	@Override
-	public Map<String, Integer> getIssuesOfProject(int projectId, String issueType) {
-		Map<String, Integer> issues = pmDAO.getIssuesOfProject(projectId, issueType);
-		return issues;
-	}
-
-	@Override
-	public Integer getPriorityOfIssue(int projectId, String issuePriority) {
-		Integer priorityIssue = pmDAO.getPriorityOfIssue(projectId, issuePriority);
-		return priorityIssue;
+		return velocityList;
 	}
 
 }

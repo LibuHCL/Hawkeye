@@ -16,6 +16,6 @@ public interface ProjectManagementDAO {
 	
 	Map<String, Integer> getIssuesOfProject( int projectId, String issueType);
 	
-	Integer getPriorityOfIssue( int projectId, String issuePriority);
+	Map<String, Integer> getPriorityOfIssue( int projectId, String issuePriority);
 
 }

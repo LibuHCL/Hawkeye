@@ -49,6 +49,14 @@ public class ProjectManagementController {
 		return velocityInfo;
 	}
 	
+	@RequestMapping(value="/getVelocityOfSprint/project/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public List<VelocityOfProject> getVelocityOfSprint(@PathVariable("id") int projectId) {
+		logger.info("Rquesting api to get the dasboard information");
+		List<VelocityOfProject> velocityInfo = pmService.getVelocityOfSprint(projectId);
+		return velocityInfo;
+	}
+	
 	@RequestMapping(value="/getIssues/project/{id}/issueType/{issueType}", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Integer> getIssuesOfProject(@PathVariable("id") int projectId, @PathVariable("issueType") String issueType) {
@@ -59,9 +67,9 @@ public class ProjectManagementController {
 	
 	@RequestMapping(value="/getIssues/project/{id}/issuePriority/{issuePriority}", method = RequestMethod.GET)
 	@ResponseBody
-	public Integer getPriorityOfIssues(@PathVariable("id") int projectId, @PathVariable("issuePriority") String issuePriority) {
+	public Map<String, Integer> getPriorityOfIssues(@PathVariable("id") int projectId, @PathVariable("issuePriority") String issuePriority) {
 		logger.info("Rquesting api to get the issues of project");
-		Integer priorityIssues = pmService.getPriorityOfIssue(projectId, issuePriority);
+		Map<String, Integer> priorityIssues = pmService.getPriorityOfIssue(projectId, issuePriority);
 		return priorityIssues;
 	}
 
