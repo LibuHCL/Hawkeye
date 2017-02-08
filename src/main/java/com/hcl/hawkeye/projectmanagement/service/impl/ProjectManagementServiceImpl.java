@@ -1,5 +1,8 @@
 package com.hcl.hawkeye.projectmanagement.service.impl;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +34,12 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 	public Velocityinfo getVelocityOfProject(int projectId) {
 		Velocityinfo vInfo = pmDAO.getVelocityOfProject(projectId);
 		return vInfo;
+	}
+
+	@Override
+	public Map<String, Integer> getIssuesOfProject(int projectId, String issueType) {
+		Map<String, Integer> issues = pmDAO.getIssuesOfProject(projectId, issueType);
+		return issues;
 	}
 
 }

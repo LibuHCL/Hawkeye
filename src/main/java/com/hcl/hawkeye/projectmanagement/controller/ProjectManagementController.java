@@ -1,5 +1,7 @@
 package com.hcl.hawkeye.projectmanagement.controller;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +47,14 @@ public class ProjectManagementController {
 		Velocityinfo dashBInfo = pmService.getVelocityOfProject(projectId);
 		return dashBInfo;
 	}
+	
+	@RequestMapping(value="/getIssues/project/{id}/issueType/{issueType}", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Integer> getIssuesOfProject(@PathVariable("id") int projectId, @PathVariable("issueType") String issueType) {
+		logger.info("Rquesting api to get the issues of project");
+		Map<String, Integer> dashBInfo = pmService.getIssuesOfProject(projectId, issueType);
+		return dashBInfo;
+	}
+
 
 }
