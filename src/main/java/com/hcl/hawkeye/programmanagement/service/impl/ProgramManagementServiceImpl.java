@@ -1,5 +1,6 @@
 package com.hcl.hawkeye.programmanagement.service.impl;
 
+import java.util.List;
 import java.util.Locale;
 
 import org.slf4j.Logger;
@@ -57,7 +58,7 @@ public class ProgramManagementServiceImpl implements ProgramManagementService {
 	}
 	
 	@Override
-	public EscalationDetails noOfProgramsInQuarter() {
+	public List<Project> noOfProgramsInQuarter() {
 		logger.info("Inside noOfProgramsInQuarter method in ProgramManagemetServiceImpl");
 		
 		try {

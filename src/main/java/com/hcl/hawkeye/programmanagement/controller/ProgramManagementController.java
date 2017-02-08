@@ -1,5 +1,7 @@
 package com.hcl.hawkeye.programmanagement.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,11 +44,11 @@ public class ProgramManagementController {
 	}
 	
 	// get no.of programs in a quarter	
-	@RequestMapping(value = "/noofprogram", method = RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<EscalationDetails> noOfProgramsInQuarter() {
+	@RequestMapping(value = "/noofprojects", method = RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<List<Project>> noofProjectsInQuarter() {
 		logger.info("Inside noOfProgramsInQuarter method in Controller");
-		EscalationDetails escDet = ProgramMangementService.noOfProgramsInQuarter();
-		return new ResponseEntity<EscalationDetails>(escDet,HttpStatus.CREATED);
+		List<Project> escDet = ProgramMangementService.noOfProgramsInQuarter();
+		return new ResponseEntity<List<Project>>(escDet,HttpStatus.CREATED);
 	}
 
 }

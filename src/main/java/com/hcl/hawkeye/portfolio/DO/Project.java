@@ -29,6 +29,10 @@ public class Project {
 	
 	private String status;
 	
+	private Integer quarter;
+	
+	private Integer count;
+	
 	public Project(){}
 	public Project (long projectId,String projName,int progId,int clientId,int vendorId,String projType,String subType,
 			String techProjectManager,String creationDate,String endDate, String status){
@@ -133,6 +137,18 @@ public class Project {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public Integer getQuarter() {
+		return quarter;
+	}
+	public void setQuarter(Integer quarter) {
+		this.quarter = quarter;
+	}
+	public Integer getCount() {
+		return count;
+	}
+	public void setCount(Integer count) {
+		this.count = count;
 	}
 	
 	

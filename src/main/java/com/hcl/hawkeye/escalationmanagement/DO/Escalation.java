@@ -14,13 +14,13 @@ public class Escalation {
 	private String resDate;
 	private String resSolution;
 	private String escStatus;
-	
+	private String reason;
 	public Escalation(){
 		
 	}
 	
 	public Escalation(Integer escalationId,Integer projId,String description,Integer priority,String escalationType,Integer repResourceId,
-			Integer repCompanyId,String repType,Integer reporteeResId,String escRepDate,String resDate,String resSolution,String escStatus){
+			Integer repCompanyId,String repType,Integer reporteeResId,String escRepDate,String resDate,String resSolution,String escStatus,String reason){
 
 		this.escalationId=escalationId;
 		this.projId=projId;
@@ -35,6 +35,7 @@ public class Escalation {
 		this.resDate=resDate;
 		this.resSolution=resSolution;
 		this.escStatus=escStatus;
+		this.reason=reason;
 	}
 	
 	public Integer getProjId() {
@@ -116,6 +117,14 @@ public class Escalation {
 	}
 	public void setEscStatus(String escStatus) {
 		this.escStatus = escStatus;
+	}
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
 	}
 	
 	

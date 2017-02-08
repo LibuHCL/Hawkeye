@@ -1,5 +1,6 @@
 package com.hcl.hawkeye.escalationmanagement.service.impl;
 
+import java.util.List;
 import java.util.Locale;
 
 import org.slf4j.Logger;
@@ -39,9 +40,9 @@ public class EscalationManagementServiceImpl implements EscalationManagementServ
 	}
 
 	@Override
-	public EscalationDetails noOfEscAtProject(Integer projectId) {
+	public List<EscalationDetails> noOfEscAtProject(Escalation esc) {
 		 try {
-			return escMgmtDao.noOfEscAtProject(projectId);
+			return escMgmtDao.noOfEscAtProject(esc);
 		} catch (Exception e) {
 			Locale locale=new Locale("en", "IN");
 			String errorMsg=messageSource.getMessage("error.noof.escalations", new Object[] {}, locale);
@@ -51,7 +52,7 @@ public class EscalationManagementServiceImpl implements EscalationManagementServ
 	}
 
 	@Override
-	public EscalationDetails noOfEscPerQtAtProgram(Integer programId) {
+	public List<EscalationDetails> noOfEscPerQtAtProgram(Integer programId) {
 		try {
 			return escMgmtDao.noOfEscPerQtAtProgram(programId);
 		} catch (Exception e) {
