@@ -28,14 +28,14 @@ public class ValueAddManagementController {
 	@Autowired
 	public ValueAddManagementService valueAddManagementService;
 	
-	// To add Portfolio
+	// Create Value
 		@RequestMapping(value = "/createValueAdd", method = RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 		public ResponseEntity<Value>  createValue(@RequestBody Value value) {
 			System.out.println("Value:"+value);
 			logger.info("Inside createValue method in Controller:"+value);
-			Value addedValue= valueAddManagementService.createValue(value);
+			Value createdValue= valueAddManagementService.createValue(value);
 			logger.info("Value Add inserted successfully: " +value);
-			return new ResponseEntity<>(value, HttpStatus.CREATED);
+			return new ResponseEntity<>(createdValue, HttpStatus.CREATED);
 		}
 	
 	@RequestMapping(value="/getValueAddData", method = RequestMethod.GET)
