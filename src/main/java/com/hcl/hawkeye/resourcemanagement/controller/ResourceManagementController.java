@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hcl.hawkeye.portfolio.DO.Resource;
+import com.hcl.hawkeye.resourcemanagement.DO.Resource;
 import com.hcl.hawkeye.resourcemanagement.service.ResourceManagementService;
 
 @RestController

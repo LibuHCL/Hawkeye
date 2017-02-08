@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hcl.hawkeye.portfolio.DO.Resource;
+import com.hcl.hawkeye.resourcemanagement.DO.Resource;
 import com.hcl.hawkeye.resourcemanagement.DAO.ResourceManagementDAO;
 import com.hcl.hawkeye.resourcemanagement.service.ResourceManagementService;
 

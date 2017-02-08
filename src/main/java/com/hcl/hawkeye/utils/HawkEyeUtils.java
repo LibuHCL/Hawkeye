@@ -52,7 +52,7 @@ public class HawkEyeUtils {
 	    cal.setTime(date);
 	    cal.set(Calendar.MONTH, cal.get(Calendar.MONTH)/3 * 3);
 	    cal.set(Calendar.DAY_OF_MONTH, 1);
-	    return (Date) cal.getTime();
+	    return cal.getTime();
 	}
 
 	public static Date getLastDayOfQuarter(java.util.Date date) {
@@ -60,7 +60,7 @@ public class HawkEyeUtils {
 	    cal.setTime(date);
 	    cal.set(Calendar.MONTH, cal.get(Calendar.MONTH)/3 * 3 + 2);
 	    cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-	    return (Date) cal.getTime();
+	    return cal.getTime();
 	}
 	public static int geMaxId(String table) {
 		String highestPortIdQuery = null ;

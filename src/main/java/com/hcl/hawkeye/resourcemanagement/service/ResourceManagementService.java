@@ -2,7 +2,7 @@ package com.hcl.hawkeye.resourcemanagement.service;
 
 import java.util.HashMap;
 
-import com.hcl.hawkeye.portfolio.DO.Resource;
+import com.hcl.hawkeye.resourcemanagement.DO.Resource;
 
 public interface ResourceManagementService {
 

@@ -1,4 +1,4 @@
-package com.hcl.hawkeye.portfolio.DO;
+package com.hcl.hawkeye.resourcemanagement.DO;
 
 import java.io.Serializable;
 

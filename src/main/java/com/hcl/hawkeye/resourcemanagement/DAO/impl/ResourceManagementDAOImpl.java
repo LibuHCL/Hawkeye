@@ -16,7 +16,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.hcl.hawkeye.Exceptions.ResourceManagementException;
-import com.hcl.hawkeye.portfolio.DO.Resource;
+import com.hcl.hawkeye.resourcemanagement.DO.Resource;
 import com.hcl.hawkeye.resourcemanagement.DAO.ResourceManagementDAO;
 
 @Repository
@@ -124,5 +124,10 @@ public class ResourceManagementDAOImpl implements ResourceManagementDAO {
 			attritionList.put((String)row.get("quarter"), (Long)row.get("count"));
 		}
 		return attritionList;
+	}
+	@Override
+	public void getResourcesCountByProgram(String programId)
+	{
+		
 	}
 }
