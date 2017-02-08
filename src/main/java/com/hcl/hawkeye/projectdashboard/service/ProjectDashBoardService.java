@@ -8,6 +8,6 @@ import com.hcl.hawkeye.projectdashboard.DO.ProjectDashBoard;
 @Service
 public interface ProjectDashBoardService {
 
-	ProjectDashBoard getProjectDashBoard(Project proj);
+	ProjectDashBoard getProjectDashBoard(Integer progId);
 
 }

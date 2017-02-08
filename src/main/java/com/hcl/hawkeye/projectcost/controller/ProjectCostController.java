@@ -50,12 +50,13 @@ public class ProjectCostController {
 	
 	@RequestMapping(value="/getProjectCost/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<ProjectCostDetails> getProjectCostData(@PathVariable("id") int projectID){
+	public void getProjectCostData(@PathVariable("id") int projectID){
 		logger.info("Requesting API to get project cost with ID: " + projectID);
-		ProjectCostDetails projectCost = null;
+		Integer cost = null;
+		//ProjectCostDetails projectCost = null;
 		if(projectID != 0){
-			projectCost = projectCostService.getProjectCostData(projectID);
+			 cost = projectCostService.getProjectCostData(projectID);
 		}
-		return new ResponseEntity<ProjectCostDetails>(projectCost, HttpStatus.OK);
+		logger.info("Cost::{}",cost);
 	}
 }

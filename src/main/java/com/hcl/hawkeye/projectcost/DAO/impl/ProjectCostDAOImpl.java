@@ -61,7 +61,13 @@ public class ProjectCostDAOImpl implements ProjectCostDAO {
 
 		String PROJECT_COST_WITH_ID_SQL = "SELECT * FROM PROJECT_COST WHERE PROJECTID = " + projectID;
 
-		ProjectCostDetails projectCost = (ProjectCostDetails)jdbcTemplate.queryForObject(PROJECT_COST_WITH_ID_SQL, projectCostRowMapper);
+		ProjectCostDetails projectCost = null;
+		try {
+			projectCost = (ProjectCostDetails) jdbcTemplate.queryForObject(
+					PROJECT_COST_WITH_ID_SQL, projectCostRowMapper);
+		} catch (Exception e) {
+			
+		}
 
 		logger.info("Project cost details are successfully fetched for project with ID: " + projectID);
 		return projectCost;

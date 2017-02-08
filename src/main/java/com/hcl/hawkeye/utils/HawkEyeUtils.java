@@ -103,4 +103,18 @@ public class HawkEyeUtils {
 			projectCost.setProjectID(projectID);
 			return projectCost;
 	}
+	
+	public static int getRAGStatus(int value){
+		
+		int retVal = 0;
+		if (value == HawkEyeConstants.GREEN) {
+			retVal = 1;
+		} else if (value <= HawkEyeConstants.AMBER) {
+			retVal = 0;
+		} else if (value <= HawkEyeConstants.RED) {
+			retVal =-1;
+		}
+		
+		return retVal;
+	}
 }

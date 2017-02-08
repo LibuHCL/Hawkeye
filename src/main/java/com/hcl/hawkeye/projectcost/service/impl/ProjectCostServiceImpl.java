@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.hcl.hawkeye.projectcost.DAO.ProjectCostDAO;
 import com.hcl.hawkeye.projectcost.DO.ProjectCostDetails;
 import com.hcl.hawkeye.projectcost.service.ProjectCostService;
+import com.hcl.hawkeye.utils.HawkEyeUtils;
 
 @Service
 public class ProjectCostServiceImpl implements ProjectCostService {
@@ -28,9 +29,18 @@ public class ProjectCostServiceImpl implements ProjectCostService {
 	}
 
 	@Override
-	public ProjectCostDetails getProjectCostData(int projectID) {
+	public Integer getProjectCostData(int projectID) {
+		
 		ProjectCostDetails costDetails = costDAO.getProjectCost(projectID);
-		return costDetails;
+		if(costDetails == null){
+			return 0;
+		}
+		if(costDetails.getPlannedCost()== null || costDetails.getActualCost()== null){
+			return 0;
+			
+		}
+		return HawkEyeUtils.getRAGStatus((int) ((costDetails.getActualCost()/costDetails.getPlannedCost())*100));
+		
 	}
 
 }
