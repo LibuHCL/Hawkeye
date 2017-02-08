@@ -4,7 +4,6 @@ import java.util.Map;
 
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
 import com.hcl.hawkeye.projectmanagement.DO.SprintDetailsOfProject;
-import com.hcl.hawkeye.projectmanagement.DO.Velocityinfo;
 
 public interface ProjectManagementService {
 	
@@ -12,7 +11,7 @@ public interface ProjectManagementService {
 	
 	DashBoardDetails getDashBoardInfo();
 	
-	Velocityinfo getVelocityOfProject(int projectId);
+	Double getVelocityOfProject(int projectId);
 	
 	Map<String, Integer> getIssuesOfProject(int projectId, String issueType);
 	

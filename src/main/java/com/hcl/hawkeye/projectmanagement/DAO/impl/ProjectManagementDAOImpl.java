@@ -98,7 +98,7 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 			
 			for (String key : velocityData.keySet()) {
 				if ("velocityStatEntries".equals(key.trim().toString())) {
-					Map<String, Map<String,StoryPoint>> velData  = (Map<String, Map<String, StoryPoint>>) velocityData.get(key);
+					Map<String, Map<String, Map<String, Double>>> velData  = (Map<String, Map<String, Map<String, Double>>>) velocityData.get(key);
 					velInfo.setVelocityStatEntries(velData);
 				}
 			}
