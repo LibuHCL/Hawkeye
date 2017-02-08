@@ -23,15 +23,19 @@ public class Project {
 	
 	private String techProjectManager;
 	
-	private Date creationDate;
+	private String creationDate;
 	
-	private Date endDate;
+	private String endDate;
 	
 	private String status;
 	
+	private Integer quarter;
+	
+	private Integer count;
+	
 	public Project(){}
 	public Project (long projectId,String projName,int progId,int clientId,int vendorId,String projType,String subType,
-			String techProjectManager,Date creationDate,Date endDate, String status){
+			String techProjectManager,String creationDate,String endDate, String status){
 		this.projectId=projectId;
 		this.projName= projName;
 		this.progId = progId;
@@ -111,19 +115,19 @@ public class Project {
 		this.techProjectManager = techProjectManager;
 	}
 
-	public Date getCreationDate() {
+	public String getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreationDate(Date creationDate) {
+	public void setCreationDate(String creationDate) {
 		this.creationDate = creationDate;
 	}
 
-	public Date getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
 
@@ -133,6 +137,18 @@ public class Project {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public Integer getQuarter() {
+		return quarter;
+	}
+	public void setQuarter(Integer quarter) {
+		this.quarter = quarter;
+	}
+	public Integer getCount() {
+		return count;
+	}
+	public void setCount(Integer count) {
+		this.count = count;
 	}
 	
 	

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import com.hcl.hawkeye.Exceptions.PortfolioCreationException;
 import com.hcl.hawkeye.portfolio.DAO.PortfolioManagementDAO;
-import com.hcl.hawkeye.portfolio.DO.Cost;
 import com.hcl.hawkeye.portfolio.DO.Portfolio;
 import com.hcl.hawkeye.portfolio.DO.Program;
 import com.hcl.hawkeye.portfolio.service.PortfolioManagementService;
@@ -26,15 +25,7 @@ public class PortfolioManagementServiceImpl implements PortfolioManagementServic
 	PortfolioManagementDAO portfolioDAO;
 	@Autowired
 	MessageSource messageSource;
-	
-	@Override
-	public Cost getConsolidatedPortfolioData() {
-		logger.info("Request in getConsolidatedPortfolioData of PortfolioServiceImpl");
-		Cost cost = null;
-		cost = portfolioDAO.getPortfolioData();
-		return cost;
-	}
-	
+		
 	@Override
 	public Portfolio addPortfolio(Portfolio portfolio) {
 		logger.info("Inside addPortfolio method in PortFolioMangementServiceImpl");

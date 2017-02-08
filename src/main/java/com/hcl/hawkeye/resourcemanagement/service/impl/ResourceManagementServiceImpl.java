@@ -1,5 +1,7 @@
 package com.hcl.hawkeye.resourcemanagement.service.impl;
 
+import java.util.HashMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,12 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
 		logger.info("Request in createResource of ResourceServiceImpl");
 		resourceDAO.createResource(resource);
 		logger.info("Resource created successfully");
+	}
+	@Override
+	public HashMap<String,Long> getResourcesCountByProject(String projectId) {
+		logger.info("Request in getResourcesCountByProject of ResourceServiceImpl");
+		HashMap<String,Long> response = resourceDAO.getResourcesCountByProject(projectId);
+		return response;
 	}
 
 }

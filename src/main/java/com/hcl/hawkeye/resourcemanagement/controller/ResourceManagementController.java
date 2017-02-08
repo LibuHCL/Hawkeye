@@ -1,5 +1,7 @@
 package com.hcl.hawkeye.resourcemanagement.controller;
 
+import java.util.HashMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +29,6 @@ private static final Logger logger = LoggerFactory.getLogger(ResourceManagementC
 	    
 	}
 	
-	@RequestMapping(value="/getResourcesCount/{role}", method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-	public int getResourcesCount(@PathVariable("role") String role) {
-		logger.info("Requested to get the resources count");
-		int resource = 0;
-		resource = resourceManagementService.getResourcesCount(role);
-		return resource;
-	}
-	
 	@RequestMapping(value="/getResourceData", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public Resource getResourceData() {
@@ -45,7 +38,13 @@ private static final Logger logger = LoggerFactory.getLogger(ResourceManagementC
 		return resource;
 	}
 	
-	
+	@RequestMapping(value="/getResourcesCount/{projectId}", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public HashMap<String,Long> getResourcesCountByProject(@PathVariable("projectId") String projectId) {
+		logger.info("Requested to get the resources count based on project");
+		HashMap<String,Long> response = resourceManagementService.getResourcesCountByProject(projectId);
+		return response;
+	}
 	
 	
 }

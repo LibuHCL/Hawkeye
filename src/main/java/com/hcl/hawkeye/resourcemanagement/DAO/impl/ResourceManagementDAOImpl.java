@@ -2,6 +2,9 @@ package com.hcl.hawkeye.resourcemanagement.DAO.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +35,7 @@ public class ResourceManagementDAOImpl implements ResourceManagementDAO {
 	public Resource getResourceData() {
 		logger.info("Request to get the data of resources");
 		Resource resource = null;
-		String sql = "select * from HawkEye_Schema.RESOURCE";
+		String sql = "select * from RESOURCE";
 
 		try {
 			resource = jdbcTemplate.queryForObject(sql,resourceRowMapper);
@@ -71,7 +74,7 @@ public class ResourceManagementDAOImpl implements ResourceManagementDAO {
 	@Override
 	public int getResourcesCount(String roleName) {
 		int resourceCount = 0;
-		String sql = "select count(*) from HawkEye_Schema.RESOURCE";
+		String sql = "select count(*) from RESOURCE";
 		try {
 			resourceCount = jdbcTemplate.queryForObject(sql, Integer.class);
 		}  catch (DataAccessException dae) {
@@ -86,7 +89,7 @@ public class ResourceManagementDAOImpl implements ResourceManagementDAO {
 	public void createResource(Resource resource) {
 		try {
 			jdbcTemplate.update(
-					"INSERT INTO HawkEye_Schema.RESOURCE (`PROJECTID`, `FIRSTNAME`, `LASTNAME`, `EMPLOYEEID`, `COMPANYID`, "
+					"INSERT INTO RESOURCE (`PROJECTID`, `FIRSTNAME`, `LASTNAME`, `EMPLOYEEID`, `COMPANYID`, "
 					+ "`CLIENTID`, `EMAIL`, `PHONE_NUMBER`, `ROLE`, `WORK_LOCATION`, `PROJECT_JOINING_DATE`, `PLANNED_RELEASE_DATE`, "
 					+ "`EXIT_DATE`, `RESOURCE_STATUS`)" 
 					+"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -99,5 +102,27 @@ public class ResourceManagementDAOImpl implements ResourceManagementDAO {
 			throw new ResourceManagementException("Exception in resource creation", dae);
 		
 		}
+	}
+
+	@Override
+	public HashMap<String, Long> getResourcesCountByProject(String projectId) {
+		String sql = "SELECT ROLE,COUNT(*) FROM RESOURCE WHERE PROJECTID ='"+projectId+"' group by role";
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
+		HashMap<String,Long> countsList = new HashMap<>();
+		for (Map<String, Object> row : list) {
+			countsList.put((String)row.get("role"), (Long)row.get("count(*)"));
+		}
+		return countsList;
+	}
+
+	@Override
+	public HashMap<String, Long> getResourceAttritionByQuarter(String attritionYear) {
+		String sql = "SELECT QUARTER(PROJECT_JOINING_DATE) AS quarter, COUNT(RESOURCEID) AS count FROM RESOURCE WHERE ING_AGREEMENT='Y' and YEAR(PROJECT_JOINING_DATE)='"+attritionYear+"' and EXIT_DATE< PLANNED_RELEASE_DATE GROUP BY YEAR(PROJECT_JOINING_DATE), QUARTER(PROJECT_JOINING_DATE) ORDER BY YEAR(PROJECT_JOINING_DATE), QUARTER(PROJECT_JOINING_DATE)";
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
+		HashMap<String,Long> attritionList = new HashMap<>();
+		for (Map<String, Object> row : list) {
+			attritionList.put((String)row.get("quarter"), (Long)row.get("count"));
+		}
+		return attritionList;
 	}
 }
