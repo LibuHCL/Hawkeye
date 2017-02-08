@@ -1,5 +1,6 @@
 package com.hcl.hawkeye.utils;
 
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -9,8 +10,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import com.hcl.hawkeye.escalationmanagement.DO.Escalation;
 import com.hcl.hawkeye.portfolio.DO.Portfolio;
 import com.hcl.hawkeye.portfolio.DO.Program;
+import com.hcl.hawkeye.projectcost.DO.ProjectCostDetails;
 import com.hcl.hawkeye.valueaddmanagement.DO.Value;
 
 
@@ -84,4 +87,20 @@ public class HawkEyeUtils {
 		value.setValueId(valueId);
 		return value;
 	}
+
+	public static Escalation populateEscalationWithescId(Escalation esc,
+			int escId) {
+		Escalation createdEsc=new Escalation();
+		BeanUtils.copyProperties(esc, createdEsc);
+		createdEsc.setEscalationId(escId);
+		return createdEsc;
+	}
+
+	public static ProjectCostDetails populateProjectCostWithProjectID(ProjectCostDetails cost,
+			BigInteger projectID) {
+			ProjectCostDetails projectCost = new ProjectCostDetails();
+			BeanUtils.copyProperties(cost, projectCost);
+			projectCost.setProjectID(projectID);
+			return projectCost;
+			}
 }
