@@ -14,4 +14,6 @@ public interface ProgramManagementDAO {
 
 	List<Project>  noOfProgramsInQuarter();
 
+	List<Project> getProjectsPerProgramId(int progId);
+
 }

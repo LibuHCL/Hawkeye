@@ -81,11 +81,8 @@ public class PortfolioManagementDAOImpl implements PortfolioManagementDAO {
 
 	private int getPortfolioId() {	
 		String highestPortIdQuery="SELECT MAX(PORTFOLIO_ID) FROM PORTFOLIO";
-		Integer id=jdbcTemplate.queryForObject(highestPortIdQuery, Integer.class);
-		if(id == null){
-			return 1000;
-		}
-		return id+1;
+		return jdbcTemplate.queryForObject(highestPortIdQuery, Integer.class);
+		
 	
 	}
 

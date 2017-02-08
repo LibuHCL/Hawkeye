@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Project {
 	
-	private long projectId;
+	private int projectId;
 	
 	private String projName;
 	
@@ -21,7 +21,7 @@ public class Project {
 	
 	private String subType;
 	
-	private String techProjectManager;
+	private int techProjectManager;
 	
 	private String creationDate;
 	
@@ -34,8 +34,8 @@ public class Project {
 	private Integer count;
 	
 	public Project(){}
-	public Project (long projectId,String projName,int progId,int clientId,int vendorId,String projType,String subType,
-			String techProjectManager,String creationDate,String endDate, String status){
+	public Project (int projectId,String projName,int progId,int clientId,int vendorId,String projType,String subType,
+			int techProjectManager,String creationDate,String endDate, String status){
 		this.projectId=projectId;
 		this.projName= projName;
 		this.progId = progId;
@@ -51,11 +51,11 @@ public class Project {
 	}
 	
 
-	public long getProjectId() {
+	public int getProjectId() {
 		return projectId;
 	}
 
-	public void setProjectId(long projectId) {
+	public void setProjectId(int projectId) {
 		this.projectId = projectId;
 	}
 
@@ -107,11 +107,11 @@ public class Project {
 		this.subType = subType;
 	}
 
-	public String getTechProjectManager() {
+	public int getTechProjectManager() {
 		return techProjectManager;
 	}
 
-	public void setTechProjectManager(String techProjectManager) {
+	public void setTechProjectManager(int techProjectManager) {
 		this.techProjectManager = techProjectManager;
 	}
 
