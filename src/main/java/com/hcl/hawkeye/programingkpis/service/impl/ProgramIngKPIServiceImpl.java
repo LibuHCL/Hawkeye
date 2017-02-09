@@ -52,8 +52,10 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 		for (int i : intVal) {
 			if(i == 1) {
 				KPIValue kv1 = new KPIValue();
-				kv1.set_graphdata(null);
-				kv1.set_labels(null);
+				List<Integer> grapIntData = new ArrayList<>();
+				List<String> labelData = new ArrayList<>();
+				kv1.set_graphdataOfVelocity(grapIntData);
+				kv1.set_labels(labelData);
 				kv1.set_name(env.getProperty("kpi.name1"));
 				kVList.add(kv1);
 			}
@@ -86,7 +88,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 				kv2.set_graphdata(grapData);
 				
 				
-				kv2.set_name(env.getProperty("kpi.name1"));
+				kv2.set_name(env.getProperty("kpi.name2"));
 				kVList.add(kv2);
 			}
 			
@@ -104,16 +106,14 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 				List<VelocityOfProject> priorityHighVal = pmService.getVelocityOfSprint(Integer.parseInt(env.getProperty("project.projectid")));
 				KPIValue kv2 = new KPIValue();
 				List<String> labelData = new ArrayList<>();
-				List<Integer[]> grapIntData = new ArrayList<>();
-				List<Integer> grapIntData1 = new ArrayList<>();
+				List<Integer> grapIntData = new ArrayList<>();
 				
 				for (VelocityOfProject string : priorityHighVal) {
 					labelData.add(string.getSprintName());
-					grapIntData1.add((int)string.getCompletedValue());
+					grapIntData.add((int)string.getCompletedValue());
 				}
 				
-				grapIntData.add(grapIntData1.toArray(new Integer[grapIntData1.size()]));
-				kv2.set_graphdata(grapIntData);
+				kv2.set_graphdataOfVelocity(grapIntData);
 				kv2.set_labels(labelData);
 				kv2.set_name(env.getProperty("kpi.name4"));
 				kVList.add(kv2);
