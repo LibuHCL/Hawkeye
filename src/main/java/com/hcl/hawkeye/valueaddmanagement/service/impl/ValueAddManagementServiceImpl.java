@@ -16,6 +16,7 @@ import com.hcl.hawkeye.valueaddmanagement.DO.Value;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueAdd;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueAddAcceptedIdeas;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueCreation;
+import com.hcl.hawkeye.valueaddmanagement.DO.ValueCreationQuarterly;
 import com.hcl.hawkeye.valueaddmanagement.service.ValueAddManagementService;
 
 @Service
@@ -71,7 +72,7 @@ public class ValueAddManagementServiceImpl implements ValueAddManagementService 
 
 	@Override
 	public ValueCreation getValueCreationByProgramId(Integer programId) {
-		logger.info("Request in getValueCreationbyId of ValueAddManagementServiceImpl");
+		logger.info("Request in getValueCreationByProgramId of ValueAddManagementServiceImpl");
 		try {
 			return valueAddManagementDAO.getValueCreationByProgramId(programId);
 		} catch (DataAccessException dae) {
@@ -84,9 +85,35 @@ public class ValueAddManagementServiceImpl implements ValueAddManagementService 
 	
 	@Override
 	public ValueCreation getValueCreationByProjectId(Integer projectId) {
-		logger.info("Request in getValueCreationbyId of ValueAddManagementServiceImpl");
+		logger.info("Request in getValueCreationByProjectId of ValueAddManagementServiceImpl");
 		try {
 			return valueAddManagementDAO.getValueCreationByProjectId(projectId);
+		} catch (DataAccessException dae) {
+			Locale locale=new Locale("en", "IN");
+			String errorMsg=messageSource.getMessage("error.create.getvalueadd", new Object[] {}, locale);
+			logger.error(errorMsg, dae);			
+			throw new ValueAddDataRetrievalException(errorMsg, dae);
+		}
+	}
+
+	@Override
+	public ValueCreationQuarterly getQuarterlyValueByProjectId(Integer projectId) {
+		logger.info("Request in getQuarterlyValueByProjectId of ValueAddManagementServiceImpl");
+		try {
+			return valueAddManagementDAO.getQuarterlyValueByProjectId(projectId);
+		} catch (DataAccessException dae) {
+			Locale locale=new Locale("en", "IN");
+			String errorMsg=messageSource.getMessage("error.create.getvalueadd", new Object[] {}, locale);
+			logger.error(errorMsg, dae);			
+			throw new ValueAddDataRetrievalException(errorMsg, dae);
+		}
+	}
+
+	@Override
+	public ValueCreationQuarterly getQuarterlyValueByProgramId(Integer programId) {
+		logger.info("Request in getQuarterlyValueByProgramId of ValueAddManagementServiceImpl");
+		try {
+			return valueAddManagementDAO.getQuarterlyValueByProgramId(programId);
 		} catch (DataAccessException dae) {
 			Locale locale=new Locale("en", "IN");
 			String errorMsg=messageSource.getMessage("error.create.getvalueadd", new Object[] {}, locale);

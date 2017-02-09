@@ -26,6 +26,7 @@ import com.hcl.hawkeye.valueaddmanagement.DO.Value;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueAdd;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueAddAcceptedIdeas;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueCreation;
+import com.hcl.hawkeye.valueaddmanagement.DO.ValueCreationQuarterly;
 
 @Repository
 public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
@@ -157,18 +158,18 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 
 	@Override
 	public ValueCreation getValueCreationByProgramId(Integer programId) {
-		ValueCreation valueCreation = new ValueCreation();
-		Integer Id = null;
-		String queryCondition = null;
 		logger.info("Request to get Value Creation by Id  programId " + programId);
+		ValueCreation valueCreation = new ValueCreation();
+		Integer id = null;
+		String queryCondition = null;
 		ArrayList<String> series = new ArrayList<String>();
 		if (0 != programId) {
-			Id = programId;
+			id = programId;
 			queryCondition = "PROGRAMID";
 		}
 		updateSeries(series);
 		valueCreation.setSeries(series);
-		ArrayList<ArrayList<Integer>> lineData = updateLineDatabyId(Id, queryCondition);
+		ArrayList<ArrayList<Integer>> lineData = updateLineDatabyId(id, queryCondition);
 		valueCreation.setLinedata(lineData);
 		return valueCreation;
 	}
@@ -180,32 +181,32 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 
 	@Override
 	public ValueCreation getValueCreationByProjectId(Integer projectId) {
-		ValueCreation valueCreation = new ValueCreation();
-		Integer Id = null;
-		String queryCondition = null;
 		logger.info("Request to get Value Creation by Id  projectId " + projectId);
+		ValueCreation valueCreation = new ValueCreation();
+		Integer id = null;
+		String queryCondition = null;
 		ArrayList<String> series = new ArrayList<String>();
 		if (0 != projectId) {
-			Id = projectId;
+			id = projectId;
 			queryCondition = "PROJECTID";
 		}
 		updateSeries(series);
 		valueCreation.setSeries(series);
-		ArrayList<ArrayList<Integer>> lineData = updateLineDatabyId(Id, queryCondition);
+		ArrayList<ArrayList<Integer>> lineData = updateLineDatabyId(id, queryCondition);
 		valueCreation.setLinedata(lineData);
 		return valueCreation;
 	}
 
-	private ArrayList<ArrayList<Integer>> updateLineDatabyId(Integer Id, String queryCondition) {
+	private ArrayList<ArrayList<Integer>> updateLineDatabyId(Integer id, String queryCondition) {
 		ArrayList<ArrayList<Integer>> lineData = new ArrayList<ArrayList<Integer>>();
-		ArrayList<Integer> proposedList = getValueAddProposed(Id, queryCondition);
-		ArrayList<Integer> acceptedList = getValueAddAccepted(Id, queryCondition);
+		ArrayList<Integer> proposedList = getValueAddProposed(id, queryCondition);
+		ArrayList<Integer> acceptedList = getValueAddAccepted(id, queryCondition);
 		lineData.add(proposedList);
 		lineData.add(acceptedList);
 		return (lineData);
 	}
 
-	private ArrayList<Integer> getValueAddAccepted(Integer Id, String queryCondition) {
+	private ArrayList<Integer> getValueAddAccepted(Integer id, String queryCondition) {
 		ArrayList<Integer> acceptedList = new ArrayList<Integer>();
 		String valueAddAcceptedQuery = " SELECT VALUE.PROGRAMID, "
 				+ "  SUM(IF(MON = 'January', VALUE.TOTAL, 0)) AS 'JAN', "
@@ -224,14 +225,14 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 				+ " 	FROM VALUEADD  " + " 	WHERE " + queryCondition + " = ? " + " AND  "
 				+ " 	VALUEADD_STATUS != 'Rejected' AND   " + "  PROPOSED_DATE >= DATE_SUB(NOW(),INTERVAL 1 YEAR)  "
 				+ "  GROUP BY PROGRAMID  " + " ) VALUE  " + " GROUP BY VALUE.PROGRAMID; ";
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(valueAddAcceptedQuery, new Object[] { Id });
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(valueAddAcceptedQuery, new Object[] { id });
 		for (Map<String, Object> row : list) {
 			updateListMonthwise(row, acceptedList);
 		}
 		return acceptedList;
 	}
 
-	private ArrayList<Integer> getValueAddProposed(Integer Id, String queryCondition) {
+	private ArrayList<Integer> getValueAddProposed(Integer id, String queryCondition) {
 		ArrayList<Integer> proposedList = new ArrayList<Integer>();
 		String valueAddProposedQuery = " SELECT VALUE.PROGRAMID, "
 				+ "  SUM(IF(MON = 'January', VALUE.TOTAL, 0)) AS 'JAN', "
@@ -250,7 +251,7 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 				+ " 	FROM VALUEADD  " + " 	WHERE " + queryCondition + " = ? AND  "
 				+ "  PROPOSED_DATE >= DATE_SUB(NOW(),INTERVAL 1 YEAR)  " + "  GROUP BY PROGRAMID  " + " ) VALUE  "
 				+ " GROUP BY VALUE.PROGRAMID; ";
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(valueAddProposedQuery, new Object[] { Id });
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(valueAddProposedQuery, new Object[] { id });
 		for (Map<String, Object> row : list) {
 			updateListMonthwise(row, proposedList);
 		}
@@ -271,6 +272,113 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 		proposedList.add(((BigDecimal) row.get("OCT")).intValue());
 		proposedList.add(((BigDecimal) row.get("NOV")).intValue());
 		proposedList.add(((BigDecimal) row.get("DEC")).intValue());
+	}
+	
+	@Override
+	public ValueCreationQuarterly getQuarterlyValueByProgramId(Integer program) {
+		logger.info("Request to get Quarterly Value Creation by Id  program " + program);
+		ValueCreationQuarterly valueCreation = new ValueCreationQuarterly();
+		Integer id = null;
+		String queryCondition = null;
+		ArrayList<String> series = new ArrayList<String>();
+		ArrayList<String> labels = new ArrayList<String>();
+		if (0 != program) {
+			id = program;
+			queryCondition = "PROGRAMID";
+		}
+		updateQuarterlySeries(series);
+		updateQuarterlyLabels(labels);
+		valueCreation.setSeries(series);
+		ArrayList<ArrayList<Integer>> lineData = updateQuarterlyLineDatabyId(id, queryCondition);
+		valueCreation.setGraphdata(lineData);
+		return valueCreation;
+	}
+
+	@Override
+	public ValueCreationQuarterly getQuarterlyValueByProjectId(Integer projectId) {
+		logger.info("Request to get Quarterly Value Creation by Id  projectId " + projectId);
+		ValueCreationQuarterly valueCreation = new ValueCreationQuarterly();
+		Integer id = null;
+		String queryCondition = null;
+		ArrayList<String> series = new ArrayList<String>();
+		ArrayList<String> labels = new ArrayList<String>();
+		if (0 != projectId) {
+			id = projectId;
+			queryCondition = "PROJECTID";
+		}
+		updateQuarterlySeries(series);
+		updateQuarterlyLabels(labels);
+		valueCreation.setSeries(series);
+		ArrayList<ArrayList<Integer>> lineData = updateQuarterlyLineDatabyId(id, queryCondition);
+		valueCreation.setGraphdata(lineData);
+		return valueCreation;
+	}
+
+	private void updateQuarterlyLabels(ArrayList<String> labels) {
+		labels.add("Q1");
+		labels.add("Q2");
+		labels.add("Q3");
+		labels.add("Q4");
+	}
+
+	private void updateQuarterlySeries(ArrayList<String> series) {
+		series.add("Ideas Implemented");
+		series.add("Ideas Accepted");
+	}
+
+	private ArrayList<ArrayList<Integer>> updateQuarterlyLineDatabyId(Integer id, String queryCondition) {
+		ArrayList<ArrayList<Integer>> lineData = new ArrayList<ArrayList<Integer>>();
+		ArrayList<Integer> implementedList = getImplValueAddQuarterly(id, queryCondition);
+		ArrayList<Integer> approvedList = getApprovedValueAddQuarterly(id, queryCondition);
+		lineData.add(implementedList);
+		lineData.add(approvedList);
+		return (lineData);
+	}
+
+	private ArrayList<Integer> getImplValueAddQuarterly(Integer id, String queryCondition) {
+		ArrayList<Integer> implementedList = new ArrayList<Integer>();
+		String valueAddImplementedQuery = " SELECT VALUE.PROJECTID,  "
+				+ " SUM(IF(QUARTER = '1', VALUE.TOTAL, 0)) AS 'Q1', "
+				+ "  SUM(IF(QUARTER = '2', VALUE.TOTAL, 0)) AS 'Q2', "
+				+ " SUM(IF(QUARTER = '3', VALUE.TOTAL, 0)) AS 'Q3', "
+				+ " SUM(IF(QUARTER = '4', VALUE.TOTAL, 0)) AS 'Q4'  " + " FROM "
+				+ " ( SELECT PROJECTID,  QUARTER(PROPOSED_DATE) as QUARTER,  " + " 	COUNT(1) AS TOTAL "
+				+ " FROM VALUEADD " + " WHERE " + queryCondition + "= ? AND     "
+				+ " PROPOSED_DATE >= DATE_SUB(NOW(),INTERVAL 1 YEAR) " + " AND VALUEADD_STATUS = 'Implemented' "
+				+ " GROUP BY PROJECTID " + " ) VALUE " + " GROUP BY VALUE.PROJECTID; ";
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(valueAddImplementedQuery, new Object[] { id });
+		for (Map<String, Object> row : list) {
+			updateListQuarterly(row, implementedList);
+		}
+
+		return implementedList;
+	}
+
+	private ArrayList<Integer> getApprovedValueAddQuarterly(Integer id, String queryCondition) {
+		ArrayList<Integer> approvedList = new ArrayList<Integer>();
+		String valueAddImplementedQuery = " SELECT VALUE.PROJECTID,  "
+				+ " SUM(IF(QUARTER = '1', VALUE.TOTAL, 0)) AS 'Q1',   "
+				+ " SUM(IF(QUARTER = '2', VALUE.TOTAL, 0)) AS 'Q2',   "
+				+ " SUM(IF(QUARTER = '3', VALUE.TOTAL, 0)) AS 'Q3',   "
+				+ " SUM(IF(QUARTER = '4', VALUE.TOTAL, 0)) AS 'Q4'      " + " FROM   "
+				+ " ( SELECT PROJECTID,  QUARTER(PROPOSED_DATE) as QUARTER,    " + " COUNT(1) AS TOTAL   "
+				+ " 		FROM VALUEADD   " + " WHERE " + queryCondition + "= ? AND        "
+				+ "             PROPOSED_DATE >= DATE_SUB(NOW(),INTERVAL 1 YEAR)   "
+				+ "             AND (VALUEADD_STATUS != 'Proposed' AND VALUEADD_STATUS != 'Rejected')   "
+				+ "             GROUP BY PROJECTID  " + " 			) VALUE   " + " GROUP BY VALUE.PROJECTID; ";
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(valueAddImplementedQuery, new Object[] { id });
+		for (Map<String, Object> row : list) {
+			updateListQuarterly(row, approvedList);
+		}
+
+		return approvedList;
+	}
+
+	private void updateListQuarterly(Map<String, Object> row, ArrayList<Integer> implementedList) {
+		implementedList.add(((BigDecimal) row.get("Q1")).intValue());
+		implementedList.add(((BigDecimal) row.get("Q2")).intValue());
+		implementedList.add(((BigDecimal) row.get("Q3")).intValue());
+		implementedList.add(((BigDecimal) row.get("Q4")).intValue());
 	}
 
 }

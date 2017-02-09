@@ -19,6 +19,7 @@ import com.hcl.hawkeye.valueaddmanagement.DO.Value;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueAdd;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueAddAcceptedIdeas;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueCreation;
+import com.hcl.hawkeye.valueaddmanagement.DO.ValueCreationQuarterly;
 import com.hcl.hawkeye.valueaddmanagement.service.ValueAddManagementService;
 
 @RestController
@@ -75,12 +76,21 @@ public class ValueAddManagementController {
 		return valueCreation;
 	}
 	
-	@RequestMapping(value="/getValueCreationByProjectId/{projectId}", method = RequestMethod.GET)
+	@RequestMapping(value="/getQuartValueByProjectId/{projectId}", method = RequestMethod.GET)
 	@ResponseBody
-	public ValueCreation getValueCreationByProjectId(@PathVariable("projectId") Integer projectId) {
-		logger.info("Requested to get the valueAdd information for Program or project");
-		ValueCreation valueCreation = new ValueCreation();
-		valueCreation = valueAddManagementService.getValueCreationByProjectId(projectId);
+	public ValueCreationQuarterly getQuartValueByProjectId(@PathVariable("projectId") Integer projectId) {
+		logger.info("Requested to get the valueAdd information for project");
+		ValueCreationQuarterly valueCreation = new ValueCreationQuarterly();
+		valueCreation = valueAddManagementService.getQuarterlyValueByProjectId(projectId);
+		return valueCreation;
+	}
+	
+	@RequestMapping(value="/getQuartValueByProgramId/{programId}", method = RequestMethod.GET)
+	@ResponseBody
+	public ValueCreationQuarterly getQartValueCreationByProgramId1(@PathVariable("programId") Integer programId) {
+		logger.info("Requested to get the valueAdd information for Program");
+		ValueCreationQuarterly valueCreation = new ValueCreationQuarterly();
+		valueCreation = valueAddManagementService.getQuarterlyValueByProgramId(programId);
 		return valueCreation;
 	}
 

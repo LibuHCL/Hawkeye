@@ -4,6 +4,7 @@ import com.hcl.hawkeye.valueaddmanagement.DO.Value;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueAdd;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueAddAcceptedIdeas;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueCreation;
+import com.hcl.hawkeye.valueaddmanagement.DO.ValueCreationQuarterly;
 
 public interface ValueAddManagementService {
 
@@ -18,4 +19,8 @@ public interface ValueAddManagementService {
 	ValueCreation getValueCreationByProgramId(Integer programId);
 	
 	ValueCreation getValueCreationByProjectId(Integer projectId);
+	
+	ValueCreationQuarterly getQuarterlyValueByProjectId(Integer projectId);
+
+	ValueCreationQuarterly getQuarterlyValueByProgramId(Integer programId);
 }
