@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.hcl.hawkeye.codequality.service.CodeQualityService;
 import com.hcl.hawkeye.portfolio.DO.Project;
 import com.hcl.hawkeye.programmanagement.service.ProgramManagementService;
+import com.hcl.hawkeye.projectcost.DO.ProjectCostDetails;
 import com.hcl.hawkeye.projectcost.service.ProjectCostService;
 import com.hcl.hawkeye.projectdashboard.DO.DashBoardProjectslist;
 import com.hcl.hawkeye.projectdashboard.DO.ProjectDashBoard;
@@ -19,6 +20,8 @@ import com.hcl.hawkeye.projectdashboard.DO.DashBoardResource;
 import com.hcl.hawkeye.projectdashboard.service.ProjectDashBoardService;
 import com.hcl.hawkeye.projectmanagement.service.ProjectManagementService;
 import com.hcl.hawkeye.resourcemanagement.service.ResourceManagementService;
+import com.hcl.hawkeye.utils.HawkEyeConstants;
+import com.hcl.hawkeye.utils.HawkEyeUtils;
 
 @Service
 public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
@@ -35,9 +38,6 @@ public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 	ProjectCostService projCostService;
 	
 	@Autowired
-	ResourceManagementService resMgmtService;
-	
-	@Autowired
 	CodeQualityService codeQService;
 
 	@Override
@@ -50,14 +50,15 @@ public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 		
 		for(Project proj1 :listOfProjects){
 			DashBoardProjectslist projList =new DashBoardProjectslist();
-			logger.info("Project"+proj1);
+			logger.info("Project Id: {}",proj1);
+			
 			//resMgmtService.getResourcesCountByProject(Integer.toString(proj1.getProjectId()));
 			projList.setId(proj1.getProjectId());
 			projList.setName(proj1.getProjName());
 			projList.setStartdate(proj1.getCreationDate());
 			projList.setEnddate(proj1.getEndDate());
 			projList.setRisks(0);
-			projList.setCost(projCostService.getProjectCostData(proj1.getProjectId()));
+			projList.setCost(getCostData(proj1.getProjectId()));
 			projList.setSchedule(projMgmtService.getVelocityOfProject(proj1.getProjectId()));
 			projList.setQuality(codeQService.getCodeQualityRAGStatus());
 			projList.setTechmanager("NULL");
@@ -73,6 +74,19 @@ public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 		pd.setProjects(project);
 		
 		return pd;
+	}
+	
+	public int getCostData(int projectId){
+		logger.info("getCostData: {}",projectId);
+		ProjectCostDetails costDetails = projCostService.getProjectCostData(projectId);
+		if(costDetails == null){
+			return HawkEyeConstants.GREEN;
+		}
+		if(costDetails.getPlannedCost()== null || costDetails.getActualCost()== null){
+			return HawkEyeConstants.GREEN;
+			
+		}
+		return HawkEyeUtils.getRAGStatus((int) ((costDetails.getActualCost()/costDetails.getPlannedCost())*100));
 	}
 
 }

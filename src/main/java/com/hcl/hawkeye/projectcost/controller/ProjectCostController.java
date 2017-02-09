@@ -52,11 +52,11 @@ public class ProjectCostController {
 	@ResponseBody
 	public void getProjectCostData(@PathVariable("id") int projectID){
 		logger.info("Requesting API to get project cost with ID: " + projectID);
-		Integer cost = null;
-		//ProjectCostDetails projectCost = null;
+		//Integer cost = null;
+		ProjectCostDetails projectCost = null;
 		if(projectID != 0){
-			 cost = projectCostService.getProjectCostData(projectID);
+			projectCost = projectCostService.getProjectCostData(projectID);
 		}
-		logger.info("Cost::{}",cost);
+		logger.info("Cost::{}",projectCost.getPlannedCost());
 	}
 }
