@@ -16,4 +16,6 @@ public interface ProgramManagementDAO {
 
 	List<Project> getProjectsPerProgramId(int progId);
 
+	Project getProject(int projectId);
+
 }

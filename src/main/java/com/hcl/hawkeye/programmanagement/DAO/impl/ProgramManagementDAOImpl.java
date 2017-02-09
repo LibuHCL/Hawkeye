@@ -1,5 +1,7 @@
 package com.hcl.hawkeye.programmanagement.DAO.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.hcl.hawkeye.portfolio.DO.Program;
@@ -118,4 +121,37 @@ public class ProgramManagementDAOImpl implements ProgramManagementDAO {
 		
 		return projectsList;
 	}
+	
+	@Override
+	public Project getProject(int projectId) {
+		logger.info("Inside getProject method in ProgramManagementDAOImpl");	
+		Project proj = null;
+		String sql_getProject ="SELECT PROJECTID,PROJECT_NAME,PROGRAM_ID,CLIENT_ID,VENDOR_ID,PROJECT_TYPE,"
+				+ "SUBTYPE,TECHNICAL_PROJECT_MANAGER_ID,CREATION_DATE,END_DATE,PROJECT_STATUS FROM PROJECT WHERE PROJECTID=?";
+		
+		proj = jdbcTemplate.queryForObject(sql_getProject,projectRowMapper);
+		return proj;
+	}
+	
+	RowMapper<Project> projectRowMapper = new RowMapper<Project>() {
+
+		@Override
+		public Project mapRow(ResultSet rSet, int arg1) throws SQLException {
+			Project project = new Project();
+			project.setProjectId((rSet.getInt(1)));
+			project.setProjName(rSet.getString(2));
+			project.setProgId(rSet.getInt(3));
+			project.setClientId(rSet.getInt(4));
+			project.setVendorId(rSet.getInt(5));
+			project.setProjType(rSet.getString(6));
+			project.setSubType(rSet.getString(7));
+			project.setTechProjectManager(rSet.getInt(8));
+			project.setCreationDate(rSet.getString(9));
+			project.setEndDate(rSet.getString(10));
+			project.setStatus(rSet.getString(11));
+			return project;
+		}
+	};
+
+
 }

@@ -84,4 +84,16 @@ public class ProgramManagementServiceImpl implements ProgramManagementService {
 		}
 	}
 
+	@Override
+	public Project getProject(int projectId) {
+		try {
+			return ProgramManagementDAO.getProject(projectId);
+		} catch (DataAccessException dae) {
+			Locale locale=new Locale("en", "IN");
+			String errorMsg=messageSource.getMessage("error.get.getProjectsPerProgramId", new Object[] {projectId}, locale);
+			logger.error(errorMsg, dae);			
+			throw new ProgramCreationException(errorMsg, dae);
+		}
+	}
+
 }
