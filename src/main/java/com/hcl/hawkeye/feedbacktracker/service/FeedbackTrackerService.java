@@ -10,6 +10,6 @@ public interface FeedbackTrackerService {
 
 	FeedbackDetails getFeedbackPerProject(String reporterType, int projectId);
 
-	List<FeedbackDetails> getFeedbackPerProgram(String reporterType, int projectId);
+	List<FeedbackDetails> getFeedbackPerProgram(String reporterType, int programId);
 
 }

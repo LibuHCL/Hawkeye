@@ -1,6 +1,7 @@
 package com.hcl.hawkeye.resourcemanagement.controller;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hcl.hawkeye.portfolio.DO.Resource;
+import com.hcl.hawkeye.resourcemanagement.DO.ProgramResourceCount;
+import com.hcl.hawkeye.resourcemanagement.DO.Resource;
 import com.hcl.hawkeye.resourcemanagement.service.ResourceManagementService;
 
 @RestController
@@ -40,11 +42,25 @@ private static final Logger logger = LoggerFactory.getLogger(ResourceManagementC
 	
 	@RequestMapping(value="/getResourcesCount/{projectId}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public HashMap<String,Long> getResourcesCountByProject(@PathVariable("projectId") String projectId) {
+	public HashMap<String,Long> getResourcesCountByProject(@PathVariable("projectId") int projectId) {
 		logger.info("Requested to get the resources count based on project");
 		HashMap<String,Long> response = resourceManagementService.getResourcesCountByProject(projectId);
 		return response;
 	}
 	
+	@RequestMapping(value="/getResourcesCount/count/{programId}", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public List<ProgramResourceCount> getResourcesCountByProgram(@PathVariable("programId") int programId) {
+		logger.info("Requested to get the resources count based on programId");
+		List<ProgramResourceCount> response = resourceManagementService.getResourcesCountByProgram(programId);
+		return response;
+	}
 	
+	@RequestMapping(value="/getResourcesPercentByPortfolio/{portfolioId}", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public Double getResourcesPercentByPortfolio(@PathVariable("portfolioId") int portfolioId) {
+		logger.info("Requested to get the resources count based on programId");
+		Double response = resourceManagementService.getResourcesPercentByPortfolio(portfolioId);
+		return response;
+	}
 }

@@ -39,7 +39,7 @@ public class FeedbackTrackerDAOImpl implements FeedbackTrackerDAO {
 				+ "REPORTER_RESOURCE_ID,REPORTER_COMPANY_ID,REPORTER_TYPE,REPORTEE_ID) VALUES(?,?,?,?,?,?,?,?,?,?) ";
 		
 		try{
-			jdbcTemplate.update(feedBack_SQL,new Object[] {fbk.getFeedbackId(),fbk.getProjectId(),fbk.getFeedback_value(),fbk.getWeightage(),
+			jdbcTemplate.update(feedBack_SQL,new Object[] {fbk.getFeedbackId(),fbk.getProjectId(),fbk.getParamaterId(),fbk.getFeedback_value(),fbk.getWeightage(),
 					fbk.getFeedback_Date(),fbk.getReporter_resource_Id(),fbk.getReporter_company_Id(),fbk.getReporter_Type(),fbk.getReportee()});
 		  }
 		catch (DataAccessException dae) {
@@ -72,7 +72,7 @@ public class FeedbackTrackerDAOImpl implements FeedbackTrackerDAO {
 	public FeedbackDetails getFeedbackPerProject(String reporterType, int projectId) {
 		// TODO Auto-generated method stub
 		FeedbackDetails feebkdetail = null;
-		String getFeedBackperProject_SQL ="SELECT * FROM hawkeye_schema.FEEDBACK_TRACKER WHERE REPORTER_TYPE = ? AND PROJECTID = ?";
+		String getFeedBackperProject_SQL ="SELECT * FROM FEEDBACK_TRACKER WHERE REPORTER_TYPE = ? AND PROJECTID = ?";
 		try{
 			feebkdetail = jdbcTemplate.queryForObject(getFeedBackperProject_SQL, new Object[] {reporterType,projectId}, rowMapper);
 		   }
@@ -82,33 +82,31 @@ public class FeedbackTrackerDAOImpl implements FeedbackTrackerDAO {
 			throw new FeedbackTrackException("Exception in Feedbacktrack Details", dae);
 		
 	     }
-		System.out.println(feebkdetail.getFeedbackId());
-		System.out.println(feebkdetail.getFeedback_Date());
+		logger.info("get the result getFeedbackPerProject METHOD");
 		return feebkdetail;
 	}
 
 	@Override
-	public List<FeedbackDetails> getFeedbackPerProgram(String reporterType, int projectId) {
+	public List<FeedbackDetails> getFeedbackPerProgram(String reporterType, int programId) {
 		// TODO Auto-generated method stub
 		List<FeedbackDetails> feebkdetailList = new ArrayList<FeedbackDetails>();
-		String getFeedBackperProject_SQL ="Select f.* from FeedbackTracker f, Project p where f.projectId = p.projectId and p.programId=? and f.reporterType=?";
+		String getFeedBackperProject_SQL = "SELECT F. * FROM FEEDBACK_TRACKER F, PROJECT P WHERE F.PROJECTID = P.PROJECTID AND P.PROGRAM_ID = ? AND F.REPORTER_TYPE = ?"; 
 		try{
-			List<Map<String, Object>> feedbackList = jdbcTemplate.queryForList(getFeedBackperProject_SQL,new Object[] {reporterType,projectId});
-			
+			List<Map<String, Object>> feedbackList = jdbcTemplate.queryForList(getFeedBackperProject_SQL,new Object[] {programId,reporterType});
 			if(feedbackList  != null && feedbackList.size() >0)  
 			{
 				for (Map<String, Object> row : feedbackList) {
 					
 					FeedbackDetails feedback = new FeedbackDetails();
-					logger.info(" FeedbackDetails:"+row.get("projectId"));
-		            feedback.setFeedbackId((Integer)row.get("feedbackId"));
-					feedback.setParamaterId((Integer)row.get("paramaterId"));
-					feedback.setFeedback_value((Integer)row.get("feedback_value"));
-					feedback.setWeightage((Integer)row.get("weightage"));
-					feedback.setFeedback_Date((String)row.get("feedback_Date"));
-					feedback.setReporter_resource_Id((Integer)row.get("reporter_resource_Id"));
-					feedback.setReporter_company_Id((Integer)row.get("reporter_company_Id"));
+					feedback.setFeedbackId(Integer.valueOf(row.get("FEEDBACKID").toString()));
+					feedback.setParamaterId(Integer.valueOf(row.get("PARAMETERID").toString()));
+					feedback.setFeedback_value(Integer.valueOf(row.get("FEEDBACK_VALUE").toString()));
+					feedback.setWeightage(Integer.valueOf(row.get("WEIGHTAGE").toString()));
+					//feedback.setFeedback_Date((String)row.get("FEEDBACK_DATE"));//need to change this
+					feedback.setReporter_resource_Id(Integer.valueOf(row.get("REPORTER_RESOURCE_ID").toString()));
+					feedback.setReporter_company_Id(Integer.valueOf(row.get("REPORTER_COMPANY_ID").toString()));
 					feebkdetailList.add(feedback);
+					
 		        } 
 			}
 		   }
@@ -118,7 +116,6 @@ public class FeedbackTrackerDAOImpl implements FeedbackTrackerDAO {
 			throw new FeedbackTrackException("Exception in Feedbacktrack Details", dae);
 		
 	     }
-		
 		return feebkdetailList;
 	}
 

@@ -8,16 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hcl.hawkeye.portfolio.DO.Portfolio;
-import com.hcl.hawkeye.portfolio.DO.Program;
 import com.hcl.hawkeye.valueaddmanagement.DO.Value;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueAdd;
+import com.hcl.hawkeye.valueaddmanagement.DO.ValueAddAcceptedIdeas;
+import com.hcl.hawkeye.valueaddmanagement.DO.ValueCreation;
 import com.hcl.hawkeye.valueaddmanagement.service.ValueAddManagementService;
 
 @RestController
@@ -54,6 +55,33 @@ public class ValueAddManagementController {
 		ValueAdd valueAdd = new ValueAdd();
 		valueAdd = valueAddManagementService.getNumberOfValueAdd();
 		return valueAdd;
+	}
+	
+	@RequestMapping(value="/getValueAddAccepted/{programId}", method = RequestMethod.GET)
+	@ResponseBody
+	public ValueAddAcceptedIdeas getValueAddByAcceptedIdeas(@PathVariable("programId") Integer programId) {
+		logger.info("Requested to get the valueAdd information for Program");
+		ValueAddAcceptedIdeas valueAddAcceptedIdeas = new ValueAddAcceptedIdeas();
+		valueAddAcceptedIdeas = valueAddManagementService.getValueAddByAcceptedIdeas(programId);
+		return valueAddAcceptedIdeas;
+	}
+	
+	@RequestMapping(value="/getValueCreationByProgramId/{programId}", method = RequestMethod.GET)
+	@ResponseBody
+	public ValueCreation getValueCreationByProgramId(@PathVariable("programId") Integer programId) {
+		logger.info("Requested to get the valueAdd information for Program or project");
+		ValueCreation valueCreation = new ValueCreation();
+		valueCreation = valueAddManagementService.getValueCreationByProgramId(programId);
+		return valueCreation;
+	}
+	
+	@RequestMapping(value="/getValueCreationByProjectId/{projectId}", method = RequestMethod.GET)
+	@ResponseBody
+	public ValueCreation getValueCreationByProjectId(@PathVariable("projectId") Integer projectId) {
+		logger.info("Requested to get the valueAdd information for Program or project");
+		ValueCreation valueCreation = new ValueCreation();
+		valueCreation = valueAddManagementService.getValueCreationByProjectId(projectId);
+		return valueCreation;
 	}
 
 }

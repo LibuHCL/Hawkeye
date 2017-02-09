@@ -11,7 +11,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.hcl.hawkeye.Exceptions.ProgramCreationException;
-import com.hcl.hawkeye.escalationmanagement.DO.EscalationDetails;
 import com.hcl.hawkeye.portfolio.DO.Program;
 import com.hcl.hawkeye.portfolio.DO.Project;
 import com.hcl.hawkeye.programmanagement.DAO.ProgramManagementDAO;
@@ -80,6 +79,18 @@ public class ProgramManagementServiceImpl implements ProgramManagementService {
 		} catch (DataAccessException dae) {
 			Locale locale=new Locale("en", "IN");
 			String errorMsg=messageSource.getMessage("error.get.getProjectsPerProgramId", new Object[] {progId}, locale);
+			logger.error(errorMsg, dae);			
+			throw new ProgramCreationException(errorMsg, dae);
+		}
+	}
+
+	@Override
+	public Project getProject(int projectId) {
+		try {
+			return ProgramManagementDAO.getProject(projectId);
+		} catch (DataAccessException dae) {
+			Locale locale=new Locale("en", "IN");
+			String errorMsg=messageSource.getMessage("error.get.getProjectsPerProgramId", new Object[] {projectId}, locale);
 			logger.error(errorMsg, dae);			
 			throw new ProgramCreationException(errorMsg, dae);
 		}

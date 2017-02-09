@@ -16,6 +16,8 @@ public interface ProgramManagementService {
 
 	List<Project> getProjectsPerProgramId(int progId);
 
+	Project getProject(int projectId);
+
 	
 
 }
