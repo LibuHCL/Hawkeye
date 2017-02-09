@@ -15,6 +15,8 @@ import com.hcl.hawkeye.programingkpis.DO.Result;
 import com.hcl.hawkeye.programingkpis.service.ProgramIngKPIService;
 import com.hcl.hawkeye.projectmanagement.DO.VelocityOfProject;
 import com.hcl.hawkeye.projectmanagement.service.ProjectManagementService;
+import com.hcl.hawkeye.valueaddmanagement.DO.ValueAddAcceptedIdeas;
+import com.hcl.hawkeye.valueaddmanagement.service.ValueAddManagementService;
 
 @Service
 @PropertySource("classpath:ingkpi.properties")
@@ -25,6 +27,9 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 	
 	@Autowired
 	ProjectManagementService pmService;
+	
+	@Autowired
+	ValueAddManagementService vmService;
 	
 	@Override
 	public Result getKpiResults() {
@@ -86,21 +91,12 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 			}
 			
 			if(i == 3) {
-				List<VelocityOfProject> priorityHighVal = pmService.getVelocityOfSprint(Integer.parseInt(env.getProperty("project.projectid")));
+				ValueAddAcceptedIdeas acceptedIdeas = vmService.getValueAddByAcceptedIdeas(Integer.parseInt(env.getProperty("program.program.ideaNum")));
 				KPIValue kv2 = new KPIValue();
-				List<String> labelData = new ArrayList<>();
-				List<Integer[]> grapIntData = new ArrayList<>();
-				List<Integer> grapIntData1 = new ArrayList<>();
 				
-				for (VelocityOfProject string : priorityHighVal) {
-					labelData.add(string.getSprintName());
-					grapIntData1.add((int)string.getCompletedValue());
-				}
-				
-				grapIntData.add(grapIntData1.toArray(new Integer[grapIntData1.size()]));
-				kv2.set_graphdata(grapIntData);
-				kv2.set_labels(labelData);
-				kv2.set_name(env.getProperty("kpi.name3"));
+				kv2.set_graphdataOfIdeas(acceptedIdeas.getGraphdata());
+				kv2.set_labels(acceptedIdeas.getLabels());
+				kv2.set_name(acceptedIdeas.getName());
 				kVList.add(kv2);
 			}
 			
