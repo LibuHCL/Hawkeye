@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.hcl.hawkeye.projectmanagement.DAO.ProjectManagementDAO;
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
+import com.hcl.hawkeye.projectmanagement.DO.DefectTypes;
 import com.hcl.hawkeye.projectmanagement.DO.SprintDetailsOfProject;
 import com.hcl.hawkeye.projectmanagement.DO.Sprints;
 import com.hcl.hawkeye.projectmanagement.DO.VelocityOfProject;
@@ -101,6 +102,11 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 			}
 		}
 		return velocityList;
+	}
+
+	@Override
+	public DefectTypes getDefectTypesOfProject(int project) {
+		return null;
 	}
 
 }
