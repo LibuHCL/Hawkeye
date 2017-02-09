@@ -14,5 +14,5 @@ public interface ResourceManagementDAO {
 	HashMap<String,Long> getResourcesCountByProject(int projectId);
 	HashMap<String,Long> getResourceAttritionByQuarter(String attritionYear);
 	List<ProgramResourceCount> getResourcesCountByProgram(int programId);
-	Integer getResourcesPercentByPortfolio(int portfolioId);
+	Double getResourcesPercentByPortfolio(int portfolioId);
 }
