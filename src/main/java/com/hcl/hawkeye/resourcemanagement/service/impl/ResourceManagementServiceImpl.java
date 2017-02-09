@@ -61,9 +61,9 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
 		return response;
 	}
 	@Override
-	public Integer getResourcesPercentByPortfolio(int portfolioId) {
+	public Double getResourcesPercentByPortfolio(int portfolioId) {
 		logger.info("Request in getResourcesPercentByPortfolio of ResourceServiceImpl");
-		Integer response = resourceDAO.getResourcesPercentByPortfolio(portfolioId);
+		Double response = resourceDAO.getResourcesPercentByPortfolio(portfolioId);
 		return response;
 	}
 
