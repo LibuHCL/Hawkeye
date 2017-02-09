@@ -32,10 +32,10 @@ public class FeedbackTrackerServiceImpl implements FeedbackTrackerService {
 		return feedbkDao.getFeedbackPerProject(reporterType,projectId);
 	}
 	@Override
-	public List<FeedbackDetails> getFeedbackPerProgram(String reporterType, int projectId) {
+	public List<FeedbackDetails> getFeedbackPerProgram(String reporterType, int programId) {
 		// TODO Auto-generated method stub
 		logger.info("Inside getFeedbackPerQtProject method in FeedbackTrackerServiceImpl");
-		return feedbkDao.getFeedbackPerProgram(reporterType,projectId);
+		return feedbkDao.getFeedbackPerProgram(reporterType,programId);
 		
 	}
 
