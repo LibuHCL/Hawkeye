@@ -2,13 +2,18 @@ package com.hcl.hawkeye.programingkpis.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import com.hcl.hawkeye.Exceptions.IngKpiRetrievalException;
 import com.hcl.hawkeye.programingkpis.DO.KPIType;
 import com.hcl.hawkeye.programingkpis.DO.KPIValue;
 import com.hcl.hawkeye.programingkpis.DO.Result;
@@ -21,9 +26,14 @@ import com.hcl.hawkeye.valueaddmanagement.service.ValueAddManagementService;
 @Service
 @PropertySource("classpath:ingkpi.properties")
 public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
+	
+	private static final Logger logger = LoggerFactory.getLogger(ProgramIngKPIServiceImpl.class);
 
 	@Autowired
 	Environment env;
+	
+	@Autowired
+	MessageSource messageSource;
 	
 	@Autowired
 	ProjectManagementService pmService;
@@ -34,14 +44,23 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 	@Override
 	public Result getKpiResults() {
 		Result res = new Result();
-		List<KPIType> Klist = new ArrayList<KPIType>();
-		KPIType kp = new KPIType();
-		List<KPIValue> kVList = getListOfKpi();
-		kp.setKpis(kVList);
-		kp.set_programId(Integer.parseInt(env.getProperty("program.programid")));
-		kp.set_programName(env.getProperty("program.programname"));
-		Klist.add(kp);
-		res.setResult(Klist);
+		try {
+			List<KPIType> Klist = new ArrayList<KPIType>();
+			KPIType kp = new KPIType();
+			List<KPIValue> kVList = getListOfKpi();
+			kp.setKpis(kVList);
+			kp.set_programId(Integer.parseInt(env.getProperty("program.programid")));
+			kp.set_programName(env.getProperty("program.programname"));
+			Klist.add(kp);
+			res.setResult(Klist);
+		
+		} catch (Exception e) {
+			Locale locale=new Locale("en", "IN");
+			String errorMsg=messageSource.getMessage("error.get.ingkpi", new Object[] {}, locale);
+			logger.error(errorMsg, e);
+			throw new IngKpiRetrievalException(errorMsg, e);
+		}
+		
 		return res;
 	}
 	
@@ -73,7 +92,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 				List<String> labelData = new ArrayList<>();
 				
 				for (String key : priorityCriVal.keySet()) {
-					labelData.add(key);
+					labelData.add(key.replace(" ", ""));
 					grapIntData1.add(priorityCriVal.get(key));
 				}
 				
@@ -109,7 +128,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 				List<Integer> grapIntData = new ArrayList<>();
 				
 				for (VelocityOfProject string : priorityHighVal) {
-					labelData.add(string.getSprintName());
+					labelData.add(string.getSprintName().replace(" ", ""));
 					grapIntData.add((int)string.getCompletedValue());
 				}
 				
