@@ -2,35 +2,129 @@ package com.hcl.hawkeye.programingkpis.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.hcl.hawkeye.programingkpis.DO.KPIType;
 import com.hcl.hawkeye.programingkpis.DO.KPIValue;
 import com.hcl.hawkeye.programingkpis.DO.Result;
 import com.hcl.hawkeye.programingkpis.service.ProgramIngKPIService;
+import com.hcl.hawkeye.projectmanagement.DO.VelocityOfProject;
+import com.hcl.hawkeye.projectmanagement.service.ProjectManagementService;
 
 @Service
+@PropertySource("classpath:ingkpi.properties")
 public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 
+	@Autowired
+	Environment env;
+	
+	@Autowired
+	ProjectManagementService pmService;
+	
 	@Override
 	public Result getKpiResults() {
 		Result res = new Result();
 		List<KPIType> Klist = new ArrayList<KPIType>();
 		KPIType kp = new KPIType();
-		List<KPIValue> kVList = new ArrayList<KPIValue>();
-		KPIValue kv = new KPIValue();
-		kv.set_name("Test 1");
-		kv.set_labels(new ArrayList<String>());
-		kv.set_graphdata(new ArrayList<Integer>());
-		kVList.add(kv);
+		List<KPIValue> kVList = getListOfKpi();
 		kp.setKpis(kVList);
-		kp.set_programId(1111);
-		kp.set_programName("Program 1");
+		kp.set_programId(Integer.parseInt(env.getProperty("program.programid")));
+		kp.set_programName(env.getProperty("program.programname"));
 		Klist.add(kp);
 		res.setResult(Klist);
-		
 		return res;
+	}
+	
+	private List<KPIValue> getListOfKpi() {
+		List<KPIValue> kVList = new ArrayList<KPIValue>();
+		int[] intVal = {1,2,3,4}; 
+		
+		for (int i : intVal) {
+			if(i == 1) {
+				KPIValue kv1 = new KPIValue();
+				kv1.set_graphdata(null);
+				kv1.set_labels(null);
+				kv1.set_name(env.getProperty("kpi.name1"));
+				kVList.add(kv1);
+			}
+			
+			if(i == 2) {
+				Map<String, Integer> priorityHighVal = pmService.getPriorityOfIssue(Integer.parseInt(env.getProperty("project.projectid")), env.getProperty("project.priority.high"));
+				Map<String, Integer> priorityCriVal = pmService.getPriorityOfIssue(Integer.parseInt(env.getProperty("project.projectid")), env.getProperty("project.priority.critical"));
+				KPIValue kv2 = new KPIValue();
+				List<Integer[]> grapData = new ArrayList<>();
+				List<Integer> grapIntData1 = new ArrayList<>();
+				List<Integer> grapIntData2 = new ArrayList<>();
+				List<String> serires = new ArrayList<>();
+				serires.add(env.getProperty("incident.p1"));
+				serires.add(env.getProperty("incident.p2"));
+				List<String> labelData = new ArrayList<>();
+				
+				for (String key : priorityCriVal.keySet()) {
+					labelData.add(key);
+					grapIntData1.add(priorityCriVal.get(key));
+				}
+				
+				for (String key1 : priorityHighVal.keySet()) {
+					grapIntData2.add(priorityHighVal.get(key1));
+				}
+				
+				grapData.add(grapIntData1.toArray(new Integer[grapIntData1.size()]));
+				grapData.add(grapIntData2.toArray(new Integer[grapIntData2.size()]));
+				kv2.set_series(serires);
+				kv2.set_labels(labelData);
+				kv2.set_graphdata(grapData);
+				
+				
+				kv2.set_name(env.getProperty("kpi.name1"));
+				kVList.add(kv2);
+			}
+			
+			if(i == 3) {
+				List<VelocityOfProject> priorityHighVal = pmService.getVelocityOfSprint(Integer.parseInt(env.getProperty("project.projectid")));
+				KPIValue kv2 = new KPIValue();
+				List<String> labelData = new ArrayList<>();
+				List<Integer[]> grapIntData = new ArrayList<>();
+				List<Integer> grapIntData1 = new ArrayList<>();
+				
+				for (VelocityOfProject string : priorityHighVal) {
+					labelData.add(string.getSprintName());
+					grapIntData1.add((int)string.getCompletedValue());
+				}
+				
+				grapIntData.add(grapIntData1.toArray(new Integer[grapIntData1.size()]));
+				kv2.set_graphdata(grapIntData);
+				kv2.set_labels(labelData);
+				kv2.set_name(env.getProperty("kpi.name3"));
+				kVList.add(kv2);
+			}
+			
+			if(i == 4) {
+				List<VelocityOfProject> priorityHighVal = pmService.getVelocityOfSprint(Integer.parseInt(env.getProperty("project.projectid")));
+				KPIValue kv2 = new KPIValue();
+				List<String> labelData = new ArrayList<>();
+				List<Integer[]> grapIntData = new ArrayList<>();
+				List<Integer> grapIntData1 = new ArrayList<>();
+				
+				for (VelocityOfProject string : priorityHighVal) {
+					labelData.add(string.getSprintName());
+					grapIntData1.add((int)string.getCompletedValue());
+				}
+				
+				grapIntData.add(grapIntData1.toArray(new Integer[grapIntData1.size()]));
+				kv2.set_graphdata(grapIntData);
+				kv2.set_labels(labelData);
+				kv2.set_name(env.getProperty("kpi.name4"));
+				kVList.add(kv2);
+			}
+		}
+		return kVList;
+		
 	}
 
 }

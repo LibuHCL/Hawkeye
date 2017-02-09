@@ -130,10 +130,6 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 				if (null != issue.getFields().getIssuetype() && issueType.equals(issue.getFields().getIssuetype().getName()) && !"UAT".equals(projectValues.getName())) {
 					count++;
 				}
-				
-				if (null != issue.getFields().getPriorityIssues() && !"UAT".equals(projectValues.getName()) && "High".equals(issue.getFields().getPriorityIssues().getName())) {
-					
-				}
 			}
 			
 			Integer issueCount = new Integer(count);

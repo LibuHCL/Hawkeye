@@ -11,8 +11,9 @@ public class KPIValue implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String _name;
-	private List<Integer> _graphdata;
+	private List<Integer[]> _graphdata;
 	private List<String> _labels;
+	private List<String> _series;
 
 	/**
 	 * @return the _name
@@ -32,7 +33,7 @@ public class KPIValue implements Serializable {
 	/**
 	 * @return the _graphdata
 	 */
-	public List<Integer> get_graphdata() {
+	public List<Integer[]> get_graphdata() {
 		return _graphdata;
 	}
 
@@ -40,7 +41,7 @@ public class KPIValue implements Serializable {
 	 * @param _graphdata
 	 *            the _graphdata to set
 	 */
-	public void set_graphdata(List<Integer> _graphdata) {
+	public void set_graphdata(List<Integer[]> _graphdata) {
 		this._graphdata = _graphdata;
 	}
 
@@ -59,9 +60,21 @@ public class KPIValue implements Serializable {
 		this._labels = _labels;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/**
+	 * @return the _series
+	 */
+	public List<String> get_series() {
+		return _series;
+	}
+
+	/**
+	 * @param _series the _series to set
+	 */
+	public void set_series(List<String> _series) {
+		this._series = _series;
+	}
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -71,17 +84,18 @@ public class KPIValue implements Serializable {
 		result = prime * result + ((_graphdata == null) ? 0 : _graphdata.hashCode());
 		result = prime * result + ((_labels == null) ? 0 : _labels.hashCode());
 		result = prime * result + ((_name == null) ? 0 : _name.hashCode());
+		result = prime * result + ((_series == null) ? 0 : _series.hashCode());
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "KPIValue [_name=" + _name + ", _graphdata=" + _graphdata + ", _labels=" + _labels + "]";
+		return "KPIValue [_name=" + _name + ", _graphdata=" + _graphdata + ", _labels=" + _labels + ", _series="
+				+ _series + "]";
 	}
 
+	
 }
