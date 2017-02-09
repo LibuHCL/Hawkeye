@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
+import com.hcl.hawkeye.projectmanagement.DO.DefectTypes;
 import com.hcl.hawkeye.projectmanagement.DO.SprintDetailsOfProject;
 import com.hcl.hawkeye.projectmanagement.DO.VelocityOfProject;
 import com.hcl.hawkeye.projectmanagement.service.ProjectManagementService;
@@ -28,7 +29,7 @@ public class ProjectManagementController {
 	@RequestMapping(value="/getProject/project/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public SprintDetailsOfProject getProjectData(@PathVariable("id") int projectId) {
-		logger.info("Rquesting api to get the project details with ID: {}", projectId);
+		logger.info("Requesting api to get the project details with ID: {}", projectId);
 		SprintDetailsOfProject proDetails = pmService.getProjectDetails(projectId);
 		return proDetails;
 	}
@@ -36,7 +37,7 @@ public class ProjectManagementController {
 	@RequestMapping(value="/getDashboard", method = RequestMethod.GET)
 	@ResponseBody
 	public DashBoardDetails getDashBoardData() {
-		logger.info("Rquesting api to get the dasboard information");
+		logger.info("Requesting api to get the dasboard information");
 		DashBoardDetails dashBInfo = pmService.getDashBoardInfo();
 		return dashBInfo;
 	}
@@ -44,7 +45,7 @@ public class ProjectManagementController {
 	@RequestMapping(value="/getVelocity/project/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public int getVelocityOfProject(@PathVariable("id") int projectId) {
-		logger.info("Rquesting api to get the dasboard information");
+		logger.info("Requesting api to get the velocity information");
 		int velocityInfo = pmService.getVelocityOfProject(projectId);
 		return velocityInfo;
 	}
@@ -52,7 +53,7 @@ public class ProjectManagementController {
 	@RequestMapping(value="/getVelocityOfSprint/project/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public List<VelocityOfProject> getVelocityOfSprint(@PathVariable("id") int projectId) {
-		logger.info("Rquesting api to get the dasboard information");
+		logger.info("Requesting api to get the velocity information for sprint");
 		List<VelocityOfProject> velocityInfo = pmService.getVelocityOfSprint(projectId);
 		return velocityInfo;
 	}
@@ -60,7 +61,7 @@ public class ProjectManagementController {
 	@RequestMapping(value="/getIssues/project/{id}/issueType/{issueType}", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Integer> getIssuesOfProject(@PathVariable("id") int projectId, @PathVariable("issueType") String issueType) {
-		logger.info("Rquesting api to get the issues of project");
+		logger.info("Requesting api to get the issues of project");
 		Map<String, Integer> dashBInfo = pmService.getIssuesOfProject(projectId, issueType);
 		return dashBInfo;
 	}
@@ -68,9 +69,17 @@ public class ProjectManagementController {
 	@RequestMapping(value="/getIssues/project/{id}/issuePriority/{issuePriority}", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Integer> getPriorityOfIssues(@PathVariable("id") int projectId, @PathVariable("issuePriority") String issuePriority) {
-		logger.info("Rquesting api to get the issues of project");
+		logger.info("Requesting api to get the issues of project");
 		Map<String, Integer> priorityIssues = pmService.getPriorityOfIssue(projectId, issuePriority);
 		return priorityIssues;
+	}
+	
+	@RequestMapping(value="/getUATIssues/project/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public DefectTypes getDefectTypes(@PathVariable("id") int projectId) {
+		logger.info("Requesting api to get the issues of project");
+		DefectTypes dTypes = pmService.getDefectTypesOfProject(projectId);
+		return dTypes;
 	}
 
 
