@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.hcl.hawkeye.FeedbackTrackerDO.FeedbackDetails;
 import com.hcl.hawkeye.feedbacktracker.service.FeedbackTrackerService;
 
@@ -50,18 +51,15 @@ public class FeedbackTrackerController {
     }
     
     /* To Get the feedbackTrack Details for Program */
-    @RequestMapping(value = "/getFeedbackperProgram/{reporterType}/{projectId}", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/getFeedbackperProgram/{reporterType}/{programId}", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public ResponseEntity<List<FeedbackDetails>>  getFeedbackPerProgram(@PathVariable("reporterType") String reporterType,@PathVariable("projectId") int projectId){
+    public ResponseEntity<List<FeedbackDetails>>  getFeedbackPerProgram(@PathVariable("reporterType") String reporterType,@PathVariable("programId") int programId){
     	
-    	logger.info("Inside getFeedbackPerProgram method in Controller:"+reporterType+projectId);
-    	List<FeedbackDetails> feedbackdetails = feedbkService.getFeedbackPerProgram(reporterType,projectId);
+    	logger.info("Inside getFeedbackPerProgram method in Controller:"+reporterType+programId);
+    	List<FeedbackDetails> feedbackdetails = feedbkService.getFeedbackPerProgram(reporterType,programId);
     	logger.info("reporterType and projectid Details recieved: " + feedbackdetails);
     	return new ResponseEntity<List<FeedbackDetails>> (feedbackdetails, HttpStatus.CREATED);
     	
     }
-    
-    
-    
-    
+       
   }

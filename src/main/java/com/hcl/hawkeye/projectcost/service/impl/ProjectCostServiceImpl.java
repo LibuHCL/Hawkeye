@@ -29,17 +29,10 @@ public class ProjectCostServiceImpl implements ProjectCostService {
 	}
 
 	@Override
-	public Integer getProjectCostData(int projectID) {
+	public ProjectCostDetails getProjectCostData(int projectID) {
 		
-		ProjectCostDetails costDetails = costDAO.getProjectCost(projectID);
-		if(costDetails == null){
-			return 0;
-		}
-		if(costDetails.getPlannedCost()== null || costDetails.getActualCost()== null){
-			return 0;
-			
-		}
-		return HawkEyeUtils.getRAGStatus((int) ((costDetails.getActualCost()/costDetails.getPlannedCost())*100));
+		return costDAO.getProjectCost(projectID);
+		
 		
 	}
 

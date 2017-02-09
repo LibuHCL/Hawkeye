@@ -10,9 +10,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.hcl.hawkeye.Exceptions.PortfolioCreationException;
+import com.hcl.hawkeye.Exceptions.ValueAddDataRetrievalException;
 import com.hcl.hawkeye.valueaddmanagement.DAO.ValueAddManagementDAO;
 import com.hcl.hawkeye.valueaddmanagement.DO.Value;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueAdd;
+import com.hcl.hawkeye.valueaddmanagement.DO.ValueAddAcceptedIdeas;
 import com.hcl.hawkeye.valueaddmanagement.service.ValueAddManagementService;
 
 @Service
@@ -49,8 +51,21 @@ public class ValueAddManagementServiceImpl implements ValueAddManagementService 
 			Locale locale=new Locale("en", "IN");
 			String errorMsg=messageSource.getMessage("error.create.getvalueadd", new Object[] {}, locale);
 			logger.error(errorMsg, dae);			
-			throw new PortfolioCreationException(errorMsg, dae);
+			throw new ValueAddDataRetrievalException(errorMsg, dae);
 		}	
+	}
+	
+	@Override
+	public ValueAddAcceptedIdeas getValueAddByAcceptedIdeas(Integer programId) {
+		logger.info("Request in getValueAddByAcceptedIdeas of ValueAddManagementServiceImpl");
+		try {
+			return valueAddManagementDAO.getValueAddByAcceptedIdeas(programId);
+		} catch (DataAccessException dae) {
+			Locale locale=new Locale("en", "IN");
+			String errorMsg=messageSource.getMessage("error.create.getvalueadd", new Object[] {}, locale);
+			logger.error(errorMsg, dae);			
+			throw new ValueAddDataRetrievalException(errorMsg, dae);
+		}
 	}
 
 }
