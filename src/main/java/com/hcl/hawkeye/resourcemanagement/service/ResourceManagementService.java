@@ -13,4 +13,5 @@ public interface ResourceManagementService {
 	HashMap<String,Long> getResourcesCountByProject(int projectId);
 	List<ProgramResourceCount> getResourcesCountByProgram(int programId);
 	HashMap<String, Long> getResourceAttritionByQuarter(String attritionYear);
+	Integer getResourcesPercentByPortfolio(int portfolioId);
 }

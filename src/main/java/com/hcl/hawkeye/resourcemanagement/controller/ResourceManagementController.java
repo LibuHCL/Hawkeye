@@ -56,4 +56,11 @@ private static final Logger logger = LoggerFactory.getLogger(ResourceManagementC
 		return response;
 	}
 	
+	@RequestMapping(value="/getResourcesPercentByPortfolio/{portfolioId}", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public Integer getResourcesPercentByPortfolio(@PathVariable("portfolioId") int portfolioId) {
+		logger.info("Requested to get the resources count based on programId");
+		Integer response = resourceManagementService.getResourcesPercentByPortfolio(portfolioId);
+		return response;
+	}
 }

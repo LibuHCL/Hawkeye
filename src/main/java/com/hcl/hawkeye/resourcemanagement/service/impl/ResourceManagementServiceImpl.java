@@ -60,5 +60,11 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
 		HashMap<String, Long> response = resourceDAO.getResourceAttritionByQuarter(attritionYear);
 		return response;
 	}
+	@Override
+	public Integer getResourcesPercentByPortfolio(int portfolioId) {
+		logger.info("Request in getResourcesPercentByPortfolio of ResourceServiceImpl");
+		Integer response = resourceDAO.getResourcesPercentByPortfolio(portfolioId);
+		return response;
+	}
 
 }

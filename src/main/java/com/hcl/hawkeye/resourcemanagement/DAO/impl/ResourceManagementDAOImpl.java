@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import com.hcl.hawkeye.Exceptions.ResourceManagementException;
 import com.hcl.hawkeye.projectcost.DO.ProjectCostDetails;
@@ -143,5 +144,18 @@ public class ResourceManagementDAOImpl implements ResourceManagementDAO {
 			resourceCountList.addAll(resultsList);
 		}
 		return resourceCountList;
+	}
+	
+	@Override
+	public Integer getResourcesPercentByPortfolio(int portfolioId)
+	{
+		String projectListQuery = "SELECT PROJECTID FROM PROJECT WHERE PROGRAM_ID IN(SELECT PROGRAMID FROM PROGRAM WHERE PORTFOLIO_ID="+portfolioId+")";
+		List<Integer> projectIdList = jdbcTemplate.queryForList(projectListQuery,Integer.class);
+		String idList = projectIdList.toString();
+		String idsCSV = idList.substring(1, idList.length() - 1).replace(", ", ",");
+		Integer onshoreResourceCount = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM RESOURCE WHERE WORK_LOCATION = 'ONSITE' and PROJECTID IN ("+idsCSV+")", Integer.class);
+		Integer offshoreResourceCount = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM RESOURCE WHERE WORK_LOCATION = 'OFFSHORE' and PROJECTID IN ("+idsCSV+")", Integer.class);
+		Integer resourcePercent = (offshoreResourceCount/(onshoreResourceCount+offshoreResourceCount))*100;
+		return resourcePercent;
 	}
 }
