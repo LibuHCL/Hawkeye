@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hcl.hawkeye.valueaddmanagement.DO.Value;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueAdd;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueAddAcceptedIdeas;
+import com.hcl.hawkeye.valueaddmanagement.DO.ValueCreation;
 import com.hcl.hawkeye.valueaddmanagement.service.ValueAddManagementService;
 
 @RestController
@@ -63,6 +64,24 @@ public class ValueAddManagementController {
 		ValueAddAcceptedIdeas valueAddAcceptedIdeas = new ValueAddAcceptedIdeas();
 		valueAddAcceptedIdeas = valueAddManagementService.getValueAddByAcceptedIdeas(programId);
 		return valueAddAcceptedIdeas;
+	}
+	
+	@RequestMapping(value="/getValueCreationByProgramId/{programId}", method = RequestMethod.GET)
+	@ResponseBody
+	public ValueCreation getValueCreationByProgramId(@PathVariable("programId") Integer programId) {
+		logger.info("Requested to get the valueAdd information for Program or project");
+		ValueCreation valueCreation = new ValueCreation();
+		valueCreation = valueAddManagementService.getValueCreationByProgramId(programId);
+		return valueCreation;
+	}
+	
+	@RequestMapping(value="/getValueCreationByProjectId/{projectId}", method = RequestMethod.GET)
+	@ResponseBody
+	public ValueCreation getValueCreationByProjectId(@PathVariable("projectId") Integer projectId) {
+		logger.info("Requested to get the valueAdd information for Program or project");
+		ValueCreation valueCreation = new ValueCreation();
+		valueCreation = valueAddManagementService.getValueCreationByProjectId(projectId);
+		return valueCreation;
 	}
 
 }
