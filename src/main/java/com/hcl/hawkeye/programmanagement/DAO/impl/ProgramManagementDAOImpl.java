@@ -80,8 +80,8 @@ public class ProgramManagementDAOImpl implements ProgramManagementDAO {
 				Project proj = new Project();
 				logger.info(" Qurter:"+row.get("quarter"));
 				proj.setQuarter((Integer)row.get("quarter"));
-				proj.setProjType("projType");
-				proj.setSubType("subType");
+				proj.setProjType((row.get("projType")).toString());
+				proj.setSubType((row.get("subType")).toString());
 				proj.setCount(Integer.valueOf(row.get("count").toString()));
 				
 				projDetList.add(proj);
@@ -129,7 +129,7 @@ public class ProgramManagementDAOImpl implements ProgramManagementDAO {
 		String sql_getProject ="SELECT PROJECTID,PROJECT_NAME,PROGRAM_ID,CLIENT_ID,VENDOR_ID,PROJECT_TYPE,"
 				+ "SUBTYPE,TECHNICAL_PROJECT_MANAGER_ID,CREATION_DATE,END_DATE,PROJECT_STATUS FROM PROJECT WHERE PROJECTID=?";
 		
-		proj = jdbcTemplate.queryForObject(sql_getProject,projectRowMapper);
+		proj = jdbcTemplate.queryForObject(sql_getProject,new Object[]{projectId},projectRowMapper);
 		return proj;
 	}
 	
