@@ -72,8 +72,7 @@ public class TeamHappinessManagementDAOImpl implements TeamHappinessManagementDA
 		}
 		teamHapDetails.setGraphData(graphData);
 		teamHapDetails.setLabels(labels);
-		return teamHapDetails;
-		
+		return teamHapDetails;		
 	}
 
 }

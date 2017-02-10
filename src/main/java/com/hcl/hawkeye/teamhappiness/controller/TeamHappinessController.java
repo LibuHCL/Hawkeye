@@ -48,7 +48,6 @@ public class TeamHappinessController {
 	@ResponseBody
 	public Graph getTeamHappiness(@PathVariable("projectId") int projectId, @PathVariable("teamYear") int teamYear) {
 		logger.info("Requested to get the happiness for project in Quarterly basis");
-		return happinessMgmtService.getHappinessPerQtAtProject(projectId,teamYear);
-		 
+		return happinessMgmtService.getHappinessPerQtAtProject(projectId,teamYear);		 
 	}
 }

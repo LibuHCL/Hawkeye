@@ -48,7 +48,6 @@ public class TeamHappinessManagementServiceImpl implements TeamHappinessManageme
 		
 	}
 
-
 	@Override
 	public Graph getHappinessPerQtAtProject(int projectId, int teamYear) {
 		logger.info("Request in getHappinessPerQtAtProject of TeamHappinessManagementServiceImpl");

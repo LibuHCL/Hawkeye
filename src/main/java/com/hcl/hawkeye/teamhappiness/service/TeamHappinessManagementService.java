@@ -3,11 +3,8 @@
  */
 package com.hcl.hawkeye.teamhappiness.service;
 
-import java.util.HashMap;
-
 import com.hcl.hawkeye.portfolio.DO.Graph;
 import com.hcl.hawkeye.teamhappiness.DO.TeamHappiness;
-import com.hcl.hawkeye.teamhappiness.DO.TeamHappinessDetails;
 
 /**
  * @author HCL
