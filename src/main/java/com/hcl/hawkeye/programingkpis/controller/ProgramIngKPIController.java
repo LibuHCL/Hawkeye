@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,26 +23,26 @@ public class ProgramIngKPIController {
 	@Autowired
 	ProgramIngKPIService piService;
 	
-	@RequestMapping(value="/getOperationalKpi", method = RequestMethod.GET)
+	@RequestMapping(value="/getOperationalKpi/projectId/{projectId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result getOperationKpi() {
+	public Result getOperationKpi(@PathVariable("projectId") int projectId) {
 		logger.info("Rquesting api to get the operational KPI");
 		Result proDetails;
 		try {
-			proDetails = piService.getOperationalKpiResults();
+			proDetails = piService.getOperationalKpiResults(projectId);
 		} catch (IngKpiRetrievalException e) {
 			proDetails = new Result();
 		}
 		return proDetails;
 	}
 	
-	@RequestMapping(value="/getTacticalKpi", method = RequestMethod.GET)
+	@RequestMapping(value="/getTacticalKpi/projectId/{projectId}", method = RequestMethod.GET)
 	@ResponseBody
-	public Result getTacticalKpi() {
+	public Result getTacticalKpi(@PathVariable("projectId") int projectId) {
 		logger.info("Rquesting api to get the tactical KPI");
 		Result proDetails;
 		try {
-			proDetails = piService.getTacticalKpiResults();
+			proDetails = piService.getTacticalKpiResults(projectId);
 		} catch (IngKpiRetrievalException e) {
 			proDetails = new Result();
 		}
