@@ -27,5 +27,7 @@ public interface ValueAddManagementDAO {
 	ValueCreationQuarterly getQuarterlyValueByProjectId(Integer projectId);
 
 	ValueCreationQuarterly getQuarterlyValueByProgramId(Integer programId);
+	
+	ValueAddAcceptedIdeas getEconomicValueAdd(Integer programId);
 
 }
