@@ -8,7 +8,6 @@ import java.util.List;
 import com.hcl.hawkeye.resourcemanagement.DO.Resource;
 
 public interface ResourceManagementService {
-
 	Resource getResourceData();
 	int getResourcesCount(String roleName);
 	void createResource(Resource resource);

@@ -15,7 +15,6 @@ import com.hcl.hawkeye.resourcemanagement.DAO.ResourceManagementDAO;
 import com.hcl.hawkeye.resourcemanagement.service.ResourceManagementService;
 
 
-
 @Service
 public class ResourceManagementServiceImpl implements ResourceManagementService {
 	private static final Logger logger = LoggerFactory.getLogger(ResourceManagementServiceImpl.class);

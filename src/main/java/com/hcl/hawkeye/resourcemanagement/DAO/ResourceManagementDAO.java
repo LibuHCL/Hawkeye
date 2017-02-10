@@ -8,7 +8,6 @@ import com.hcl.hawkeye.resourcemanagement.DO.ProgramResourceCount;
 import com.hcl.hawkeye.resourcemanagement.DO.Resource;
 
 public interface ResourceManagementDAO {
-
 	Resource getResourceData();
 	int getResourcesCount(String roleName);
 	void createResource(Resource resource);

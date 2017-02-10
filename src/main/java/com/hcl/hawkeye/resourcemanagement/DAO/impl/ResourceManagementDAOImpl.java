@@ -188,8 +188,7 @@ public class ResourceManagementDAOImpl implements ResourceManagementDAO {
 		}
 		graph.setGraphData(graphData);
 		graph.setLabels(labels);
-		return graph;
-		
+		return graph;		
 	}
 	
 }
