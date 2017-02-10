@@ -107,5 +107,14 @@ public class ValueAddManagementController {
 		valueIndex = valueAddManagementService.getValueAddByIds(portfolioId);
 		return valueIndex;
 	}
+	
+	@RequestMapping(value="/getEconomicValueAdd/{programId}", method = RequestMethod.GET)
+	@ResponseBody
+	public ValueAddAcceptedIdeas getEconomicValueAdd(@PathVariable("programId") Integer programId) {
+		logger.info("Requested to get getValueAddByIds for programId");
+		ValueAddAcceptedIdeas economicValueAdd = new ValueAddAcceptedIdeas();
+		economicValueAdd = valueAddManagementService.getEconomicValueAdd(programId);
+		return economicValueAdd;
+	}
 
 }
