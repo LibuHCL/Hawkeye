@@ -146,7 +146,7 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 		TeamHappinessDetails teamHap = teamHapService.getHappinessPerQtAtProject(projectId, now.get(Calendar.YEAR));
 		Metrics teamHapMet = new Metrics();
 		teamHapMet.setKey(env.getProperty("metric.teamhap.progname"));
-		teamHapMet.setGraphdata(teamHap.getGraphData());
+		//teamHapMet.setGraphdata(teamHap.getGraphData());
 		teamHapMet.setLabels(teamHap.getLabels());		
 		metrics.add(teamHapMet);
 		
