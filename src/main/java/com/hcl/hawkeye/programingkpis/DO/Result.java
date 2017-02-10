@@ -10,26 +10,23 @@ public class Result implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private List<KPIType> result;
+	private KPIType result;
 
 	/**
 	 * @return the result
 	 */
-	public List<KPIType> getResult() {
+	public KPIType getResult() {
 		return result;
 	}
 
 	/**
-	 * @param result
-	 *            the result to set
+	 * @param result the result to set
 	 */
-	public void setResult(List<KPIType> result) {
+	public void setResult(KPIType result) {
 		this.result = result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -40,9 +37,27 @@ public class Result implements Serializable {
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Result other = (Result) obj;
+		if (result == null) {
+			if (other.result != null)
+				return false;
+		} else if (!result.equals(other.result))
+			return false;
+		return true;
+	}
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -50,4 +65,5 @@ public class Result implements Serializable {
 		return "Result [result=" + result + "]";
 	}
 
+	
 }

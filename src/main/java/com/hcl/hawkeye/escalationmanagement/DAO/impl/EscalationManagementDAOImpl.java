@@ -59,7 +59,7 @@ public class EscalationManagementDAOImpl implements EscalationManagementDAO {
 				//quarteRes.put(String.valueOf(row.get("quarter")), Double.valueOf(String.valueOf(row.get("rating"))));
 				String q =String.valueOf(row.get("quarter"));
 				labels.add(q.equals("1")? "Q1":(q.equals("2") ? "Q2" : (q.equals("3") ? "Q3" :"Q4")));
-				graphData.add((Double) row.get("count"));
+				graphData.add(Double.parseDouble(String.valueOf(row.get("count"))));
 			}
 		}
 		escDetList.setGraphData(graphData);
