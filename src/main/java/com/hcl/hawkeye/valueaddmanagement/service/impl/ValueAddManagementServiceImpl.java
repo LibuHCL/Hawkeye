@@ -1,6 +1,7 @@
 package com.hcl.hawkeye.valueaddmanagement.service.impl;
 
 import java.util.Locale;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import com.hcl.hawkeye.valueaddmanagement.DO.ValueAdd;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueAddAcceptedIdeas;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueCreation;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueCreationQuarterly;
+import com.hcl.hawkeye.valueaddmanagement.DO.ValueIndex;
 import com.hcl.hawkeye.valueaddmanagement.service.ValueAddManagementService;
 
 @Service
@@ -38,9 +40,9 @@ public class ValueAddManagementServiceImpl implements ValueAddManagementService 
 	}
 
 	@Override
-	public ValueAdd getValueAddByIds(Integer programId, Integer portfolioId) {
+	public Map<Integer, ValueIndex> getValueAddByIds(Integer portfolioId) {
 		logger.info("Request in getNumberOfValueAddByProgram of ValueAddManagementServiceImpl");
-		ValueAdd valueAdd = valueAddManagementDAO.getValueAddByIds(programId, portfolioId);
+		Map<Integer, ValueIndex> valueAdd = valueAddManagementDAO.getValueAddByIds(portfolioId);
 		return valueAdd;
 	}
 

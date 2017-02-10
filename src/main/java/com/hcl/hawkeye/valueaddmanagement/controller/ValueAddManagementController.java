@@ -1,6 +1,8 @@
 package com.hcl.hawkeye.valueaddmanagement.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,7 @@ import com.hcl.hawkeye.valueaddmanagement.DO.ValueAdd;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueAddAcceptedIdeas;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueCreation;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueCreationQuarterly;
+import com.hcl.hawkeye.valueaddmanagement.DO.ValueIndex;
 import com.hcl.hawkeye.valueaddmanagement.service.ValueAddManagementService;
 
 @RestController
@@ -94,6 +97,15 @@ public class ValueAddManagementController {
 		ValueCreationQuarterly valueCreation = new ValueCreationQuarterly();
 		valueCreation = valueAddManagementService.getQuarterlyValueByProgramId(programId);
 		return valueCreation;
+	}
+	
+	@RequestMapping(value="/getValueIndexByPortfolio/{portfolioId}", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<Integer, ValueIndex> getValueAddByIds(@PathVariable("portfolioId") Integer portfolioId) {
+		logger.info("Requested to get getValueAddByIds for portfolio");
+		Map<Integer, ValueIndex> valueIndex = new HashMap<Integer, ValueIndex>();
+		valueIndex = valueAddManagementService.getValueAddByIds(portfolioId);
+		return valueIndex;
 	}
 
 }
