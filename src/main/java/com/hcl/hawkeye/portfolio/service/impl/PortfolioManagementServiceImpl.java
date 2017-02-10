@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -24,9 +25,13 @@ import com.hcl.hawkeye.portfolio.DO.PortfolioDate;
 import com.hcl.hawkeye.portfolio.DO.PortfolioInfo;
 import com.hcl.hawkeye.portfolio.DO.Program;
 import com.hcl.hawkeye.portfolio.DO.Quarter;
+import com.hcl.hawkeye.portfolio.DO.ValueCreation;
 import com.hcl.hawkeye.portfolio.service.PortfolioManagementService;
 import com.hcl.hawkeye.projectcost.service.ProjectCostService;
 import com.hcl.hawkeye.utils.HawkEyeConstants;
+import com.hcl.hawkeye.valueaddmanagement.DO.ValueAdd;
+import com.hcl.hawkeye.valueaddmanagement.DO.ValueIndex;
+import com.hcl.hawkeye.valueaddmanagement.service.ValueAddManagementService;
 
 @Service
 public class PortfolioManagementServiceImpl implements PortfolioManagementService {
@@ -39,6 +44,8 @@ public class PortfolioManagementServiceImpl implements PortfolioManagementServic
 	MessageSource messageSource;
 	@Autowired
 	ProjectCostService projectCostService;
+	@Autowired
+	ValueAddManagementService valueAddService;
 
 	@Override
 	public Portfolio addPortfolio(Portfolio portfolio) {
@@ -111,6 +118,7 @@ public class PortfolioManagementServiceImpl implements PortfolioManagementServic
 				String currentKey = "Q" + portfoliosList.get(j).getQuarter() + " - " + portfoliosList.get(j).getYear();
 				if (currentKey.equalsIgnoreCase(s)) {
 					String portfolioName = portfolioDAO.getPortfolioNameById(portfoliosList.get(j).getPortfolioId());
+					Map<Integer,ValueIndex> valueAdds = valueAddService.getValueAddByIds(portfoliosList.get(j).getPortfolioId());
 					portfolioDetail.setId(portfoliosList.get(j).getPortfolioId());
 					portfolioDetail.setName(portfolioName);
 					ArrayList<Cost> costs = new ArrayList<>();
@@ -133,8 +141,18 @@ public class PortfolioManagementServiceImpl implements PortfolioManagementServic
 					cost.setValue(String.valueOf(portfoliosList.get(j).getRoi()));
 					costs.add(cost);
 					portfolioDetail.setCost(costs);
+					ValueIndex v = valueAdds.get(portfoliosList.get(j).getYear());
+					ValueCreation value = new ValueCreation();
+					if(null != v && null != v.getLabels())
+					{
+					value.setLabels(v.getLabels());
+					value.setLinedata(v.getLinedata());
+					value.setSeries(v.getSeries());
+					portfolioDetail.setValueCreation(value);
+					}
 					colList.add(portfolioDetail);
-
+					
+					
 				}
 			}
 
