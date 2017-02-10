@@ -20,15 +20,10 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.hcl.hawkeye.Exceptions.SonarMetricsDataRetrievalException;
-import com.hcl.hawkeye.Exceptions.ValueAddDataRetrievalException;
-import com.hcl.hawkeye.portfolio.DO.Project;
-import com.hcl.hawkeye.portfolio.DO.Result;
 import com.hcl.hawkeye.sonarmetrics.DAO.SonarMetricsManagementDAO;
 import com.hcl.hawkeye.sonarmetrics.DO.Metrics;
 import com.hcl.hawkeye.sonarmetrics.DO.SonarMetrics;
 import com.hcl.hawkeye.sonarmetrics.DO.Trackers;
-import com.hcl.hawkeye.sonarmetrics.service.SonarMetricsManagementService;
-import com.hcl.hawkeye.valueaddmanagement.DO.Kpi;
 
 /**
  * @author HCL
