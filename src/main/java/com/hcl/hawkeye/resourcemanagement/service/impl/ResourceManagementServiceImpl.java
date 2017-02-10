@@ -56,9 +56,9 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
 		return response;
 	}
 	@Override
-	public HashMap<String, Long> getResourceAttritionByQuarter(String attritionYear) {
+	public HashMap<Integer, Long> getResourceAttritionByQuarter(String attritionYear) {
 		logger.info("Request in getResourceAttritionByQuarter of ResourceServiceImpl");
-		HashMap<String, Long> response = resourceDAO.getResourceAttritionByQuarter(attritionYear);
+		HashMap<Integer, Long> response = resourceDAO.getResourceAttritionByQuarter(attritionYear);
 		return response;
 	}
 	@Override

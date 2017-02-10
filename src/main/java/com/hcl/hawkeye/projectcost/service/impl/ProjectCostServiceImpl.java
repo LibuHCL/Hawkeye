@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hcl.hawkeye.portfolio.DO.PortfolioDashboard;
 import com.hcl.hawkeye.projectcost.DAO.ProjectCostDAO;
 import com.hcl.hawkeye.projectcost.DO.ProjectCostDetails;
 import com.hcl.hawkeye.projectcost.service.ProjectCostService;
@@ -34,6 +35,12 @@ public class ProjectCostServiceImpl implements ProjectCostService {
 		return costDAO.getProjectCost(projectID);
 		
 		
+	}
+
+	@Override
+	public PortfolioDashboard getAllPortfolioDetails() {
+		
+		return costDAO.getAllPortfolioDetails();
 	}
 
 }

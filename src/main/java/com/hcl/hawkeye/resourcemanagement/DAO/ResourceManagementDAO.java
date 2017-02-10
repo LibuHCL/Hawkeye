@@ -13,7 +13,7 @@ public interface ResourceManagementDAO {
 	int getResourcesCount(String roleName);
 	void createResource(Resource resource);
 	HashMap<String,Long> getResourcesCountByProject(int projectId);
-	HashMap<String,Long> getResourceAttritionByQuarter(String attritionYear);
+	HashMap<Integer,Long> getResourceAttritionByQuarter(String attritionYear);
 	List<ProgramResourceCount> getResourcesCountByProgram(int programId);
 	Double getResourcesPercentByPortfolio(int portfolioId);
 	Graph getOffshorePerQtPerProject(int projectId);

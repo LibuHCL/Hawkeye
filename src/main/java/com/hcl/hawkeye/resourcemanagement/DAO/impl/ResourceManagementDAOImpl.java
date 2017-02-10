@@ -119,14 +119,14 @@ public class ResourceManagementDAOImpl implements ResourceManagementDAO {
 	}
 
 	@Override
-	public HashMap<String, Long> getResourceAttritionByQuarter(String attritionYear) {
+	public HashMap<Integer, Long> getResourceAttritionByQuarter(String attritionYear) {
 		String sql = "SELECT QUARTER(PROJECT_JOINING_DATE) AS quarter, (COUNT(RESOURCEID) *100/(SELECT count(*) FROM RESOURCE WHERE QUARTER(PROJECT_JOINING_DATE) = quarter)) AS attrition_percent FROM RESOURCE WHERE ING_AGREEMENT='N' and YEAR(PROJECT_JOINING_DATE)='"
 				+ attritionYear
 				+ "' and EXIT_DATE< PLANNED_RELEASE_DATE GROUP BY YEAR(PROJECT_JOINING_DATE), QUARTER(PROJECT_JOINING_DATE) ORDER BY YEAR(PROJECT_JOINING_DATE), QUARTER(PROJECT_JOINING_DATE)";
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
-		HashMap<String, Long> attritionList = new HashMap<>();
+		HashMap<Integer, Long> attritionList = new HashMap<>();
 		for (Map<String, Object> row : list) {
-			attritionList.put((String) row.get("quarter"), (Long) row.get("count"));
+			attritionList.put((Integer) row.get("quarter"), (Long) row.get("count"));
 		}
 		return attritionList;
 	}
