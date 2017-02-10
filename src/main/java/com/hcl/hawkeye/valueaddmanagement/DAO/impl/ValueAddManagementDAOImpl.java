@@ -341,6 +341,7 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 		updateQuarterlySeries(series);
 		updateQuarterlyLabels(labels);
 		valueCreation.setSeries(series);
+		valueCreation.setLabels(labels);
 		ArrayList<ArrayList<Integer>> lineData = updateQuarterlyLineDatabyId(id, queryCondition);
 		valueCreation.setGraphdata(lineData);
 		return valueCreation;
