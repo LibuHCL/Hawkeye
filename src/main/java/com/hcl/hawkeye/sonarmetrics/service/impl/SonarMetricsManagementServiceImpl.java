@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
-import com.hcl.hawkeye.sonarmetrics.DO.Graph;
+import com.hcl.hawkeye.portfolio.DO.Graph;
 import com.hcl.hawkeye.sonarmetrics.DAO.SonarMetricsManagementDAO;
 import com.hcl.hawkeye.sonarmetrics.DO.SonarMetrics;
 import com.hcl.hawkeye.sonarmetrics.DO.Trackers;

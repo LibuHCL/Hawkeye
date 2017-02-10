@@ -2,7 +2,9 @@ package com.hcl.hawkeye.projectmetrics.service.impl;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +31,7 @@ import com.hcl.hawkeye.projectmetrics.DO.ProjectMetricResults;
 import com.hcl.hawkeye.projectmetrics.DO.ProjectMetrics;
 import com.hcl.hawkeye.projectmetrics.service.ProjectMetricsService;
 import com.hcl.hawkeye.resourcemanagement.service.ResourceManagementService;
+import com.hcl.hawkeye.sonarmetrics.service.SonarMetricsManagementService;
 import com.hcl.hawkeye.teamhappiness.DO.TeamHappinessDetails;
 import com.hcl.hawkeye.teamhappiness.service.TeamHappinessManagementService;
 import com.hcl.hawkeye.utils.HawkEyeConstants;
@@ -62,6 +65,9 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 	
 	@Autowired
 	TeamHappinessManagementService teamHapService;
+	
+	@Autowired
+	SonarMetricsManagementService sonMetService;
 
 	@Override
 	public ProjectMetrics getProjMetricsData(int projectId) {
@@ -109,6 +115,8 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 		projMet.setEndDate(proj.getEndDate());
 		projMet.setCurrentsprint(sprintDetails.getCurrentSprint());
 		projMet.setTotalsptint(String.valueOf(sprintDetails.getNoOfSprintPerProject()));
+		projMet.setTpmname("NULL");
+		projMet.setPmname("NULL");
 		projMet.setDevelopers(String.valueOf(resMap.get("DEVELOPER")));
 		projMet.setTesters(String.valueOf(resMap.get("TESTER")));
 		projMet.setUidev(String.valueOf(resMap.get("UIDEV")));
@@ -164,6 +172,8 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 	
 	private ProjectMetricResults addEngineeringMetrics(int projectId) {
 		
+		Map <String,Graph> engMap = sonMetService.getSonarMetricsData(projectId);
+		
 		List<Metrics> engMetrics= new ArrayList<Metrics>();
 		
 		ProjectMetricResults pMetResults = new ProjectMetricResults();
@@ -173,29 +183,31 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 		Metrics codeMet = new Metrics();
 		
 		codeMet.setKey(env.getProperty("metric.code.progname"));
-		//codeMet.setGraphdata(graphdata);
-		//codeMet.setLabels(labels);		
+		codeMet.setGraphdata(engMap.get("Code Violation").getGraphData());
+		codeMet.setLabels(engMap.get("Code Violation").getLabels());		
 		engMetrics.add(codeMet);
 		
 		Metrics techDebtMet = new Metrics();
-		
+		String[] labels = env.getProperty("metric.debt.labels").split(",");
+		ArrayList<String> labelsList = new ArrayList<String>();
+		Collections.addAll(labelsList, labels);
 		techDebtMet.setKey(env.getProperty("metric.techDebt.progname"));
-		//techDebtMet.setGraphdata(graphdata);
-		//techDebtMet.setLabels(labels);		
+		techDebtMet.setGraphdata(engMap.get("Technical Debt").getGraphData());
+		techDebtMet.setLabels(labelsList);		
 		engMetrics.add(techDebtMet);
 		
 		Metrics blockeMet = new Metrics();
 		
 		blockeMet.setKey(env.getProperty("metric.blockeMet.progname"));
-		//blockeMet.setGraphdata(graphdata);
-		//blockeMet.setLabels(labels);		
+		blockeMet.setGraphdata(engMap.get("Blockers").getGraphData());
+		blockeMet.setLabels(engMap.get("Blockers").getLabels());		
 		engMetrics.add(blockeMet);
 		
 		Metrics commnetMet = new Metrics();
 		
 		commnetMet.setKey(env.getProperty("metric.commnetMet.progname"));
-		//commnetMet.setGraphdata(graphdata);
-		//commnetMet.setLabels(labels);		
+		commnetMet.setGraphdata(engMap.get("Commented Lines").getGraphData());
+		commnetMet.setLabels(engMap.get("Commented Lines").getLabels());		
 		engMetrics.add(commnetMet);
 		
 		pMetResults.setMetrics(engMetrics);
@@ -215,26 +227,26 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 		
 		ProjectMetricCost pmCost = new ProjectMetricCost();
 		//Planned Cost
-		pmCost.set_key(env.getProperty("comm.plannedcost"));
-		pmCost.set_value(costDetails.getPlannedCost());
-		pmCost.set_postfix(env.getProperty("comm.postfix"));
-		pmCost.set_symbol(env.getProperty("comm.symbol"));
+		pmCost.setKey(env.getProperty("comm.plannedcost"));
+		pmCost.setValue(costDetails.getPlannedCost());
+		pmCost.setPostfix(env.getProperty("comm.postfix"));
+		pmCost.setSymbol(env.getProperty("comm.symbol"));
 		pmCostList.add(pmCost);
 		
 		//Actual Cost
 		ProjectMetricCost pmCost1 = new ProjectMetricCost();
-		pmCost1.set_key(env.getProperty("comm.actualcost"));
-		pmCost1.set_value(costDetails.getActualCost());
-		pmCost1.set_postfix(env.getProperty("comm.postfix"));
-		pmCost1.set_symbol(env.getProperty("comm.symbol"));
+		pmCost1.setKey(env.getProperty("comm.actualcost"));
+		pmCost1.setValue(costDetails.getActualCost());
+		pmCost1.setPostfix(env.getProperty("comm.postfix"));
+		pmCost1.setSymbol(env.getProperty("comm.symbol"));
 		pmCostList.add(pmCost1);
 		
 		//ROI
 		ProjectMetricCost pmCost2 = new ProjectMetricCost();
-		pmCost2.set_key(env.getProperty("comm.roi"));
-		pmCost2.set_value(costDetails.getPlannedCost());
-		pmCost2.set_postfix(env.getProperty("comm.postfix.roi"));
-		pmCost2.set_symbol(env.getProperty("comm.symbol.roi"));
+		pmCost2.setKey(env.getProperty("comm.roi"));
+		pmCost2.setValue(costDetails.getPlannedCost());
+		pmCost2.setPostfix(env.getProperty("comm.postfix.roi"));
+		pmCost2.setSymbol(env.getProperty("comm.symbol.roi"));
 		pmCostList.add(pmCost2);
 		
 		pMetResults.setCost(pmCostList);

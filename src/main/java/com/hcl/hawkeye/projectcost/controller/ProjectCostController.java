@@ -1,6 +1,5 @@
 package com.hcl.hawkeye.projectcost.controller;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -9,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +21,7 @@ import com.hcl.hawkeye.projectcost.service.ProjectCostService;
 import com.hcl.hawkeye.projectmanagement.controller.ProjectManagementController;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class ProjectCostController {
 
 	private static final Logger logger = LoggerFactory.getLogger(ProjectManagementController.class);
