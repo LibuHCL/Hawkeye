@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hcl.hawkeye.escalationmanagement.DO.EscalationDetails;
 import com.hcl.hawkeye.portfolio.DO.Program;
 import com.hcl.hawkeye.portfolio.DO.Project;
 import com.hcl.hawkeye.programmanagement.service.ProgramManagementService;
@@ -47,7 +46,7 @@ public class ProgramManagementController {
 	@RequestMapping(value = "/noofprojects", method = RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<List<Project>> noofProjectsInQuarter() {
 		logger.info("Inside noOfProgramsInQuarter method in Controller");
-		List<Project> escDet = ProgramMangementService.noOfProgramsInQuarter();
+		List<Project> escDet = ProgramMangementService.noOfProjectsInQuarter();
 		return new ResponseEntity<List<Project>>(escDet,HttpStatus.CREATED);
 	}
 

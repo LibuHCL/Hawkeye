@@ -1,6 +1,7 @@
 package com.hcl.hawkeye.common;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -36,8 +37,15 @@ public class JiraRestCallAPI {
 	        if(responseCode == HttpURLConnection.HTTP_OK)
 		    {
 	            String str = "";
+	            StringBuffer strBuf = new StringBuffer();
+	            DataInputStream input = null;
 	            try {
-	                str = new BufferedReader(new InputStreamReader(conn.getInputStream())).lines().collect(Collectors.joining("\n"));
+	            	 input = new DataInputStream (conn.getInputStream());
+                     while (null != ((str = input.readLine()))) {
+                                     strBuf.append(str);
+                                     strBuf.append("\n");
+                     }
+                     input.close ();
 	            }
 	            catch (IOException ex) {
 	            	Locale locale=new Locale("en", "IN");
@@ -50,7 +58,7 @@ public class JiraRestCallAPI {
 	                	conn.disconnect();
 	                }
 	            }
-	            return str.toString();
+	            return strBuf.toString();
 		    }       
 		}
 		catch (IOException e) {

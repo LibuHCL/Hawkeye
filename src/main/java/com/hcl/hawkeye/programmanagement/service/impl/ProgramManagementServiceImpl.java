@@ -57,11 +57,11 @@ public class ProgramManagementServiceImpl implements ProgramManagementService {
 	}
 	
 	@Override
-	public List<Project> noOfProgramsInQuarter() {
+	public List<Project> noOfProjectsInQuarter() {
 		logger.info("Inside noOfProgramsInQuarter method in ProgramManagemetServiceImpl");
 		
 		try {
-			return ProgramManagementDAO.noOfProgramsInQuarter();
+			return ProgramManagementDAO.noOfProjectsInQuarter();
 		} catch (DataAccessException dae) {
 			Locale locale=new Locale("en", "IN");
 			String errorMsg=messageSource.getMessage("error.get.noofprograminquarter", new Object[] {}, locale);

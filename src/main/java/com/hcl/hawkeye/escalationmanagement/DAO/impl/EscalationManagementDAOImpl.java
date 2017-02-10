@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.hcl.hawkeye.escalationmanagement.DAO.EscalationManagementDAO;
 import com.hcl.hawkeye.escalationmanagement.DO.Escalation;
-import com.hcl.hawkeye.escalationmanagement.DO.EscalationDetails;
+import com.hcl.hawkeye.portfolio.DO.Graph;
 import com.hcl.hawkeye.utils.HawkEyeUtils;
 
 @Repository
@@ -44,34 +44,35 @@ public class EscalationManagementDAOImpl implements EscalationManagementDAO {
 	}
 
 	@Override
-	public List<EscalationDetails> noOfEscAtProject(Escalation esc) {
-		logger.info("Request to get the no.of escalations per quarter for project :"+esc.getProjId());
+	public Graph noOfEscAtProject(int  projectId) {
+		logger.info("Request to get the no.of escalations per quarter for project : {}",projectId);
+		ArrayList<Double> graphData = new ArrayList<Double>();
+		ArrayList<String> labels = new ArrayList<String>();
 		
-		List<EscalationDetails> escDetList = new ArrayList<EscalationDetails>();
-		String sql = "SELECT QUARTER(ESCALATION_REPORED_DATE) AS quarter, REASON as reason, COUNT(ESCALATIONID) AS count FROM ESCALATION "+
-						"WHERE PROJECTID = ? AND REASON = ?  AND ESCALATION_REPORED_DATE >= DATE_FORMAT( curdate() - INTERVAL 12 MONTH, '%Y/%m/01' ) "
+		Graph escDetList = new Graph();
+		String sql = "SELECT QUARTER(ESCALATION_REPORED_DATE) AS quarter, COUNT(ESCALATIONID) AS count FROM ESCALATION "+
+						"WHERE PROJECTID = ?  AND ESCALATION_REPORED_DATE >= DATE_FORMAT( curdate() - INTERVAL 12 MONTH, '%Y/%m/01' ) "
 						+ "GROUP BY QUARTER(ESCALATION_REPORED_DATE) ORDER BY YEAR(ESCALATION_REPORED_DATE) DESC, QUARTER(ESCALATION_REPORED_DATE)";
-		List<Map<String, Object>> resultList = jdbcTemplate.queryForList(sql,new Object[] { esc.getProjId(),esc.getReason() });
-		
+		List<Map<String, Object>> resultList = jdbcTemplate.queryForList(sql,new Object[] { projectId });		
 		if(resultList  != null && resultList.size() >0){
 			for (Map<String, Object> row : resultList) {
-				EscalationDetails escDet = new EscalationDetails();
-				logger.info(" Qurter:"+row.get("quarter"));
-	            escDet.setQuarter((Integer)row.get("quarter"));
-	            escDet.setReason(row.get("reason").toString());
-	            escDet.setCount(Integer.valueOf(row.get("count").toString()));
-	            escDetList.add(escDet);
-	        } 
+				//quarteRes.put(String.valueOf(row.get("quarter")), Double.valueOf(String.valueOf(row.get("rating"))));
+				String q =String.valueOf(row.get("quarter"));
+				labels.add(q.equals("1")? "Q1":(q.equals("2") ? "Q2" : (q.equals("3") ? "Q3" :"Q4")));
+				graphData.add(Double.parseDouble(String.valueOf(row.get("count"))));
+			}
 		}
+		escDetList.setGraphData(graphData);
+		escDetList.setLabels(labels);
 
 		return escDetList;
 	}
 
 	@Override
-	public List<EscalationDetails> noOfEscPerQtAtProgram(Integer programId) {
+	public List<Graph> noOfEscPerQtAtProgram(Integer programId) {
 		logger.info("Request to get the no.of escalations per quarter for project :"+programId);
 		
-		List<EscalationDetails> escDetList = new ArrayList<EscalationDetails>();
+		List<Graph> escDetList = new ArrayList<Graph>();
 		
 		String sql = "SELECT  QUARTER(ESCALATION_REPORED_DATE) AS quarter, COUNT(ESCALATIONID) AS count FROM ESCALATION e, PROJECT p WHERE e.PROJECTID=p.PROJECTID "+
 				"AND p.PROGRAM_ID = ? AND ESCALATION_REPORED_DATE >= DATE_FORMAT( curdate() - INTERVAL 12 MONTH, '%Y/%m/01' ) "
@@ -81,10 +82,10 @@ public class EscalationManagementDAOImpl implements EscalationManagementDAO {
 		
 		if(resultList  != null && resultList.size() >0){
 			for (Map<String, Object> row : resultList) {
-				EscalationDetails escDet = new EscalationDetails();
+				Graph escDet = new Graph();
 				logger.info(" Qurter:"+row.get("quarter"));
-	            escDet.setQuarter((Integer)row.get("quarter"));
-	            escDet.setCount(Integer.valueOf(row.get("count").toString()));
+	            //escDet.setQuarter((Integer)row.get("quarter"));
+	            //escDet.setCount(Integer.valueOf(row.get("count").toString()));
 	            escDetList.add(escDet);
 	        } 
 		}

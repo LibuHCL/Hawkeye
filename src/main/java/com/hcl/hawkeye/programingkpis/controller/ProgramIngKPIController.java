@@ -22,11 +22,24 @@ public class ProgramIngKPIController {
 	
 	@RequestMapping(value="/getOperationalKpi", method = RequestMethod.GET)
 	@ResponseBody
-	public Result getProjectData() {
+	public Result getOperationKpi() {
 		logger.info("Rquesting api to get the operational KPI");
 		Result proDetails;
 		try {
-			proDetails = piService.getKpiResults();
+			proDetails = piService.getOperationalKpiResults();
+		} catch (IngKpiRetrievalException e) {
+			proDetails = new Result();
+		}
+		return proDetails;
+	}
+	
+	@RequestMapping(value="/getTacticalKpi", method = RequestMethod.GET)
+	@ResponseBody
+	public Result getTacticalKpi() {
+		logger.info("Rquesting api to get the tactical KPI");
+		Result proDetails;
+		try {
+			proDetails = piService.getTacticalKpiResults();
 		} catch (IngKpiRetrievalException e) {
 			proDetails = new Result();
 		}

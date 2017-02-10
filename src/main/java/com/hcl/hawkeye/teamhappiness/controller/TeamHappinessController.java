@@ -3,14 +3,13 @@
  */
 package com.hcl.hawkeye.teamhappiness.controller;
 
-import java.util.HashMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hcl.hawkeye.portfolio.DO.Graph;
 import com.hcl.hawkeye.teamhappiness.DO.TeamHappiness;
 import com.hcl.hawkeye.teamhappiness.service.TeamHappinessManagementService;
 /**
@@ -25,6 +25,7 @@ import com.hcl.hawkeye.teamhappiness.service.TeamHappinessManagementService;
  *
  */
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class TeamHappinessController {
 	private static final Logger logger = LoggerFactory.getLogger(TeamHappinessController.class);
 
@@ -45,9 +46,8 @@ public class TeamHappinessController {
 	
 	@RequestMapping(value="/getTeamHappiness/{projectId}-{teamYear}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
-	public HashMap<String,Double> getTeamHappiness(@PathVariable("projectId") String projectId, @PathVariable("teamYear") String teamYear) {
+	public Graph getTeamHappiness(@PathVariable("projectId") int projectId, @PathVariable("teamYear") int teamYear) {
 		logger.info("Requested to get the happiness for project in Quarterly basis");
-		HashMap<String,Double> response = happinessMgmtService.getHappinessPerQtAtProject(projectId,teamYear);
-		return response;
+		return happinessMgmtService.getHappinessPerQtAtProject(projectId,teamYear);		 
 	}
 }

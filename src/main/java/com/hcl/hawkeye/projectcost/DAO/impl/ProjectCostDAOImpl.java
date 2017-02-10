@@ -14,8 +14,11 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.hcl.hawkeye.portfolio.DO.Cost;
+import com.hcl.hawkeye.portfolio.DO.PortfolioDashboard;
+import com.hcl.hawkeye.portfolio.DO.PortfolioInfo;
 import com.hcl.hawkeye.projectcost.DAO.ProjectCostDAO;
 import com.hcl.hawkeye.projectcost.DO.ProjectCostDetails;
+import com.hcl.hawkeye.resourcemanagement.DO.ProgramResourceCount;
 import com.hcl.hawkeye.utils.HawkEyeUtils;
 
 @Repository
@@ -59,7 +62,7 @@ public class ProjectCostDAOImpl implements ProjectCostDAO {
 	public ProjectCostDetails getProjectCost(int projectID) {
 		logger.info("Inside getProjectCost method in ProjectCostDAOImpl::getProjectCost() " + projectID);
 
-		String PROJECT_COST_WITH_ID_SQL = "SELECT * FROM PROJECT_COST WHERE PROJECTID = " + projectID;
+		String PROJECT_COST_WITH_ID_SQL = "SELECT * FROM PROJECT_COST WHERE PROJECT_ID = " + projectID;
 
 		ProjectCostDetails projectCost = null;
 		try {
@@ -78,12 +81,28 @@ public class ProjectCostDAOImpl implements ProjectCostDAO {
 		@Override
 		public ProjectCostDetails mapRow(ResultSet rSet, int arg1) throws SQLException {
 			ProjectCostDetails cost = new ProjectCostDetails();
-			cost.setProjectID(new BigInteger(rSet.getString("projectid")));
+			cost.setProjectID(new BigInteger(rSet.getString("project_id")));
 			cost.setPlannedCost(rSet.getDouble("planned_cost"));
 			cost.setActualCost(rSet.getDouble("actual_cost"));
-			cost.setCaptureDate(rSet.getTimestamp("capture_date"));;
+			cost.setCaptureDate(rSet.getTimestamp("capture_date"));
+			cost.setRoi(rSet.getInt("roi"));
 			return cost;
 		}
 	};
+	
+	@Override
+	public PortfolioDashboard getAllPortfolioDetails(){
+		
+		PortfolioDashboard portfolioDashboard = new PortfolioDashboard();
+		String sql = "SELECT quarter, yr, SUM(ACTUAL_COST) actual_cost, SUM(PLANNED_COST) planned_cost, SUM(ROI) roi FROM ("+
+  "SELECT QUARTER('2014-01-01')  quarter union SELECT QUARTER('2014-04-01')  quarter union "+
+  "SELECT QUARTER('2014-08-01')  quarter union SELECT QUARTER('2014-12-01')  quarter) QRTR_T LEFT JOIN ("+
+   "SELECT QUARTER(CAPTURE_DATE) Quater, YEAR(CAPTURE_DATE) yr, ACTUAL_COST, PLANNED_COST, ROI from PROJECT_COST where PROJECT_ID in(select distinct(PROJECT_ID) from PROJECT_COST,PROJECT, PROGRAM, PORTFOLIO"+ 
+" where PROJECT_COST.PROJECT_ID = PROJECT.PROJECTID and PROJECT.PROGRAM_ID = PROGRAM.PROGRAMID and "+
+"PROGRAM.PORTFOLIO_ID=1)) costs on Quater = quarter group by quarter";
+		List<PortfolioInfo> resultsList = jdbcTemplate.query(sql,new BeanPropertyRowMapper<PortfolioInfo>(PortfolioInfo.class));
+		return portfolioDashboard;
+		
+	}
 	
 }

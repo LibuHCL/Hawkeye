@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,12 +19,12 @@ import com.hcl.hawkeye.resourcemanagement.DO.Resource;
 import com.hcl.hawkeye.resourcemanagement.service.ResourceManagementService;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class ResourceManagementController {
 private static final Logger logger = LoggerFactory.getLogger(ResourceManagementController.class);
 	
 	@Autowired
-	public ResourceManagementService resourceManagementService;
-	
+	public ResourceManagementService resourceManagementService;	
 	
 	@RequestMapping(value = "/createResource", method = RequestMethod.POST,consumes = "application/json")
 	public void createResource(@RequestBody Resource resource) {
@@ -63,4 +64,13 @@ private static final Logger logger = LoggerFactory.getLogger(ResourceManagementC
 		Double response = resourceManagementService.getResourcesPercentByPortfolio(portfolioId);
 		return response;
 	}
+	
+	@RequestMapping(value="/getResourcesAttrition/{year}", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public HashMap<Integer, Long> getResourceAttritionByQuarter(@PathVariable("year") String year) {
+		logger.info("Requested to get the resources count based on programId");
+		HashMap<Integer, Long> response = resourceManagementService.getResourceAttritionByQuarter(year);
+		return response;
+	}
+	
 }

@@ -14,4 +14,10 @@ public interface HawkEyeConstants {
 	
 	public static final int GOOD= 90;
 	
+	public static final String MILLION = "million";
+	
+	public static final String SYMBOL_EURO = "€";
+	
+	public static final String SYMBOL_PERCENTAGE = "%";
+	
 	}

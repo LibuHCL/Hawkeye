@@ -4,6 +4,7 @@
 package com.hcl.hawkeye.teamhappiness.DAO.impl;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,8 +17,10 @@ import org.springframework.context.MessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.hcl.hawkeye.portfolio.DO.Graph;
 import com.hcl.hawkeye.teamhappiness.DAO.TeamHappinessManagementDAO;
 import com.hcl.hawkeye.teamhappiness.DO.TeamHappiness;
+import com.hcl.hawkeye.teamhappiness.DO.TeamHappinessDetails;
 
 /**
  * @author HCL
@@ -54,15 +57,22 @@ public class TeamHappinessManagementDAOImpl implements TeamHappinessManagementDA
 	}
 	
 	@Override
-	public HashMap<String, Double> getHappinessAverageByProject(String projectId, String teamYear) {
-		String sql="SELECT QUARTER(CAPTURE_DATE) AS quarter,AVG(SCALE) AS rating FROM TEAM_HAPPINESS WHERE PROJECTID ='"+projectId+"' AND YEAR(CAPTURE_DATE)='"+teamYear+"' GROUP BY YEAR(CAPTURE_DATE), QUARTER(CAPTURE_DATE) ORDER BY YEAR(CAPTURE_DATE), QUARTER(CAPTURE_DATE)";
+	public Graph  getHappinessAverageByProject(int projectId, int teamYear) {
+		ArrayList<Double> graphData = new ArrayList<Double>();
+		ArrayList<String> labels = new ArrayList<String>();
+		Graph teamHapDetails = new Graph();
+		String sql="SELECT QUARTER(CAPTURE_DATE) AS quarter,AVG(SCALE) AS rating FROM TEAM_HAPPINESS WHERE PROJECTID ="+projectId+" AND YEAR(CAPTURE_DATE)="+teamYear+" GROUP BY YEAR(CAPTURE_DATE), QUARTER(CAPTURE_DATE) ORDER BY YEAR(CAPTURE_DATE), QUARTER(CAPTURE_DATE)";
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
-		HashMap<String,Double> quarteRes = new HashMap<>();
+		//HashMap<String,Double> quarteRes = new HashMap<>();
 		for (Map<String, Object> row : list) {
-			quarteRes.put(String.valueOf(row.get("quarter")), Double.valueOf(String.valueOf(row.get("rating"))));
+			//quarteRes.put(String.valueOf(row.get("quarter")), Double.valueOf(String.valueOf(row.get("rating"))));
+			String q =String.valueOf(row.get("quarter"));
+			labels.add(q.equals("1")? "Q1":(q.equals("2") ? "Q2" : (q.equals("3") ? "Q3" :"Q4")));
+			graphData.add(Double.valueOf(String.valueOf(row.get("rating"))));
 		}
-		return quarteRes;
-		
+		teamHapDetails.setGraphData(graphData);
+		teamHapDetails.setLabels(labels);
+		return teamHapDetails;		
 	}
 
 }

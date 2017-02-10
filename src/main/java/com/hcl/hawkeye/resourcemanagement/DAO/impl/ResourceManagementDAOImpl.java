@@ -18,6 +18,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.hcl.hawkeye.Exceptions.ResourceManagementException;
+import com.hcl.hawkeye.portfolio.DO.Graph;
 import com.hcl.hawkeye.resourcemanagement.DAO.ResourceManagementDAO;
 import com.hcl.hawkeye.resourcemanagement.DO.ProgramResourceCount;
 import com.hcl.hawkeye.resourcemanagement.DO.Resource;
@@ -118,14 +119,14 @@ public class ResourceManagementDAOImpl implements ResourceManagementDAO {
 	}
 
 	@Override
-	public HashMap<String, Long> getResourceAttritionByQuarter(String attritionYear) {
+	public HashMap<Integer, Long> getResourceAttritionByQuarter(String attritionYear) {
 		String sql = "SELECT QUARTER(PROJECT_JOINING_DATE) AS quarter, (COUNT(RESOURCEID) *100/(SELECT count(*) FROM RESOURCE WHERE QUARTER(PROJECT_JOINING_DATE) = quarter)) AS attrition_percent FROM RESOURCE WHERE ING_AGREEMENT='N' and YEAR(PROJECT_JOINING_DATE)='"
 				+ attritionYear
 				+ "' and EXIT_DATE< PLANNED_RELEASE_DATE GROUP BY YEAR(PROJECT_JOINING_DATE), QUARTER(PROJECT_JOINING_DATE) ORDER BY YEAR(PROJECT_JOINING_DATE), QUARTER(PROJECT_JOINING_DATE)";
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
-		HashMap<String, Long> attritionList = new HashMap<>();
+		HashMap<Integer, Long> attritionList = new HashMap<>();
 		for (Map<String, Object> row : list) {
-			attritionList.put((String) row.get("quarter"), (Long) row.get("count"));
+			attritionList.put((Integer) row.get("quarter"), (Long) row.get("count"));
 		}
 		return attritionList;
 	}
@@ -169,4 +170,25 @@ public class ResourceManagementDAOImpl implements ResourceManagementDAO {
 		}
 		return resourcePercent;
 	}
+	
+	@Override
+	public Graph getOffshorePerQtPerProject(int projectId){
+		
+		Graph graph = new Graph();
+		ArrayList<Double> graphData = new ArrayList<Double>();
+		ArrayList<String> labels = new ArrayList<String>();
+		String sql = "select QUARTER(PROJECT_JOINING_DATE) AS quarter, count(EMPLOYEEID) as count from RESOURCE where PROJECTID=? and WORK_LOCATION='OFFSHORE' "
+				+ "group by QUARTER(PROJECT_JOINING_DATE) order by QUARTER(PROJECT_JOINING_DATE) DESC;";
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql,new Object[] { projectId });
+		
+		for (Map<String, Object> row : list) {			
+			String q =String.valueOf(row.get("quarter"));
+			labels.add(q.equals("1")? "Q1":(q.equals("2") ? "Q2" : (q.equals("3") ? "Q3" :"Q4")));
+			graphData.add( (Double.parseDouble(String.valueOf(row.get("count")))));
+		}
+		graph.setGraphData(graphData);
+		graph.setLabels(labels);
+		return graph;		
+	}
+	
 }

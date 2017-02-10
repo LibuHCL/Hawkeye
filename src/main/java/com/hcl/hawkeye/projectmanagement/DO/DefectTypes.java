@@ -67,7 +67,7 @@ public class DefectTypes implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + defectLekage;
+		result = (int) (prime * result + defectLekage);
 		result = prime * result + internalDefects;
 		result = prime * result + uatDefects;
 		result = prime * result + validInternalDefects;

@@ -4,6 +4,8 @@ import com.hcl.hawkeye.programingkpis.DO.Result;
 
 public interface ProgramIngKPIService {
 	
-	Result getKpiResults();
+	Result getOperationalKpiResults();
+
+	Result getTacticalKpiResults();
 
 }
