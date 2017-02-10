@@ -122,8 +122,9 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 			if(i == 3) {
 				ValueAddAcceptedIdeas acceptedIdeas = vmService.getValueAddByAcceptedIdeas(Integer.parseInt(env.getProperty("program.program.ideaNum")));
 				KPIValue kv2 = new KPIValue();
-				
-				kv2.setGraphdataOfIdeas(acceptedIdeas.getGraphdata());
+				List<Double> graphData = acceptedIdeas.getGraphdata();
+				graphData.add(0.0);
+				kv2.setGraphdataOfIdeas(graphData);
 				kv2.setLabels(acceptedIdeas.getLabels());
 				kv2.setName(acceptedIdeas.getName());
 				kVList.add(kv2);
@@ -190,7 +191,9 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 				Graph eDetails = emService.noOfEscAtProject(27);
 				KPIValue kv2 = new KPIValue();
 				kv2.setLabels(eDetails.getLabels());
-				kv2.setGraphdataOfIdeas(eDetails.getGraphData());
+				List<Double> grahData = eDetails.getGraphData();
+						grahData.add(0.0);
+				kv2.setGraphdataOfIdeas(grahData);
 				
 				kv2.setName(env.getProperty("tacticalKpi.name2"));
 				kVList.add(kv2);
@@ -201,6 +204,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 				
 				List<String> labelData = new ArrayList<>();
 				List<Integer> graphData = new ArrayList<>();
+				graphData.add(0);
 				KPIValue kv2 = new KPIValue();
 				for (VelocityOfProject velocityOfProject : sprintVelocity) {
 					labelData.add(velocityOfProject.getSprintName().replace(" ", ""));
