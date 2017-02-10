@@ -1,16 +1,20 @@
 package com.hcl.hawkeye.valueaddmanagement.DAO;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import com.hcl.hawkeye.valueaddmanagement.DO.Value;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueAdd;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueAddAcceptedIdeas;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueCreation;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueCreationQuarterly;
+import com.hcl.hawkeye.valueaddmanagement.DO.ValueIndex;
 
 public interface ValueAddManagementDAO {
 
 	ValueAdd getNumbersOfValueAdd();
 	
-	ValueAdd getValueAddByIds(Integer programId, Integer portfolioId);
+	Map<Integer, ValueIndex> getValueAddByIds(Integer portfolioId);
 
 	Value createValueAdd(Value value);
 	

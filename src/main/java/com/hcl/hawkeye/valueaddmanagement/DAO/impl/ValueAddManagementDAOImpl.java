@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -27,6 +29,7 @@ import com.hcl.hawkeye.valueaddmanagement.DO.ValueAdd;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueAddAcceptedIdeas;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueCreation;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueCreationQuarterly;
+import com.hcl.hawkeye.valueaddmanagement.DO.ValueIndex;
 
 @Repository
 public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
@@ -92,33 +95,82 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 	};
 
 	@Override
-	public ValueAdd getValueAddByIds(Integer programId, Integer portfolioId) {
-		logger.info("Request to get the data of number of Value Add at program level");
-		ValueAdd valueAdd = new ValueAdd();
+	public Map<Integer, ValueIndex> getValueAddByIds(Integer portfolioId) {
+		logger.info("Request to get the data of number of Value Add by portfolio");
+		Map<Integer, ValueIndex> valueIndex = new HashMap<Integer, ValueIndex>();
+		updateValueIndex(valueIndex, portfolioId);
+		return valueIndex;
+	}
 
-		try {
-			if (0 != programId) {
-				String numbersOfValueAddProgQuery = "SELECT PROGRAMID, VALUEADD_STATUS, MONTHNAME(PROPOSED_DATE) as MON, COUNT(1) AS TOTAL "
-						+ "FROM VALUEADD " + "WHERE " + "PROGRAMID = ? "
-						+ "AND PROPOSED_DATE >= DATE_SUB(NOW(),INTERVAL 1 YEAR) "
-						+ "GROUP BY PROJECTID, VALUEADD_STATUS, MON; ";
-				valueAdd = jdbcTemplate.queryForObject(numbersOfValueAddProgQuery, VALUEADDROWMAPPER,
-						new Object[] { programId });
-			} else {
-				String numbersOfValueAddProgQuery = "SELECT PORTFOLIOID, VALUEADD_STATUS, MONTHNAME(PROPOSED_DATE) as MON, COUNT(1) AS TOTAL "
-						+ "FROM VALUEADD " + "WHERE " + "PORTFOLIOID = ? "
-						+ "AND PROPOSED_DATE >= DATE_SUB(NOW(),INTERVAL 1 YEAR) "
-						+ "GROUP BY PORTFOLIOID, VALUEADD_STATUS, MON; ";
-				valueAdd = jdbcTemplate.queryForObject(numbersOfValueAddProgQuery, VALUEADDROWMAPPER,
-						new Object[] { portfolioId });
+	private void updateValueIndex(Map<Integer, ValueIndex> valueIndex, Integer portfolioId) {
+		String proposedIdeasQuery = " SELECT VALUE.PROJECTID,  VALUE.YR, "
+				+ "  SUM(IF(MON = 'January', VALUE.TOTAL, 0)) AS 'JAN',  "
+				+ " SUM(IF(MON = 'February', VALUE.TOTAL, 0)) AS 'FEB',  "
+				+ " SUM(IF(MON = 'March', VALUE.TOTAL, 0)) AS 'MAR',  "
+				+ " SUM(IF(MON = 'April', VALUE.TOTAL, 0)) AS 'APR',  "
+				+ " SUM(IF(MON = 'May', VALUE.TOTAL, 0)) AS 'MAY',  "
+				+ " SUM(IF(MON = 'June', VALUE.TOTAL, 0)) AS 'JUN',  "
+				+ " SUM(IF(MON = 'July', VALUE.TOTAL, 0)) AS 'Jul',  "
+				+ " SUM(IF(MON = 'August', VALUE.TOTAL, 0)) AS 'AUG',  "
+				+ " SUM(IF(MON = 'September', VALUE.TOTAL, 0)) AS 'SEP',  "
+				+ " SUM(IF(MON = 'October', VALUE.TOTAL, 0)) AS 'OCT',  "
+				+ " SUM(IF(MON = 'November', VALUE.TOTAL, 0)) AS 'NOV',  "
+				+ " SUM(IF(MON = 'December', VALUE.TOTAL, 0)) AS 'DEC'  " + " FROM   "
+				+ " ( SELECT PROJECTID,  MONTHNAME(PROPOSED_DATE) as MON, YEAR(PROPOSED_DATE) AS YR,   "
+				+ " COUNT(1) AS TOTAL   " + " FROM VALUEADD   " + " WHERE             " + " PORTFOLIOID = ?   "
+				+ " GROUP BY PROJECTID, YR   " + " ) VALUE   " + " GROUP BY VALUE.PROJECTID, VALUE.YR;";
+
+		String acceptedIdeasQuery = "  SELECT VALUE.PROJECTID,  VALUE.YR, "
+				+ "  SUM(IF(MON = 'January', VALUE.TOTAL, 0)) AS 'JAN',  "
+				+ "   SUM(IF(MON = 'February', VALUE.TOTAL, 0)) AS 'FEB',  "
+				+ "   SUM(IF(MON = 'March', VALUE.TOTAL, 0)) AS 'MAR',  "
+				+ "   SUM(IF(MON = 'April', VALUE.TOTAL, 0)) AS 'APR',  "
+				+ "   SUM(IF(MON = 'May', VALUE.TOTAL, 0)) AS 'MAY',  "
+				+ "  SUM(IF(MON = 'June', VALUE.TOTAL, 0)) AS 'JUN',  "
+				+ "  SUM(IF(MON = 'July', VALUE.TOTAL, 0)) AS 'Jul',  "
+				+ "  SUM(IF(MON = 'August', VALUE.TOTAL, 0)) AS 'AUG',  "
+				+ "  SUM(IF(MON = 'September', VALUE.TOTAL, 0)) AS 'SEP',  "
+				+ "  SUM(IF(MON = 'October', VALUE.TOTAL, 0)) AS 'OCT',  "
+				+ "  SUM(IF(MON = 'November', VALUE.TOTAL, 0)) AS 'NOV',  "
+				+ "   SUM(IF(MON = 'December', VALUE.TOTAL, 0)) AS 'DEC'  " + "   FROM  "
+				+ "  ( SELECT PROJECTID,  MONTHNAME(PROPOSED_DATE) as MON, YEAR(PROPOSED_DATE) AS YR,  "
+				+ "  COUNT(1) AS TOTAL  " + "  	FROM VALUEADD  " + "  	WHERE             " + "   PORTFOLIOID = ? AND  "
+				+ "   (VALUEADD_STATUS != 'Proposed' AND VALUEADD_STATUS != 'Rejected')  "
+				+ "   GROUP BY PROJECTID, YR  " + "  ) VALUE  " + "  GROUP BY VALUE.PROJECTID, VALUE.YR; ";
+		List<Map<String, Object>> proposedList = jdbcTemplate.queryForList(proposedIdeasQuery,
+				new Object[] { portfolioId });
+		List<Map<String, Object>> acceptedList = jdbcTemplate.queryForList(acceptedIdeasQuery,
+				new Object[] { portfolioId });
+		for (Map<String, Object> row : proposedList) {
+			ValueIndex index = new ValueIndex();
+			ArrayList<Integer> proposedListData = new ArrayList<Integer>();
+			ArrayList<Integer> acceptedListData = new ArrayList<Integer>();
+			ArrayList<String> series = new ArrayList<String>();
+			updateSeries(series);
+			ArrayList<String> labels = new ArrayList<String>();
+			updateLabels(labels);
+			index.setLabels(labels);
+			index.setSeries(series);
+			updateListMonthwise(row, proposedListData);
+			Integer year = (Integer) row.get("YR");
+			for (Map<String, Object> acceptedListRow : acceptedList) {
+				Integer acceptedYear = (Integer) acceptedListRow.get("YR");
+				if (year.equals(acceptedYear)) {
+					updateListMonthwise(acceptedListRow, acceptedListData);
+				}
 			}
-		} catch (DataAccessException dae) {
-			Locale locale = new Locale("en", "IN");
-			String errorMsg = messageSource.getMessage("error.get.getvalueadd", new Object[] {}, locale);
-			logger.error(errorMsg, dae);
-			throw new ValueAddDataRetrievalException(errorMsg, dae);
+			ArrayList<ArrayList<Integer>> lineData = new ArrayList<ArrayList<Integer>>();
+			lineData.add(proposedListData);
+			lineData.add(acceptedListData);
+			index.setLinedata(lineData);
+			valueIndex.put(year, index);
 		}
-		return valueAdd;
+
+	}
+
+	private void updateLabels(ArrayList<String> labels) {
+		labels.addAll(
+				Arrays.asList("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"));
 	}
 
 	@Override
@@ -273,7 +325,7 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 		proposedList.add(((BigDecimal) row.get("NOV")).intValue());
 		proposedList.add(((BigDecimal) row.get("DEC")).intValue());
 	}
-	
+
 	@Override
 	public ValueCreationQuarterly getQuarterlyValueByProgramId(Integer program) {
 		logger.info("Request to get Quarterly Value Creation by Id  program " + program);
