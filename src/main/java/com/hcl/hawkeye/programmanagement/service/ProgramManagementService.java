@@ -10,7 +10,7 @@ public interface ProgramManagementService {
 
 	Program addProgram(Program program);
 
-	List<Project> noOfProgramsInQuarter();
+	List<Project> noOfProjectsInQuarter();
 
 	Project addProjectsToProgram(Project project);
 

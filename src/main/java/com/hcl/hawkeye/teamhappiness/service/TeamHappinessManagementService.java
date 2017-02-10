@@ -6,6 +6,7 @@ package com.hcl.hawkeye.teamhappiness.service;
 import java.util.HashMap;
 
 import com.hcl.hawkeye.teamhappiness.DO.TeamHappiness;
+import com.hcl.hawkeye.teamhappiness.DO.TeamHappinessDetails;
 
 /**
  * @author HCL
@@ -13,5 +14,5 @@ import com.hcl.hawkeye.teamhappiness.DO.TeamHappiness;
  */
 public interface TeamHappinessManagementService {
 	TeamHappiness capHappinessDetails(TeamHappiness teamHappiness);
-	HashMap<String,Double> getHappinessPerQtAtProject(String projectId, String teamYear);
+	TeamHappinessDetails getHappinessPerQtAtProject(int projectId, int teamYear);
 }

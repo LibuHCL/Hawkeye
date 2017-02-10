@@ -1,49 +1,21 @@
 package com.hcl.hawkeye.escalationmanagement.DO;
 
+import java.util.ArrayList;
+
 public class EscalationDetails {
 	
-	//private Integer year;
-	private Integer quarter;
-	private Integer count;
-	private String reason;
-	
-	
-	
-
-	public EscalationDetails(){
-		
+	ArrayList<Integer> graphData;
+	ArrayList<String> labels;
+	public ArrayList<Integer> getGraphData() {
+		return graphData;
 	}
-	
-	public EscalationDetails(Integer quarter,String reason,Integer count){
-		this.quarter=quarter;
-		this.count=count;
-		this.reason=reason;
-		}
-
-	public Integer getQuarter() {
-		return quarter;
+	public void setGraphData(ArrayList<Integer> graphData) {
+		this.graphData = graphData;
 	}
-
-	public void setQuarter(Integer quarter) {
-		this.quarter = quarter;
+	public ArrayList<String> getLabels() {
+		return labels;
 	}
-
-	public Integer getCount() {
-		return count;
-	}
-
-	public void setCount(Integer count) {
-		this.count = count;
-	}
-
-	public String getReason() {
-		return reason;
-	}
-
-	public void setReason(String reason) {
-		this.reason = reason;
-	}
-
-	
-	
+	public void setLabels(ArrayList<String> labels) {
+		this.labels = labels;
+	}	
 }

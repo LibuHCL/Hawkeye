@@ -59,7 +59,7 @@ public class ProjectCostDAOImpl implements ProjectCostDAO {
 	public ProjectCostDetails getProjectCost(int projectID) {
 		logger.info("Inside getProjectCost method in ProjectCostDAOImpl::getProjectCost() " + projectID);
 
-		String PROJECT_COST_WITH_ID_SQL = "SELECT * FROM PROJECT_COST WHERE PROJECTID = " + projectID;
+		String PROJECT_COST_WITH_ID_SQL = "SELECT * FROM PROJECT_COST WHERE PROJECT_ID = " + projectID;
 
 		ProjectCostDetails projectCost = null;
 		try {
@@ -78,10 +78,11 @@ public class ProjectCostDAOImpl implements ProjectCostDAO {
 		@Override
 		public ProjectCostDetails mapRow(ResultSet rSet, int arg1) throws SQLException {
 			ProjectCostDetails cost = new ProjectCostDetails();
-			cost.setProjectID(new BigInteger(rSet.getString("projectid")));
+			cost.setProjectID(new BigInteger(rSet.getString("project_id")));
 			cost.setPlannedCost(rSet.getDouble("planned_cost"));
 			cost.setActualCost(rSet.getDouble("actual_cost"));
-			cost.setCaptureDate(rSet.getTimestamp("capture_date"));;
+			cost.setCaptureDate(rSet.getTimestamp("capture_date"));
+			cost.setRoi(rSet.getInt("roi"));
 			return cost;
 		}
 	};
