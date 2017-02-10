@@ -9,6 +9,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,7 +29,10 @@ public class GlobalControllerAdvice {
 	logger.error(argInvalidException.getMessage(), argInvalidException);
 	BindingResult bindingResult = argInvalidException.getBindingResult();
 	StringBuilder errorDetails = new StringBuilder();
-	(bindingResult.getAllErrors()).stream().forEach(objectError -> errorDetails.append(objectError.toString()));
+	for (ObjectError errorDetail : bindingResult.getAllErrors()) {
+		errorDetails.append(errorDetail.toString());
+	}
+	//(bindingResult.getAllErrors()).stream().forEach(objectError -> errorDetails.append(objectError.toString()));
 	ErrorDetail errorDetail = new ErrorDetail(HttpStatus.BAD_REQUEST.name(), errorDetails.toString());
 	return new ResponseEntity<>(errorDetail, HttpStatus.BAD_REQUEST);
     }
