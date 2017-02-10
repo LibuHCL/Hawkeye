@@ -43,6 +43,7 @@ public class EscalationManagementServiceImpl implements EscalationManagementServ
 	public Graph noOfEscAtProject(int projectId) {
 		 try {
 			return escMgmtDao.noOfEscAtProject(projectId);
+			
 		} catch (Exception e) {
 			Locale locale=new Locale("en", "IN");
 			String errorMsg=messageSource.getMessage("error.noof.escalations", new Object[] {}, locale);

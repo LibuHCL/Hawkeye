@@ -53,11 +53,9 @@ public class EscalationManagementDAOImpl implements EscalationManagementDAO {
 		String sql = "SELECT QUARTER(ESCALATION_REPORED_DATE) AS quarter, COUNT(ESCALATIONID) AS count FROM ESCALATION "+
 						"WHERE PROJECTID = ?  AND ESCALATION_REPORED_DATE >= DATE_FORMAT( curdate() - INTERVAL 12 MONTH, '%Y/%m/01' ) "
 						+ "GROUP BY QUARTER(ESCALATION_REPORED_DATE) ORDER BY YEAR(ESCALATION_REPORED_DATE) DESC, QUARTER(ESCALATION_REPORED_DATE)";
-		List<Map<String, Object>> resultList = jdbcTemplate.queryForList(sql,new Object[] { projectId });
-		
+		List<Map<String, Object>> resultList = jdbcTemplate.queryForList(sql,new Object[] { projectId });		
 		if(resultList  != null && resultList.size() >0){
 			for (Map<String, Object> row : resultList) {
-				Graph escDet = new Graph();
 				//quarteRes.put(String.valueOf(row.get("quarter")), Double.valueOf(String.valueOf(row.get("rating"))));
 				String q =String.valueOf(row.get("quarter"));
 				labels.add(q.equals("1")? "Q1":(q.equals("2") ? "Q2" : (q.equals("3") ? "Q3" :"Q4")));
