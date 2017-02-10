@@ -169,4 +169,17 @@ public class ResourceManagementDAOImpl implements ResourceManagementDAO {
 		}
 		return resourcePercent;
 	}
+	
+	public void getOffshorePerQtPerProject(int projectId){
+		String sql = "select QUARTER(PROJECT_JOINING_DATE) AS quarter, count(EMPLOYEEID) from RESOURCE where PROJECTID=? and WORK_LOCATION='OFFSHORE' "
+				+ "group by QUARTER(PROJECT_JOINING_DATE) order by QUARTER(PROJECT_JOINING_DATE) DESC;";
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql,new Object[] { projectId });
+		HashMap<String, Long> attritionList = new HashMap<>();
+		for (Map<String, Object> row : list) {
+			attritionList.put((String) row.get("quarter"), (Long) row.get("count"));
+		}
+		
+	}
+	
+	//select QUARTER(PROJECT_JOINING_DATE) AS quarter, count(EMPLOYEEID) from RESOURCE where PROJECTID=27 and WORK_LOCATION="OFFSHORE" group by QUARTER(PROJECT_JOINING_DATE) ;
 }

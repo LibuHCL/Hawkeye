@@ -47,7 +47,7 @@ public class ProgramManagementController {
 	@RequestMapping(value = "/noofprojects", method = RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<List<Project>> noofProjectsInQuarter() {
 		logger.info("Inside noOfProgramsInQuarter method in Controller");
-		List<Project> escDet = ProgramMangementService.noOfProgramsInQuarter();
+		List<Project> escDet = ProgramMangementService.noOfProjectsInQuarter();
 		return new ResponseEntity<List<Project>>(escDet,HttpStatus.CREATED);
 	}
 

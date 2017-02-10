@@ -7,7 +7,7 @@ import com.hcl.hawkeye.escalationmanagement.DO.EscalationDetails;
 
 public interface EscalationManagementDAO {
 
-	List<EscalationDetails> noOfEscAtProject(Escalation esc);
+	EscalationDetails noOfEscAtProject(int projectId);
 
 	Escalation capEscalationDetails(Escalation escalation);
 

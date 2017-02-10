@@ -12,7 +12,7 @@ public interface ProgramManagementDAO {
 
 	Project addProjectsToProgram(Project project);
 
-	List<Project>  noOfProgramsInQuarter();
+	List<Project>  noOfProjectsInQuarter();
 
 	List<Project> getProjectsPerProgramId(int progId);
 

@@ -10,6 +10,7 @@ public class ProjectCostDetails {
 	private Double plannedCost;
 	private Double actualCost;
 	private Timestamp captureDate;
+	private int roi;
 
 	public BigInteger getProjectID() {
 		return projectID;
@@ -42,5 +43,14 @@ public class ProjectCostDetails {
 	public void setCaptureDate(Timestamp captureDate) {
 		this.captureDate = captureDate;
 	}
+
+	public int getRoi() {
+		return roi;
+	}
+
+	public void setRoi(int roi) {
+		this.roi = roi;
+	}
+	
 
 }

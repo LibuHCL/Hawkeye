@@ -64,7 +64,7 @@ public class ProgramManagementDAOImpl implements ProgramManagementDAO {
 	}
 
 	@Override
-	public List<Project>  noOfProgramsInQuarter() {
+	public List<Project>  noOfProjectsInQuarter() {
 		logger.info("Inside noOfProgramsInQuarter method in PortfolioManagementDAOImpl");	
 		
 		List<Project> projDetList = new ArrayList<Project>();

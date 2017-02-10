@@ -9,7 +9,7 @@ public interface EscalationManagementService {
 
 	Escalation capEscalationDetails(Escalation escalation);
 
-	List<EscalationDetails> noOfEscAtProject(Escalation esc);
+	EscalationDetails noOfEscAtProject(int projId);
 
 	List<EscalationDetails> noOfEscPerQtAtProgram(Integer programId);
 

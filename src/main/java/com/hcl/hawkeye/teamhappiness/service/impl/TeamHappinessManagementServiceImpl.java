@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.hcl.hawkeye.Exceptions.HappinessCaptureException;
 import com.hcl.hawkeye.teamhappiness.DAO.TeamHappinessManagementDAO;
 import com.hcl.hawkeye.teamhappiness.DO.TeamHappiness;
+import com.hcl.hawkeye.teamhappiness.DO.TeamHappinessDetails;
 import com.hcl.hawkeye.teamhappiness.service.TeamHappinessManagementService;
 
 /**
@@ -50,10 +51,9 @@ public class TeamHappinessManagementServiceImpl implements TeamHappinessManageme
 
 
 	@Override
-	public HashMap<String, Double> getHappinessPerQtAtProject(String projectId, String teamYear) {
+	public TeamHappinessDetails getHappinessPerQtAtProject(int projectId, int teamYear) {
 		logger.info("Request in getHappinessPerQtAtProject of TeamHappinessManagementServiceImpl");
-		HashMap<String,Double> response = teamHappinessMgmtDao.getHappinessAverageByProject(projectId,teamYear);
-		return response;
+		return teamHappinessMgmtDao.getHappinessAverageByProject(projectId,teamYear);
 	}
 
 }
