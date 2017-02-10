@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
-import com.hcl.hawkeye.portfolio.DO.Graph;
+import com.hcl.hawkeye.sonarmetrics.DO.Graph;
 import com.hcl.hawkeye.sonarmetrics.DAO.SonarMetricsManagementDAO;
 import com.hcl.hawkeye.sonarmetrics.DO.SonarMetrics;
 import com.hcl.hawkeye.sonarmetrics.DO.Trackers;
@@ -44,7 +44,7 @@ public class SonarMetricsManagementServiceImpl implements SonarMetricsManagement
 			Graph g = new Graph();
 			ArrayList<Double> graphData = new ArrayList<Double>();
 			ArrayList<String> labels = new ArrayList<String>();
-			graphData.add((track.getComplexity()).doubleValue());
+			graphData.add((track.getComplexity()));
 			labels.add(track.getSprint());
 			g.setGraphData(graphData);
 			g.setLabels(labels);
@@ -54,7 +54,7 @@ public class SonarMetricsManagementServiceImpl implements SonarMetricsManagement
 			Graph g1 = new Graph();
 			ArrayList<Double> graphData1 = new ArrayList<Double>();
 			ArrayList<String> labels1 = new ArrayList<String>();
-			graphData1.add((track.getBlockers()).doubleValue());
+			graphData1.add((track.getBlockers().doubleValue()));
 			labels1.add(track.getSprint());
 			g1.setGraphData(graphData1);
 			g1.setLabels(labels1);
@@ -64,7 +64,7 @@ public class SonarMetricsManagementServiceImpl implements SonarMetricsManagement
 			Graph g2 = new Graph();
 			ArrayList<Double> graphData2 = new ArrayList<Double>();
 			ArrayList<String> labels2 = new ArrayList<String>();
-			graphData2.add((track.getTechnicalDebt()).doubleValue());
+			graphData2.add((track.getTechnicalDebt()));
 			labels2.add(track.getSprint());
 			g2.setGraphData(graphData2);
 			g2.setLabels(labels2);
@@ -74,7 +74,7 @@ public class SonarMetricsManagementServiceImpl implements SonarMetricsManagement
 			Graph g3 = new Graph();
 			ArrayList<Double> graphData3 = new ArrayList<Double>();
 			ArrayList<String> labels3 = new ArrayList<String>();
-			graphData3.add((track.getCommentedLines()).doubleValue());
+			graphData3.add((track.getCommentedLines().doubleValue()));
 			labels3.add(track.getSprint());
 			g3.setGraphData(graphData3);
 			g3.setLabels(labels);
