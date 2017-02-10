@@ -1,70 +1,37 @@
+
 package com.hcl.hawkeye.portfolio.DO;
 
-public class Cost {
+import java.io.Serializable;
 
-	private String _key;
-	private String _value;
-	private String _postfix;
-	private String _symbol;
+public class Cost implements Serializable
+{
 
 	/**
-	 * @return the _key
+	 * 
 	 */
-	public String get_key() {
-		return _key;
-	}
+	private static final long serialVersionUID = 1L;
+	private String key;
 
-	/**
-	 * @param _key
-	 *            the _key to set
-	 */
-	public void set_key(String _key) {
-		this._key = _key;
-	}
+	  public String getKey() { return this.key; }
 
-	/**
-	 * @return the _value
-	 */
-	public String get_value() {
-		return _value;
-	}
+	  public void setKey(String key) { this.key = key; }
 
-	/**
-	 * @param _value
-	 *            the _value to set
-	 */
-	public void set_value(String _value) {
-		this._value = _value;
-	}
+	  private String value;
 
-	/**
-	 * @return the _postfix
-	 */
-	public String get_postfix() {
-		return _postfix;
-	}
+	  public String getValue() { return this.value; }
 
-	/**
-	 * @param _postfix
-	 *            the _postfix to set
-	 */
-	public void set_postfix(String _postfix) {
-		this._postfix = _postfix;
-	}
+	  public void setValue(String value) { this.value = value; }
 
-	/**
-	 * @return the _symbol
-	 */
-	public String get_symbol() {
-		return _symbol;
-	}
+	  private String postfix;
 
-	/**
-	 * @param _symbol
-	 *            the _symbol to set
-	 */
-	public void set_symbol(String _symbol) {
-		this._symbol = _symbol;
-	}
+	  public String getPostfix() { return this.postfix; }
+
+	  public void setPostfix(String postfix) { this.postfix = postfix; }
+
+	  private String symbol;
+
+	  public String getSymbol() { return this.symbol; }
+
+	  public void setSymbol(String symbol) { this.symbol = symbol; }
 
 }

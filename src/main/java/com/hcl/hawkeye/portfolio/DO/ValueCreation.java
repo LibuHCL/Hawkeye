@@ -1,38 +1,31 @@
+
 package com.hcl.hawkeye.portfolio.DO;
 
-public class ValueCreation {
+import java.io.Serializable;
+import java.util.ArrayList;
 
-	private String[] _series;
-	private int[][] _linedata;
-
-	/**
-	 * @return the _series
-	 */
-	public String[] get_series() {
-		return _series;
-	}
+public class ValueCreation implements Serializable
+{
 
 	/**
-	 * @param _series
-	 *            the _series to set
+	 * 
 	 */
-	public void set_series(String[] _series) {
-		this._series = _series;
-	}
+	private static final long serialVersionUID = 1L;
+	private ArrayList<String> series;
 
-	/**
-	 * @return the _linedata
-	 */
-	public int[][] get_linedata() {
-		return _linedata;
-	}
+	  public ArrayList<String> getSeries() { return this.series; }
 
-	/**
-	 * @param _linedata
-	 *            the _linedata to set
-	 */
-	public void set_linedata(int[][] _linedata) {
-		this._linedata = _linedata;
-	}
+	  public void setSeries(ArrayList<String> series) { this.series = series; }
 
+	  private ArrayList<ArrayList<Integer>> linedata;
+
+	  public ArrayList<ArrayList<Integer>> getLinedata() { return this.linedata; }
+
+	  public void setLinedata(ArrayList<ArrayList<Integer>> linedata) { this.linedata = linedata; }
+
+	  private ArrayList<String> labels;
+
+	  public ArrayList<String> getLabels() { return this.labels; }
+
+	  public void setLabels(ArrayList<String> labels) { this.labels = labels; }
 }

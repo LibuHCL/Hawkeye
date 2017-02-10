@@ -1,88 +1,45 @@
+
 package com.hcl.hawkeye.portfolio.DO;
 
-import java.util.List;
+import java.io.Serializable;
+import java.util.ArrayList;
 
-public class PortfolioColl {
-
-	private String _name;
-	private int _id;
-	private int _count;
-	private List<Cost> _cost;
-	private ValueCreation _valueCreation;
+public class PortfolioColl implements Serializable
+{
 
 	/**
-	 * @return the _name
+	 * 
 	 */
-	public String get_name() {
-		return _name;
-	}
+	private static final long serialVersionUID = 1L;
+	private String name;
 
-	/**
-	 * @param _name
-	 *            the _name to set
-	 */
-	public void set_name(String _name) {
-		this._name = _name;
-	}
+	  public String getName() { return this.name; }
 
-	/**
-	 * @return the _id
-	 */
-	public int get_id() {
-		return _id;
-	}
+	  public void setName(String name) { this.name = name; }
 
-	/**
-	 * @param _id
-	 *            the _id to set
-	 */
-	public void set_id(int _id) {
-		this._id = _id;
-	}
+	  private int id;
 
-	/**
-	 * @return the _count
-	 */
-	public int get_count() {
-		return _count;
-	}
+	  public int getId() { return this.id; }
 
-	/**
-	 * @param _count
-	 *            the _count to set
-	 */
-	public void set_count(int _count) {
-		this._count = _count;
-	}
+	  public void setId(int id) { this.id = id; }
 
-	/**
-	 * @return the _cost
-	 */
-	public List<Cost> get_cost() {
-		return _cost;
-	}
+	  private int count;
 
-	/**
-	 * @param _cost
-	 *            the _cost to set
-	 */
-	public void set_cost(List<Cost> _cost) {
-		this._cost = _cost;
-	}
+	  public int getCount() { return this.count; }
 
-	/**
-	 * @return the _valueCreation
-	 */
-	public ValueCreation get_valueCreation() {
-		return _valueCreation;
-	}
+	  public void setCount(int count) { this.count = count; }
 
-	/**
-	 * @param _valueCreation
-	 *            the _valueCreation to set
-	 */
-	public void set_valueCreation(ValueCreation _valueCreation) {
-		this._valueCreation = _valueCreation;
-	}
+	  private ArrayList<Cost> cost;
+
+	  public ArrayList<Cost> getCost() { return this.cost; }
+
+	  public void setCost(ArrayList<Cost> cost) { this.cost = cost; }
+
+	  private ValueCreation valueCreation;
+
+	  public ValueCreation getValueCreation() { return this.valueCreation; }
+
+	  public void setValueCreation(ValueCreation valueCreation) { this.valueCreation = valueCreation; }
+
 
 }

@@ -14,8 +14,11 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.hcl.hawkeye.portfolio.DO.Cost;
+import com.hcl.hawkeye.portfolio.DO.PortfolioDashboard;
+import com.hcl.hawkeye.portfolio.DO.PortfolioInfo;
 import com.hcl.hawkeye.projectcost.DAO.ProjectCostDAO;
 import com.hcl.hawkeye.projectcost.DO.ProjectCostDetails;
+import com.hcl.hawkeye.resourcemanagement.DO.ProgramResourceCount;
 import com.hcl.hawkeye.utils.HawkEyeUtils;
 
 @Repository
@@ -85,5 +88,20 @@ public class ProjectCostDAOImpl implements ProjectCostDAO {
 			return cost;
 		}
 	};
+	
+	@Override
+	public PortfolioDashboard getAllPortfolioDetails(){
+		
+		PortfolioDashboard portfolioDashboard = new PortfolioDashboard();
+		String sql = "SELECT quarter, yr, SUM(ACTUAL_COST) actual_cost, SUM(PLANNED_COST) planned_cost, SUM(ROI) roi FROM ("+
+  "SELECT QUARTER('2014-01-01')  quarter union SELECT QUARTER('2014-04-01')  quarter union "+
+  "SELECT QUARTER('2014-08-01')  quarter union SELECT QUARTER('2014-12-01')  quarter) QRTR_T LEFT JOIN ("+
+   "SELECT QUARTER(CAPTURE_DATE) Quater, YEAR(CAPTURE_DATE) yr, ACTUAL_COST, PLANNED_COST, ROI from PROJECT_COST where PROJECT_ID in(select distinct(PROJECT_ID) from PROJECT_COST,PROJECT, PROGRAM, PORTFOLIO"+ 
+" where PROJECT_COST.PROJECT_ID = PROJECT.PROJECTID and PROJECT.PROGRAM_ID = PROGRAM.PROGRAMID and "+
+"PROGRAM.PORTFOLIO_ID=1)) costs on Quater = quarter group by quarter";
+		List<PortfolioInfo> resultsList = jdbcTemplate.query(sql,new BeanPropertyRowMapper<PortfolioInfo>(PortfolioInfo.class));
+		return portfolioDashboard;
+		
+	}
 	
 }

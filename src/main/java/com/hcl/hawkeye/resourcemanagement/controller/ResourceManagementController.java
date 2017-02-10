@@ -63,4 +63,13 @@ private static final Logger logger = LoggerFactory.getLogger(ResourceManagementC
 		Double response = resourceManagementService.getResourcesPercentByPortfolio(portfolioId);
 		return response;
 	}
+	
+	@RequestMapping(value="/getResourcesAttrition/{year}", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public HashMap<Integer, Long> getResourceAttritionByQuarter(@PathVariable("year") String year) {
+		logger.info("Requested to get the resources count based on programId");
+		HashMap<Integer, Long> response = resourceManagementService.getResourceAttritionByQuarter(year);
+		return response;
+	}
+	
 }
