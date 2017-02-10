@@ -6,23 +6,19 @@ package com.hcl.hawkeye.sonarmetrics.service.impl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.hcl.hawkeye.portfolio.DO.Graph;
-import com.hcl.hawkeye.sonarmetrics.DO.Metrics;
-import com.hcl.hawkeye.sonarmetrics.DO.Result;
+import com.hcl.hawkeye.sonarmetrics.DAO.SonarMetricsManagementDAO;
 import com.hcl.hawkeye.sonarmetrics.DO.SonarMetrics;
 import com.hcl.hawkeye.sonarmetrics.DO.Trackers;
 import com.hcl.hawkeye.sonarmetrics.service.SonarMetricsManagementService;
-import com.hcl.hawkeye.sonarmetrics.DAO.SonarMetricsManagementDAO;
 
 /**
  * @author HCL
@@ -82,7 +78,7 @@ public class SonarMetricsManagementServiceImpl implements SonarMetricsManagement
 			labels3.add(track.getSprint());
 			g3.setGraphData(graphData3);
 			g3.setLabels(labels);
-			engMap.put("Cmmented Lines",g3);
+			engMap.put("Commented Lines",g3);
 
 		}
 		return engMap;

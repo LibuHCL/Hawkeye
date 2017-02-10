@@ -124,7 +124,6 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 		
 		
 		ArrayList<Double> graphdata = new ArrayList<Double>();
-		ArrayList<String> labels = new ArrayList<String>();
 		
 		//UAT Issues Metric
 		Metrics uatMet = new Metrics();
