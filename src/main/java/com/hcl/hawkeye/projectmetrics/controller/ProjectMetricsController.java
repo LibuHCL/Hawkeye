@@ -14,7 +14,7 @@ import com.hcl.hawkeye.projectmetrics.DO.ProjectMetrics;
 import com.hcl.hawkeye.projectmetrics.service.ProjectMetricsService;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
+//@CrossOrigin(origins = "*", maxAge = 3600)	
 public class ProjectMetricsController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ProjectMetricsController.class);

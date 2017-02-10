@@ -3,6 +3,7 @@ package com.hcl.hawkeye.resourcemanagement.DAO;
 import java.util.HashMap;
 import java.util.List;
 
+import com.hcl.hawkeye.portfolio.DO.Graph;
 import com.hcl.hawkeye.resourcemanagement.DO.ProgramResourceCount;
 import com.hcl.hawkeye.resourcemanagement.DO.Resource;
 
@@ -15,4 +16,5 @@ public interface ResourceManagementDAO {
 	HashMap<String,Long> getResourceAttritionByQuarter(String attritionYear);
 	List<ProgramResourceCount> getResourcesCountByProgram(int programId);
 	Double getResourcesPercentByPortfolio(int portfolioId);
+	Graph getOffshorePerQtPerProject(int projectId);
 }

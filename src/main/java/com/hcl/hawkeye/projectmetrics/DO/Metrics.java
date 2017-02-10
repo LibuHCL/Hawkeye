@@ -9,6 +9,8 @@ public class Metrics {
 
     private ArrayList<Double> graphdata;
     
+    private ArrayList<Integer> graphdata1;
+    
     private Integer Internal_Defects;
     
     private Integer Valid_Internal_Defects;
@@ -123,6 +125,14 @@ public class Metrics {
 
 	public void setManDaysCount(String manDaysCount) {
 		this.manDaysCount = manDaysCount;
+	}
+
+	public ArrayList<Integer> getGraphdata1() {
+		return graphdata1;
+	}
+
+	public void setGraphdata1(ArrayList<Integer> graphdata1) {
+		this.graphdata1 = graphdata1;
 	}
     
     

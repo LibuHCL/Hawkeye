@@ -14,6 +14,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import com.hcl.hawkeye.portfolio.DO.Graph;
 import com.hcl.hawkeye.portfolio.DO.Project;
 import com.hcl.hawkeye.programmanagement.service.ProgramManagementService;
 import com.hcl.hawkeye.projectcost.DO.ProjectCostDetails;
@@ -143,18 +144,19 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 		
 		//Team Hapiness Matrics
 		Calendar now = Calendar.getInstance();
-		TeamHappinessDetails teamHap = teamHapService.getHappinessPerQtAtProject(projectId, now.get(Calendar.YEAR));
+		Graph teamHapGrpah = teamHapService.getHappinessPerQtAtProject(projectId, now.get(Calendar.YEAR));
 		Metrics teamHapMet = new Metrics();
 		teamHapMet.setKey(env.getProperty("metric.teamhap.progname"));
-		//teamHapMet.setGraphdata(teamHap.getGraphData());
-		teamHapMet.setLabels(teamHap.getLabels());		
+		teamHapMet.setGraphdata(teamHapGrpah.getGraphData());
+		teamHapMet.setLabels(teamHapGrpah.getLabels());		
 		metrics.add(teamHapMet);
 		
 		//Offshore associates
 		Metrics offAssMet = new Metrics();
+		Graph offShoreGrpah = resMgmtService.getOffshorePerQtPerProject(projectId);
 		offAssMet.setKey(env.getProperty("metric.offAss.progname"));
-		//offAssMet.setGraphdata(graphdata);
-		//offAssMet.setLabels(labels);
+		offAssMet.setGraphdata(offShoreGrpah.getGraphData());
+		offAssMet.setLabels(offShoreGrpah.getLabels());
 		metrics.add(offAssMet);
 		pMetResults.setMetrics(metrics);
 		

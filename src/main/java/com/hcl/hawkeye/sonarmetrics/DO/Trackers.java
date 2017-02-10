@@ -8,6 +8,7 @@ public class Trackers {
 	private Integer complexity;
 	private Integer commentedLines;
 	private Integer duplicateLines;
+	private String sprint;
 
 	public Trackers() {
 
@@ -23,6 +24,7 @@ public class Trackers {
 		this.commentedLines = commentedLines;
 		this.duplicateLines = duplicateLines;
 	}
+	
 
 	public Integer getTechnicalDebt() {
 		return technicalDebt;
@@ -71,5 +73,14 @@ public class Trackers {
 	public void setDuplicateLines(Integer duplicateLines) {
 		this.duplicateLines = duplicateLines;
 	}
+
+	public String getSprint() {
+		return sprint;
+	}
+
+	public void setSprint(String sprint) {
+		this.sprint = sprint;
+	}
+	
 
 }

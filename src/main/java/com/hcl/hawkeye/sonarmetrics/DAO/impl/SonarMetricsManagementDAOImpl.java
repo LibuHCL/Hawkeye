@@ -52,12 +52,13 @@ public class SonarMetricsManagementDAOImpl implements SonarMetricsManagementDAO 
 		List<Trackers> trackers = new ArrayList<Trackers>();
 		try {
 			//String fetchMetricsData = "SELECT * FROM CODE_QUALITY_TRACKER WHERE PROJECTID=? AND SPRINT IN(SELECT SPRINT FROM CODE_QUALITY_TRACKER WHERE PROJECTID=? ORDER BY CREATION_DATE DESC LIMIT 4)";
-			String fetchMetricsData = "SELECT BLOCKER_ISSUES AS blockers,TECHNICAL_DEBT AS TechDebt,COMPLEXITY AS Complexity,DUPLICATED_LINES_DENSITY AS DuplicateLines,CRITICAL_ISSUES AS CriticalIssues,COMMENTED_LINES AS CommentedLines FROM CODE_QUALITY_TRACKER  WHERE  PROJECTID=?  ORDER BY CREATION_DATE DESC  LIMIT 4";
+			String fetchMetricsData = "SELECT SPRINT as sprint BLOCKER_ISSUES AS blockers,TECHNICAL_DEBT AS TechDebt,COMPLEXITY AS Complexity,DUPLICATED_LINES_DENSITY AS DuplicateLines,CRITICAL_ISSUES AS CriticalIssues,COMMENTED_LINES AS CommentedLines FROM CODE_QUALITY_TRACKER  WHERE  PROJECTID=?  ORDER BY CREATION_DATE DESC  LIMIT 4";
 			List<Map<String, Object>> resultList = jdbcTemplate.queryForList(fetchMetricsData,new Object[] { projectId},SONARMETRICSROWMAPPER);
 			if(resultList  != null && resultList.size() >0){
 				for (Map<String, Object> row : resultList) {
 					Metrics metrics = new Metrics();
 					Trackers tracker=new Trackers();
+					tracker.setSprint((String)row.get("sprint"));
 					tracker.setBlockers((Integer) row.get("blockers"));
 					tracker.setTechnicalDebt((Integer) row.get("TechDebt"));
 					tracker.setComplexity((Integer) row.get("Complexity"));
@@ -65,9 +66,6 @@ public class SonarMetricsManagementDAOImpl implements SonarMetricsManagementDAO 
 					tracker.setCritical((Integer) row.get("CriticalIssues"));
 					tracker.setCommentedLines((Integer) row.get("CommentedLines"));
 					trackers.add(tracker);
-					
-					
-					
 		        } 
 			}
 		} catch (DataAccessException dae) {
