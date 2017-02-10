@@ -19,6 +19,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.hcl.hawkeye.Exceptions.ResourceManagementException;
+import com.hcl.hawkeye.portfolio.DO.Graph;
 import com.hcl.hawkeye.resourcemanagement.DAO.ResourceManagementDAO;
 import com.hcl.hawkeye.resourcemanagement.DO.ProgramResourceCount;
 import com.hcl.hawkeye.resourcemanagement.DO.Resource;
@@ -173,16 +174,24 @@ public class ResourceManagementDAOImpl implements ResourceManagementDAO {
 		return resourcePercent;
 	}
 	
-	public void getOffshorePerQtPerProject(int projectId){
-		String sql = "select QUARTER(PROJECT_JOINING_DATE) AS quarter, count(EMPLOYEEID) from RESOURCE where PROJECTID=? and WORK_LOCATION='OFFSHORE' "
+	@Override
+	public Graph getOffshorePerQtPerProject(int projectId){
+		
+		Graph graph = new Graph();
+		ArrayList<Double> graphData = new ArrayList<Double>();
+		ArrayList<String> labels = new ArrayList<String>();
+		String sql = "select QUARTER(PROJECT_JOINING_DATE) AS quarter, count(EMPLOYEEID) as count from RESOURCE where PROJECTID=? and WORK_LOCATION='OFFSHORE' "
 				+ "group by QUARTER(PROJECT_JOINING_DATE) order by QUARTER(PROJECT_JOINING_DATE) DESC;";
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql,new Object[] { projectId });
-		HashMap<String, Long> attritionList = new HashMap<>();
-		for (Map<String, Object> row : list) {
-			attritionList.put((String) row.get("quarter"), (Long) row.get("count"));
-		}
 		
+		for (Map<String, Object> row : list) {			
+			String q =String.valueOf(row.get("quarter"));
+			labels.add(q.equals("1")? "Q1":(q.equals("2") ? "Q2" : (q.equals("3") ? "Q3" :"Q4")));
+			graphData.add( (Double.parseDouble(String.valueOf(row.get("count")))));
+		}
+		graph.setGraphData(graphData);
+		graph.setLabels(labels);
+		return graph;		
 	}
 	
-	//select QUARTER(PROJECT_JOINING_DATE) AS quarter, count(EMPLOYEEID) from RESOURCE where PROJECTID=27 and WORK_LOCATION="OFFSHORE" group by QUARTER(PROJECT_JOINING_DATE) ;
 }

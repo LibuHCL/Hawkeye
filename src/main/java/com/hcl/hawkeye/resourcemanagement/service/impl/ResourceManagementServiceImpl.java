@@ -9,11 +9,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hcl.hawkeye.portfolio.DO.Graph;
 import com.hcl.hawkeye.resourcemanagement.DO.ProgramResourceCount;
 import com.hcl.hawkeye.resourcemanagement.DO.Resource;
 import com.hcl.hawkeye.resourcemanagement.DAO.ResourceManagementDAO;
 import com.hcl.hawkeye.resourcemanagement.service.ResourceManagementService;
-
 
 
 @Service
@@ -66,6 +66,11 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
 		logger.info("Request in getResourcesPercentByPortfolio of ResourceServiceImpl");
 		Double response = resourceDAO.getResourcesPercentByPortfolio(portfolioId);
 		return response;
+	}
+	@Override
+	public Graph getOffshorePerQtPerProject(int projectId) {
+		// TODO Auto-generated method stub
+		return resourceDAO.getOffshorePerQtPerProject(projectId);
 	}
 
 }

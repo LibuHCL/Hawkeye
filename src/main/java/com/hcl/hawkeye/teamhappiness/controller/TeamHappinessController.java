@@ -3,8 +3,6 @@
  */
 package com.hcl.hawkeye.teamhappiness.controller;
 
-import java.util.HashMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hcl.hawkeye.portfolio.DO.Graph;
 import com.hcl.hawkeye.teamhappiness.DO.TeamHappiness;
-import com.hcl.hawkeye.teamhappiness.DO.TeamHappinessDetails;
 import com.hcl.hawkeye.teamhappiness.service.TeamHappinessManagementService;
 /**
  * @author HCL
@@ -48,9 +46,8 @@ public class TeamHappinessController {
 	
 	@RequestMapping(value="/getTeamHappiness/{projectId}-{teamYear}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
-	public TeamHappinessDetails getTeamHappiness(@PathVariable("projectId") int projectId, @PathVariable("teamYear") int teamYear) {
+	public Graph getTeamHappiness(@PathVariable("projectId") int projectId, @PathVariable("teamYear") int teamYear) {
 		logger.info("Requested to get the happiness for project in Quarterly basis");
-		return happinessMgmtService.getHappinessPerQtAtProject(projectId,teamYear);
-		 
+		return happinessMgmtService.getHappinessPerQtAtProject(projectId,teamYear);		 
 	}
 }

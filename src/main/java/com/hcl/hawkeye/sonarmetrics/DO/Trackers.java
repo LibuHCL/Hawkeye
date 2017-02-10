@@ -2,19 +2,21 @@ package com.hcl.hawkeye.sonarmetrics.DO;
 
 public class Trackers {
 
-	private Integer technicalDebt;
+	private Double technicalDebt;
 	private Integer blockers;
 	private Integer critical;
-	private Integer complexity;
+	private Double complexity;
 	private Integer commentedLines;
-	private Integer duplicateLines;
+	private Double duplicateLines;
+	private String sprint;
 
 	public Trackers() {
 
 	}
 
-	public Trackers(Integer technicalDebt, Integer blockers, Integer critical, Integer complexity,
-			Integer commentedLines, Integer duplicateLines) {
+	public Trackers(Double technicalDebt, Integer blockers, Integer critical,
+			Double complexity, Integer commentedLines, Double duplicateLines,
+			String sprint) {
 		super();
 		this.technicalDebt = technicalDebt;
 		this.blockers = blockers;
@@ -22,13 +24,14 @@ public class Trackers {
 		this.complexity = complexity;
 		this.commentedLines = commentedLines;
 		this.duplicateLines = duplicateLines;
+		this.sprint = sprint;
 	}
 
-	public Integer getTechnicalDebt() {
+	public Double getTechnicalDebt() {
 		return technicalDebt;
 	}
 
-	public void setTechnicalDebt(Integer technicalDebt) {
+	public void setTechnicalDebt(Double technicalDebt) {
 		this.technicalDebt = technicalDebt;
 	}
 
@@ -48,11 +51,11 @@ public class Trackers {
 		this.critical = critical;
 	}
 
-	public Integer getComplexity() {
+	public Double getComplexity() {
 		return complexity;
 	}
 
-	public void setComplexity(Integer complexity) {
+	public void setComplexity(Double complexity) {
 		this.complexity = complexity;
 	}
 
@@ -64,12 +67,20 @@ public class Trackers {
 		this.commentedLines = commentedLines;
 	}
 
-	public Integer getDuplicateLines() {
+	public Double getDuplicateLines() {
 		return duplicateLines;
 	}
 
-	public void setDuplicateLines(Integer duplicateLines) {
+	public void setDuplicateLines(Double duplicateLines) {
 		this.duplicateLines = duplicateLines;
+	}
+
+	public String getSprint() {
+		return sprint;
+	}
+
+	public void setSprint(String sprint) {
+		this.sprint = sprint;
 	}
 
 }

@@ -1,15 +1,18 @@
-package com.hcl.hawkeye.escalationmanagement.DO;
+/**
+ * 
+ */
+package com.hcl.hawkeye.sonarmetrics.DO;
 
 import java.util.ArrayList;
 
-public class EscalationDetails {
-	
-	ArrayList<Integer> graphData;
+public class Graph {	
+	ArrayList<Double> graphData;
 	ArrayList<String> labels;
-	public ArrayList<Integer> getGraphData() {
+	
+	public ArrayList<Double> getGraphData() {
 		return graphData;
 	}
-	public void setGraphData(ArrayList<Integer> graphData) {
+	public void setGraphData(ArrayList<Double> graphData) {
 		this.graphData = graphData;
 	}
 	public ArrayList<String> getLabels() {

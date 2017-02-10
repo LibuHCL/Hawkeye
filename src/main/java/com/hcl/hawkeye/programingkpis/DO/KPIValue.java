@@ -10,83 +10,84 @@ public class KPIValue implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String _name;
-	private List<Integer[]> _graphdata;
-	private List<Integer> _graphdataOfVelocity;
-	private List<Double> _graphdataOfIdeas;
-	private List<String> _labels;
-	private List<String> _series;
+	private String name;
+	private List<Integer[]> graphdata;
+	private List<Integer> graphdataOfVelocity;
+	private List<Double> graphdataOfIdeas;
+	private List<String> labels;
+	private List<String> series;
+	private List<Long> longraphData;
 	/**
-	 * @return the _name
+	 * @return the name
 	 */
-	public String get_name() {
-		return _name;
+	public String getName() {
+		return name;
 	}
 	/**
-	 * @param _name the _name to set
+	 * @param name the name to set
 	 */
-	public void set_name(String _name) {
-		this._name = _name;
+	public void setName(String name) {
+		this.name = name;
 	}
 	/**
-	 * @return the _graphdata
+	 * @return the graphdata
 	 */
-	public List<Integer[]> get_graphdata() {
-		return _graphdata;
+	public List<Integer[]> getGraphdata() {
+		return graphdata;
 	}
 	/**
-	 * @param _graphdata the _graphdata to set
+	 * @param graphdata the graphdata to set
 	 */
-	public void set_graphdata(List<Integer[]> _graphdata) {
-		this._graphdata = _graphdata;
+	public void setGraphdata(List<Integer[]> graphdata) {
+		this.graphdata = graphdata;
 	}
 	/**
-	 * @return the _graphdataOfVelocity
+	 * @return the graphdataOfVelocity
 	 */
-	public List<Integer> get_graphdataOfVelocity() {
-		return _graphdataOfVelocity;
+	public List<Integer> getGraphdataOfVelocity() {
+		return graphdataOfVelocity;
 	}
 	/**
-	 * @param _graphdataOfVelocity the _graphdataOfVelocity to set
+	 * @param graphdataOfVelocity the graphdataOfVelocity to set
 	 */
-	public void set_graphdataOfVelocity(List<Integer> _graphdataOfVelocity) {
-		this._graphdataOfVelocity = _graphdataOfVelocity;
+	public void setGraphdataOfVelocity(List<Integer> graphdataOfVelocity) {
+		this.graphdataOfVelocity = graphdataOfVelocity;
 	}
 	/**
-	 * @return the _graphdataOfIdeas
+	 * @return the graphdataOfIdeas
 	 */
-	public List<Double> get_graphdataOfIdeas() {
-		return _graphdataOfIdeas;
+	public List<Double> getGraphdataOfIdeas() {
+		return graphdataOfIdeas;
 	}
 	/**
-	 * @param _graphdataOfIdeas the _graphdataOfIdeas to set
+	 * @param graphdataOfIdeas the graphdataOfIdeas to set
 	 */
-	public void set_graphdataOfIdeas(List<Double> _graphdataOfIdeas) {
-		this._graphdataOfIdeas = _graphdataOfIdeas;
+	public void setGraphdataOfIdeas(List<Double> graphdataOfIdeas) {
+		this.graphdataOfIdeas = graphdataOfIdeas;
 	}
 	/**
-	 * @return the _labels
+	 * @return the labels
 	 */
-	public List<String> get_labels() {
-		return _labels;
+	public List<String> getLabels() {
+		return labels;
 	}
 	/**
-	 * @param _labels the _labels to set
+	 * @param labels the labels to set
 	 */
-	public void set_labels(List<String> _labels) {
-		this._labels = _labels;
+	public void setLabels(List<String> labels) {
+		this.labels = labels;
 	}
 	/**
-	 * @return the _series
+	 * @return the series
 	 */
-	public List<String> get_series() {
-		return _series;
+	public List<String> getSeries() {
+		return series;
 	}
 	/**
-	 * @param _series the _series to set
+	 * @param series the series to set
 	 */
-	public void set_series(List<String> _series) {
-		this._series = _series;
+	public void setSeries(List<String> series) {
+		this.series = series;
 	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
@@ -95,12 +96,12 @@ public class KPIValue implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((_graphdata == null) ? 0 : _graphdata.hashCode());
-		result = prime * result + ((_graphdataOfIdeas == null) ? 0 : _graphdataOfIdeas.hashCode());
-		result = prime * result + ((_graphdataOfVelocity == null) ? 0 : _graphdataOfVelocity.hashCode());
-		result = prime * result + ((_labels == null) ? 0 : _labels.hashCode());
-		result = prime * result + ((_name == null) ? 0 : _name.hashCode());
-		result = prime * result + ((_series == null) ? 0 : _series.hashCode());
+		result = prime * result + ((graphdata == null) ? 0 : graphdata.hashCode());
+		result = prime * result + ((graphdataOfIdeas == null) ? 0 : graphdataOfIdeas.hashCode());
+		result = prime * result + ((graphdataOfVelocity == null) ? 0 : graphdataOfVelocity.hashCode());
+		result = prime * result + ((labels == null) ? 0 : labels.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((series == null) ? 0 : series.hashCode());
 		return result;
 	}
 	/* (non-Javadoc)
@@ -115,35 +116,35 @@ public class KPIValue implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		KPIValue other = (KPIValue) obj;
-		if (_graphdata == null) {
-			if (other._graphdata != null)
+		if (graphdata == null) {
+			if (other.graphdata != null)
 				return false;
-		} else if (!_graphdata.equals(other._graphdata))
+		} else if (!graphdata.equals(other.graphdata))
 			return false;
-		if (_graphdataOfIdeas == null) {
-			if (other._graphdataOfIdeas != null)
+		if (graphdataOfIdeas == null) {
+			if (other.graphdataOfIdeas != null)
 				return false;
-		} else if (!_graphdataOfIdeas.equals(other._graphdataOfIdeas))
+		} else if (!graphdataOfIdeas.equals(other.graphdataOfIdeas))
 			return false;
-		if (_graphdataOfVelocity == null) {
-			if (other._graphdataOfVelocity != null)
+		if (graphdataOfVelocity == null) {
+			if (other.graphdataOfVelocity != null)
 				return false;
-		} else if (!_graphdataOfVelocity.equals(other._graphdataOfVelocity))
+		} else if (!graphdataOfVelocity.equals(other.graphdataOfVelocity))
 			return false;
-		if (_labels == null) {
-			if (other._labels != null)
+		if (labels == null) {
+			if (other.labels != null)
 				return false;
-		} else if (!_labels.equals(other._labels))
+		} else if (!labels.equals(other.labels))
 			return false;
-		if (_name == null) {
-			if (other._name != null)
+		if (name == null) {
+			if (other.name != null)
 				return false;
-		} else if (!_name.equals(other._name))
+		} else if (!name.equals(other.name))
 			return false;
-		if (_series == null) {
-			if (other._series != null)
+		if (series == null) {
+			if (other.series != null)
 				return false;
-		} else if (!_series.equals(other._series))
+		} else if (!series.equals(other.series))
 			return false;
 		return true;
 	}
@@ -152,11 +153,21 @@ public class KPIValue implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "KPIValue [_name=" + _name + ", _graphdata=" + _graphdata + ", _graphdataOfVelocity="
-				+ _graphdataOfVelocity + ", _graphdataOfIdeas=" + _graphdataOfIdeas + ", _labels=" + _labels
-				+ ", _series=" + _series + "]";
+		return "KPIValue [name=" + name + ", graphdata=" + graphdata + ", graphdataOfVelocity=" + graphdataOfVelocity
+				+ ", graphdataOfIdeas=" + graphdataOfIdeas + ", labels=" + labels + ", series=" + series + "]";
 	}
-	
+	/**
+	 * @return the longraphData
+	 */
+	public List<Long> getLongraphData() {
+		return longraphData;
+	}
+	/**
+	 * @param longraphData the longraphData to set
+	 */
+	public void setLongraphData(List<Long> longraphData) {
+		this.longraphData = longraphData;
+	}
 	
 	
 }

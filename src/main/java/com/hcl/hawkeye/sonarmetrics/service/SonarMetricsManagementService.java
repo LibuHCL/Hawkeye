@@ -3,10 +3,10 @@
  */
 package com.hcl.hawkeye.sonarmetrics.service;
 
-import java.util.List;
+import java.util.Map;
 
-import com.hcl.hawkeye.sonarmetrics.DO.SonarMetrics;
-import com.hcl.hawkeye.sonarmetrics.DO.Trackers;
+import com.hcl.hawkeye.portfolio.DO.Graph;
+
 
 /**
  * @author HCL
@@ -14,5 +14,5 @@ import com.hcl.hawkeye.sonarmetrics.DO.Trackers;
  */
 public interface SonarMetricsManagementService {
 
-	List<SonarMetrics> getSonarMetricsData(Integer projectId);
+	Map <String, Graph> getSonarMetricsData(Integer projectId);
 }

@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import com.hcl.hawkeye.Exceptions.PortfolioCreationException;
 import com.hcl.hawkeye.escalationmanagement.DAO.EscalationManagementDAO;
 import com.hcl.hawkeye.escalationmanagement.DO.Escalation;
-import com.hcl.hawkeye.escalationmanagement.DO.EscalationDetails;
 import com.hcl.hawkeye.escalationmanagement.service.EscalationManagementService;
+import com.hcl.hawkeye.portfolio.DO.Graph;
 
 @Service
 public class EscalationManagementServiceImpl implements EscalationManagementService {
@@ -40,9 +40,10 @@ public class EscalationManagementServiceImpl implements EscalationManagementServ
 	}
 
 	@Override
-	public EscalationDetails noOfEscAtProject(int projectId) {
+	public Graph noOfEscAtProject(int projectId) {
 		 try {
 			return escMgmtDao.noOfEscAtProject(projectId);
+			
 		} catch (Exception e) {
 			Locale locale=new Locale("en", "IN");
 			String errorMsg=messageSource.getMessage("error.noof.escalations", new Object[] {}, locale);
@@ -52,7 +53,7 @@ public class EscalationManagementServiceImpl implements EscalationManagementServ
 	}
 
 	@Override
-	public List<EscalationDetails> noOfEscPerQtAtProgram(Integer programId) {
+	public List<Graph> noOfEscPerQtAtProgram(Integer programId) {
 		try {
 			return escMgmtDao.noOfEscPerQtAtProgram(programId);
 		} catch (Exception e) {

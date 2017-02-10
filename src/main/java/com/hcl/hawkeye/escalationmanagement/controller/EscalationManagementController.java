@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hcl.hawkeye.escalationmanagement.DO.Escalation;
-import com.hcl.hawkeye.escalationmanagement.DO.EscalationDetails;
 import com.hcl.hawkeye.escalationmanagement.service.EscalationManagementService;
+import com.hcl.hawkeye.portfolio.DO.Graph;
 import com.hcl.hawkeye.portfolio.DO.Project;
 
 @RestController
@@ -42,25 +42,25 @@ public class EscalationManagementController {
 	}
 	
 	@RequestMapping(value = "/noOfEscPerQtProject/{projId}", method = RequestMethod.GET, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<EscalationDetails>  noOfEscPerQtProject(@PathVariable int projId) {
+	public ResponseEntity<Graph>  noOfEscPerQtProject(@PathVariable int projId) {
 		
 		logger.info("Inside noOfEscAtProject method in Controller:"+projId);
-		EscalationDetails escdet= escMgmtService.noOfEscAtProject(projId);
+		Graph escdet= escMgmtService.noOfEscAtProject(projId);
 		
 		logger.info("Escalation Details recieved: " +escdet);
 		
-		return new ResponseEntity<EscalationDetails>(escdet, HttpStatus.CREATED);
+		return new ResponseEntity<Graph>(escdet, HttpStatus.CREATED);
 	}
 	
 	@RequestMapping(value = "/noOfEscPerQtAtProgram", method = RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<List<EscalationDetails>>  noOfEscPerQtAtProgram(@RequestBody Project proj) {
+	public ResponseEntity<List<Graph>>  noOfEscPerQtAtProgram(@RequestBody Project proj) {
 		
 		logger.info("Inside noOfEscPerQtAtProfile method in Controller:"+proj.getProgId());
-		List<EscalationDetails> noofEscalations= escMgmtService.noOfEscPerQtAtProgram(proj.getProgId());
+		List<Graph> noofEscalations= escMgmtService.noOfEscPerQtAtProgram(proj.getProgId());
 		
 		logger.info("Escalation Details recieved: " +noofEscalations);
 		
-		return new ResponseEntity<List<EscalationDetails>>(noofEscalations, HttpStatus.CREATED);
+		return new ResponseEntity<List<Graph>>(noofEscalations, HttpStatus.CREATED);
 	}
 	
 	

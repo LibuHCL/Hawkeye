@@ -25,8 +25,7 @@ public class ResourceManagementController {
 private static final Logger logger = LoggerFactory.getLogger(ResourceManagementController.class);
 	
 	@Autowired
-	public ResourceManagementService resourceManagementService;
-	
+	public ResourceManagementService resourceManagementService;	
 	
 	@RequestMapping(value = "/createResource", method = RequestMethod.POST,consumes = "application/json")
 	public void createResource(@RequestBody Resource resource) {

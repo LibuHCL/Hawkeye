@@ -17,6 +17,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.hcl.hawkeye.portfolio.DO.Graph;
 import com.hcl.hawkeye.teamhappiness.DAO.TeamHappinessManagementDAO;
 import com.hcl.hawkeye.teamhappiness.DO.TeamHappiness;
 import com.hcl.hawkeye.teamhappiness.DO.TeamHappinessDetails;
@@ -56,10 +57,10 @@ public class TeamHappinessManagementDAOImpl implements TeamHappinessManagementDA
 	}
 	
 	@Override
-	public TeamHappinessDetails  getHappinessAverageByProject(int projectId, int teamYear) {
-		ArrayList<Integer> graphData = new ArrayList<Integer>();
+	public Graph  getHappinessAverageByProject(int projectId, int teamYear) {
+		ArrayList<Double> graphData = new ArrayList<Double>();
 		ArrayList<String> labels = new ArrayList<String>();
-		TeamHappinessDetails teamHapDetails = new TeamHappinessDetails();
+		Graph teamHapDetails = new Graph();
 		String sql="SELECT QUARTER(CAPTURE_DATE) AS quarter,AVG(SCALE) AS rating FROM TEAM_HAPPINESS WHERE PROJECTID ="+projectId+" AND YEAR(CAPTURE_DATE)="+teamYear+" GROUP BY YEAR(CAPTURE_DATE), QUARTER(CAPTURE_DATE) ORDER BY YEAR(CAPTURE_DATE), QUARTER(CAPTURE_DATE)";
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
 		//HashMap<String,Double> quarteRes = new HashMap<>();
@@ -67,12 +68,11 @@ public class TeamHappinessManagementDAOImpl implements TeamHappinessManagementDA
 			//quarteRes.put(String.valueOf(row.get("quarter")), Double.valueOf(String.valueOf(row.get("rating"))));
 			String q =String.valueOf(row.get("quarter"));
 			labels.add(q.equals("1")? "Q1":(q.equals("2") ? "Q2" : (q.equals("3") ? "Q3" :"Q4")));
-			graphData.add((Integer) row.get("rating"));
+			graphData.add(Double.valueOf(String.valueOf(row.get("rating"))));
 		}
 		teamHapDetails.setGraphData(graphData);
 		teamHapDetails.setLabels(labels);
-		return teamHapDetails;
-		
+		return teamHapDetails;		
 	}
 
 }

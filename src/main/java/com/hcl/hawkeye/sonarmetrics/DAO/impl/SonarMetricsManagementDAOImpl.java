@@ -20,15 +20,10 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.hcl.hawkeye.Exceptions.SonarMetricsDataRetrievalException;
-import com.hcl.hawkeye.Exceptions.ValueAddDataRetrievalException;
-import com.hcl.hawkeye.portfolio.DO.Project;
-import com.hcl.hawkeye.portfolio.DO.Result;
 import com.hcl.hawkeye.sonarmetrics.DAO.SonarMetricsManagementDAO;
 import com.hcl.hawkeye.sonarmetrics.DO.Metrics;
 import com.hcl.hawkeye.sonarmetrics.DO.SonarMetrics;
 import com.hcl.hawkeye.sonarmetrics.DO.Trackers;
-import com.hcl.hawkeye.sonarmetrics.service.SonarMetricsManagementService;
-import com.hcl.hawkeye.valueaddmanagement.DO.Kpi;
 
 /**
  * @author HCL
@@ -52,22 +47,20 @@ public class SonarMetricsManagementDAOImpl implements SonarMetricsManagementDAO 
 		List<Trackers> trackers = new ArrayList<Trackers>();
 		try {
 			//String fetchMetricsData = "SELECT * FROM CODE_QUALITY_TRACKER WHERE PROJECTID=? AND SPRINT IN(SELECT SPRINT FROM CODE_QUALITY_TRACKER WHERE PROJECTID=? ORDER BY CREATION_DATE DESC LIMIT 4)";
-			String fetchMetricsData = "SELECT BLOCKER_ISSUES AS blockers,TECHNICAL_DEBT AS TechDebt,COMPLEXITY AS Complexity,DUPLICATED_LINES_DENSITY AS DuplicateLines,CRITICAL_ISSUES AS CriticalIssues,COMMENTED_LINES AS CommentedLines FROM CODE_QUALITY_TRACKER  WHERE  PROJECTID=?  ORDER BY CREATION_DATE DESC  LIMIT 4";
-			List<Map<String, Object>> resultList = jdbcTemplate.queryForList(fetchMetricsData,new Object[] { projectId},SONARMETRICSROWMAPPER);
+			String fetchMetricsData = "SELECT BLOCKER_ISSUES AS blockers,TECHNICAL_DEBT AS TechDebt,COMPLEXITY AS Complexity,DUPLICATED_LINES_DENSITY AS DuplicateLines,CRITICAL_ISSUES AS CriticalIssues,COMMENTED_LINES AS CommentedLines,SPRINT AS Sprint FROM CODE_QUALITY_TRACKER  WHERE  PROJECTID=?  ORDER BY CREATION_DATE DESC  LIMIT 4";
+			List<Map<String, Object>> resultList = jdbcTemplate.queryForList(fetchMetricsData,new Object[] { projectId});
 			if(resultList  != null && resultList.size() >0){
 				for (Map<String, Object> row : resultList) {
 					Metrics metrics = new Metrics();
 					Trackers tracker=new Trackers();
+					tracker.setSprint((String)row.get("Sprint"));
 					tracker.setBlockers((Integer) row.get("blockers"));
-					tracker.setTechnicalDebt((Integer) row.get("TechDebt"));
-					tracker.setComplexity((Integer) row.get("Complexity"));
-					tracker.setDuplicateLines((Integer) row.get("DuplicateLines"));
+					tracker.setTechnicalDebt((Double) row.get("TechDebt"));
+					tracker.setComplexity((Double) row.get("Complexity"));
+					tracker.setDuplicateLines((Double) row.get("DuplicateLines"));
 					tracker.setCritical((Integer) row.get("CriticalIssues"));
 					tracker.setCommentedLines((Integer) row.get("CommentedLines"));
 					trackers.add(tracker);
-					
-					
-					
 		        } 
 			}
 		} catch (DataAccessException dae) {
