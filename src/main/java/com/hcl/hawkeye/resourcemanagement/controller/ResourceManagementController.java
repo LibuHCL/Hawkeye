@@ -1,5 +1,6 @@
 package com.hcl.hawkeye.resourcemanagement.controller;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -68,9 +69,9 @@ private static final Logger logger = LoggerFactory.getLogger(ResourceManagementC
 	
 	@RequestMapping(value="/getResourcesAttrition/{year}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public HashMap<Integer, Long> getResourceAttritionByQuarter(@PathVariable("year") String year) {
+	public HashMap<Integer, BigDecimal> getResourceAttritionByQuarter(@PathVariable("year") String year) {
 		logger.info("Requested to get the resources count based on programId");
-		HashMap<Integer, Long> response = resourceManagementService.getResourceAttritionByQuarter(year);
+		HashMap<Integer, BigDecimal> response = resourceManagementService.getResourceAttritionByQuarter(year);
 		return response;
 	}
 	

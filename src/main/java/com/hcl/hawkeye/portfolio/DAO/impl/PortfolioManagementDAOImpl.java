@@ -85,5 +85,12 @@ public class PortfolioManagementDAOImpl implements PortfolioManagementDAO {
 		
 	
 	}
+	
+	@Override
+	public String getPortfolioNameById(Integer portfolioId) {
+		String portfolioQuery = "SELECT PORTFOLIO_NAME FROM PORTFOLIO WHERE PORTFOLIO_ID="+portfolioId;
+		String portfolioName = (String) jdbcTemplate.queryForObject(portfolioQuery,String.class);
+		return portfolioName;
+	}
 
 }

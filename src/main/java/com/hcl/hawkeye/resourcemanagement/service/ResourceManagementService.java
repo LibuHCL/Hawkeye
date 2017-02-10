@@ -1,5 +1,7 @@
 package com.hcl.hawkeye.resourcemanagement.service;
 import com.hcl.hawkeye.resourcemanagement.DO.ProgramResourceCount;
+
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,6 +14,6 @@ public interface ResourceManagementService {
 	void createResource(Resource resource);
 	HashMap<String,Long> getResourcesCountByProject(int projectId);
 	List<ProgramResourceCount> getResourcesCountByProgram(int programId);
-	HashMap<Integer, Long> getResourceAttritionByQuarter(String attritionYear);
+	HashMap<Integer, BigDecimal> getResourceAttritionByQuarter(String attritionYear);
 	Double getResourcesPercentByPortfolio(int portfolioId);
 }

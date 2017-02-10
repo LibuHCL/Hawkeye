@@ -1,5 +1,6 @@
 package com.hcl.hawkeye.resourcemanagement.DAO.impl;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -118,14 +119,16 @@ public class ResourceManagementDAOImpl implements ResourceManagementDAO {
 	}
 
 	@Override
-	public HashMap<Integer, Long> getResourceAttritionByQuarter(String attritionYear) {
+	public HashMap<Integer, BigDecimal> getResourceAttritionByQuarter(String attritionYear) {
 		String sql = "SELECT QUARTER(PROJECT_JOINING_DATE) AS quarter, (COUNT(RESOURCEID) *100/(SELECT count(*) FROM RESOURCE WHERE QUARTER(PROJECT_JOINING_DATE) = quarter)) AS attrition_percent FROM RESOURCE WHERE ING_AGREEMENT='N' and YEAR(PROJECT_JOINING_DATE)='"
 				+ attritionYear
 				+ "' and EXIT_DATE< PLANNED_RELEASE_DATE GROUP BY YEAR(PROJECT_JOINING_DATE), QUARTER(PROJECT_JOINING_DATE) ORDER BY YEAR(PROJECT_JOINING_DATE), QUARTER(PROJECT_JOINING_DATE)";
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
-		HashMap<Integer, Long> attritionList = new HashMap<>();
+		HashMap<Integer, BigDecimal> attritionList = new HashMap<>();
 		for (Map<String, Object> row : list) {
-			attritionList.put((Integer) row.get("quarter"), (Long) row.get("count"));
+			Integer quarter = (Integer) row.get("quarter");
+			BigDecimal attritionRate = (BigDecimal) row.get("attrition_percent");
+			attritionList.put(quarter,attritionRate);
 		}
 		return attritionList;
 	}

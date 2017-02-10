@@ -8,22 +8,23 @@ public class PortfolioInfo implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String quarter;
-	private String year;
+	private Long quarter;
+	private Long year;
 	private double actualCost;
 	private double plannedCost;
 	private double roi;
+	private Integer portfolioId;
 	
-	public String getQuarter() {
+	public Long getQuarter() {
 		return quarter;
 	}
-	public void setQuarter(String quarter) {
+	public void setQuarter(Long quarter) {
 		this.quarter = quarter;
 	}
-	public String getYear() {
+	public Long getYear() {
 		return year;
 	}
-	public void setYear(String year) {
+	public void setYear(Long year) {
 		this.year = year;
 	}
 	public double getActualCost() {
@@ -44,7 +45,11 @@ public class PortfolioInfo implements Serializable{
 	public void setRoi(double roi) {
 		this.roi = roi;
 	}
-	
-	
+	public Integer getPortfolioId() {
+		return portfolioId;
+	}
+	public void setPortfolioId(Integer portfolioId) {
+		this.portfolioId = portfolioId;
+	}
 	
 }

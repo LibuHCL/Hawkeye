@@ -1,5 +1,6 @@
 package com.hcl.hawkeye.resourcemanagement.service.impl;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -55,9 +56,9 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
 		return response;
 	}
 	@Override
-	public HashMap<Integer, Long> getResourceAttritionByQuarter(String attritionYear) {
+	public HashMap<Integer, BigDecimal> getResourceAttritionByQuarter(String attritionYear) {
 		logger.info("Request in getResourceAttritionByQuarter of ResourceServiceImpl");
-		HashMap<Integer, Long> response = resourceDAO.getResourceAttritionByQuarter(attritionYear);
+		HashMap<Integer, BigDecimal> response = resourceDAO.getResourceAttritionByQuarter(attritionYear);
 		return response;
 	}
 	@Override

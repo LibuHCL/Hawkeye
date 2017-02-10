@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hcl.hawkeye.portfolio.DO.Portfolio;
+import com.hcl.hawkeye.portfolio.DO.PortfolioDashboard;
 import com.hcl.hawkeye.portfolio.DO.Program;
 import com.hcl.hawkeye.portfolio.service.PortfolioManagementService;
 
@@ -50,6 +51,14 @@ public class PortfolioController {
 			Integer noOfPortFolios = portfolioService.noOfPrgmsPerPortFolio(portFoId);
 			logger.info("noOfPortFolios==="+noOfPortFolios);
 			return new ResponseEntity<Integer>(noOfPortFolios,HttpStatus.CREATED);
+		}
+		
+		@RequestMapping(value = "/getAllPortfolioDetails", method = RequestMethod.GET)			
+		public ResponseEntity<PortfolioDashboard> getAllPortfolioDetails() {
+			logger.info("Inside getAllPortfolioDetails method in Controller");
+			PortfolioDashboard portfolio = portfolioService.getAllPortfolioDashboardInfo();
+			logger.info("getAllPortfolioDetails===");
+			return new ResponseEntity<PortfolioDashboard>(portfolio,HttpStatus.OK);
 		}
 
 }

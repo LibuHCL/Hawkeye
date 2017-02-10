@@ -3,7 +3,9 @@ package com.hcl.hawkeye.projectcost.DAO.impl;
 import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,12 +15,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.hcl.hawkeye.portfolio.DO.Cost;
-import com.hcl.hawkeye.portfolio.DO.PortfolioDashboard;
 import com.hcl.hawkeye.portfolio.DO.PortfolioInfo;
 import com.hcl.hawkeye.projectcost.DAO.ProjectCostDAO;
 import com.hcl.hawkeye.projectcost.DO.ProjectCostDetails;
-import com.hcl.hawkeye.resourcemanagement.DO.ProgramResourceCount;
 import com.hcl.hawkeye.utils.HawkEyeUtils;
 
 @Repository
@@ -66,10 +65,10 @@ public class ProjectCostDAOImpl implements ProjectCostDAO {
 
 		ProjectCostDetails projectCost = null;
 		try {
-			projectCost = (ProjectCostDetails) jdbcTemplate.queryForObject(
-					PROJECT_COST_WITH_ID_SQL, projectCostRowMapper);
+			projectCost = (ProjectCostDetails) jdbcTemplate.queryForObject(PROJECT_COST_WITH_ID_SQL,
+					projectCostRowMapper);
 		} catch (Exception e) {
-			
+
 		}
 
 		logger.info("Project cost details are successfully fetched for project with ID: " + projectID);
@@ -89,20 +88,36 @@ public class ProjectCostDAOImpl implements ProjectCostDAO {
 			return cost;
 		}
 	};
-	
+
 	@Override
-	public PortfolioDashboard getAllPortfolioDetails(){
-		
-		PortfolioDashboard portfolioDashboard = new PortfolioDashboard();
-		String sql = "SELECT quarter, yr, SUM(ACTUAL_COST) actual_cost, SUM(PLANNED_COST) planned_cost, SUM(ROI) roi FROM ("+
-  "SELECT QUARTER('2014-01-01')  quarter union SELECT QUARTER('2014-04-01')  quarter union "+
-  "SELECT QUARTER('2014-08-01')  quarter union SELECT QUARTER('2014-12-01')  quarter) QRTR_T LEFT JOIN ("+
-   "SELECT QUARTER(CAPTURE_DATE) Quater, YEAR(CAPTURE_DATE) yr, ACTUAL_COST, PLANNED_COST, ROI from PROJECT_COST where PROJECT_ID in(select distinct(PROJECT_ID) from PROJECT_COST,PROJECT, PROGRAM, PORTFOLIO"+ 
-" where PROJECT_COST.PROJECT_ID = PROJECT.PROJECTID and PROJECT.PROGRAM_ID = PROGRAM.PROGRAMID and "+
-"PROGRAM.PORTFOLIO_ID=1)) costs on Quater = quarter group by quarter";
-		List<PortfolioInfo> resultsList = jdbcTemplate.query(sql,new BeanPropertyRowMapper<PortfolioInfo>(PortfolioInfo.class));
-		return portfolioDashboard;
-		
+	public List<PortfolioInfo> getAllPortfolioDetails() {
+
+		List<PortfolioInfo> portfolioList = new ArrayList<PortfolioInfo>();
+		String portfolioListQuery = "select PORTFOLIO_ID from PROGRAM where PROGRAMID IN (select PROGRAM_ID from PROJECT where PROJECTID in (select distinct(PROJECTID) from PROJECT_COST))";
+		List<Integer> portfolioIdsList = jdbcTemplate.queryForList(portfolioListQuery, Integer.class);
+		if (0 != portfolioIdsList.size()) {
+			for (int i = 0; i < portfolioIdsList.size(); i++) {
+				String sql = "SELECT QUARTER(CAPTURE_DATE) Quarter, YEAR(CAPTURE_DATE) yr, sum(ACTUAL_COST) actual_cost, sum(PLANNED_COST) planned_cost, sum(ROI) roi from PROJECT_COST where PROJECT_ID in(select distinct(PROJECT_ID) from PROJECT_COST,PROJECT, PROGRAM, PORTFOLIO "
+						+ "where PROJECT_COST.PROJECT_ID = PROJECT.PROJECTID and PROJECT.PROGRAM_ID = PROGRAM.PROGRAMID and "
+						+ "PROGRAM.PORTFOLIO_ID=" + portfolioIdsList.get(i) + ")";
+				List<Map<String, Object>> resultsList = jdbcTemplate.queryForList(sql);
+				for (Map<String, Object> row : resultsList) {
+					PortfolioInfo info = new PortfolioInfo();
+					info.setActualCost((double) row.get("actual_cost"));
+					info.setPlannedCost((double) row.get("planned_cost"));
+					info.setQuarter((Long) row.get("Quarter"));
+					info.setRoi((double) row.get("roi"));
+					info.setYear((Long) row.get("yr"));
+					info.setPortfolioId(portfolioIdsList.get(i));
+					portfolioList.add(info);
+				}
+			}
+		}
+		logger.info("Portfolio details fetched successfully");
+		return portfolioList;
+
 	}
+
 	
+
 }
