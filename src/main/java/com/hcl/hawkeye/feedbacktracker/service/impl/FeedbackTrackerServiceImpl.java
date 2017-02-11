@@ -42,7 +42,6 @@ public class FeedbackTrackerServiceImpl implements FeedbackTrackerService {
 	
 	@Override
 	public Graph getnoofFeedBacksPerQtAtPerfolioLevel(int portfolioId,String reporterType) {
-		// TODO Auto-generated method stub
 		logger.info("Inside getFeedbackPerQtProject method in FeedbackTrackerServiceImpl");
 		return feedbkDao.getnoofFeedBacksPerQtAtPerfolioLevel( portfolioId, reporterType);
 		

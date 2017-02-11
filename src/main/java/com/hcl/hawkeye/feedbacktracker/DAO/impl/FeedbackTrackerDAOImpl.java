@@ -163,7 +163,6 @@ public class FeedbackTrackerDAOImpl implements FeedbackTrackerDAO {
 		updateQuarterlyLabels(labels);
 		escDetList.setGraphData(graphData);
 		escDetList.setLabels(labels);
-
 		return escDetList;
 	}
 	

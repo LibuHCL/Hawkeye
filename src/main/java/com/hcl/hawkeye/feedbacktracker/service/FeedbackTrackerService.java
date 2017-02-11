@@ -13,7 +13,6 @@ public interface FeedbackTrackerService {
 
 	List<FeedbackDetails> getFeedbackPerProgram(String reporterType, int programId);
 
-	Graph getnoofFeedBacksPerQtAtPerfolioLevel(int portfolioId,
-			String reporterType);
+	Graph getnoofFeedBacksPerQtAtPerfolioLevel(int portfolioId,	String reporterType);
 
 }

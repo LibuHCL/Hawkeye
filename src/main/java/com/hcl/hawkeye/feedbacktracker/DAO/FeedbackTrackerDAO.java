@@ -11,8 +11,7 @@ public interface FeedbackTrackerDAO {
 		// TODO Auto-generated method stub
 	FeedbackDetails getFeedbackPerProject(String reporterType, int projectId);
 	List<FeedbackDetails> getFeedbackPerProgram(String reporterType, int projectId);
-	Graph getnoofFeedBacksPerQtAtPerfolioLevel(int portfolioId, String repType);
-		
+	Graph getnoofFeedBacksPerQtAtPerfolioLevel(int portfolioId, String repType);		
 	}
 
 

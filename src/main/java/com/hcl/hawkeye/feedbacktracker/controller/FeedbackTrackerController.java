@@ -68,7 +68,7 @@ public class FeedbackTrackerController {
      
     
     @RequestMapping(value = "/getnoofFeedBacksPerQtAtPerfolioLevel/{portfolioId}/{reporterType}", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseBody
+   
     public ResponseEntity<Graph>  getnoofFeedBacksPerQtAtPerfolioLevel(@PathVariable("reporterType") String reporterType,@PathVariable("portfolioId") int portfolioId){
     	
     	logger.info("Inside getnoofFeedBacksPerQtAtPerfolioLevel method in Controller:"+reporterType+portfolioId);
