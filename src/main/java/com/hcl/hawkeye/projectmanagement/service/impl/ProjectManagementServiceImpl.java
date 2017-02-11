@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +19,15 @@ import com.hcl.hawkeye.projectmanagement.DO.Velocityinfo;
 import com.hcl.hawkeye.projectmanagement.service.ProjectManagementService;
 import com.hcl.hawkeye.utils.HawkEyeUtils;
 
+/**
+ * 
+ * @author Haribabu
+ *
+ */
 @Service
 public class ProjectManagementServiceImpl implements ProjectManagementService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(ProjectManagementServiceImpl.class);
 
 	@Autowired
 	ProjectManagementDAO pmDAO;
@@ -37,6 +46,7 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 
 	@Override
 	public int getVelocityOfProject(int projectId) {
+		logger.info("Processing to get the velocity of project: {}", projectId );
 		Velocityinfo vInfo = pmDAO.getVelocityOfProject(projectId);
 		List<VelocityOfProject> velocityList = getVelocityList(vInfo);
 		Double estimated = 0.0;
@@ -49,8 +59,8 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 		}else{
 			return 0;
 		}
-		
-		return HawkEyeUtils.getRAGStatus( (int)(completed/estimated)*100);
+		int count = HawkEyeUtils.getRAGStatus( (int)(completed/estimated)*100);
+		return count;
 	}
 
 	@Override

@@ -1,9 +1,14 @@
 package com.hcl.hawkeye.projectmanagement.DO;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class DashBoardDetails {
+public class DashBoardDetails implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int maxResults;
 	private int startAt;
 	private boolean isLast;

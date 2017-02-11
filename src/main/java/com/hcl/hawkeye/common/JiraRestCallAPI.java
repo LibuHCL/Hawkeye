@@ -1,13 +1,10 @@
 package com.hcl.hawkeye.common;
 
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +24,7 @@ public class JiraRestCallAPI {
 		
 	public String callRestAPI(String url) {
 		logger.info("Requested to get the details with url - {}", url);
+		Locale locale=new Locale("en", "IN");
 		try {
 			HttpURLConnection.setFollowRedirects(false);
 			URL restUrl = new URL(url);
@@ -48,7 +46,6 @@ public class JiraRestCallAPI {
                      input.close ();
 	            }
 	            catch (IOException ex) {
-	            	Locale locale=new Locale("en", "IN");
 	    			String errorMsg=messageSource.getMessage("error.get.project", new Object[] {}, locale);
 	    			logger.error(errorMsg, ex);
 	    			throw new NoProjectDetailsException(errorMsg, ex);
@@ -62,7 +59,6 @@ public class JiraRestCallAPI {
 		    }       
 		}
 		catch (IOException e) {
-			Locale locale=new Locale("en", "IN");
 			String errorMsg=messageSource.getMessage("error.get.project", new Object[] {}, locale);
 			logger.error(errorMsg, e);
 			throw new NoProjectDetailsException(errorMsg, e);
