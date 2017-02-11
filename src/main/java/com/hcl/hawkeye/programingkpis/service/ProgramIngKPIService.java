@@ -8,4 +8,6 @@ public interface ProgramIngKPIService {
 
 	Result getTacticalKpiResults(int projectId);
 
+	Result getStrategicalKpiResults(int projectId);
+
 }

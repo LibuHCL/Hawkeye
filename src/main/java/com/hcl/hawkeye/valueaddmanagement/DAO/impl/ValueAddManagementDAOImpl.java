@@ -451,8 +451,38 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 				+ " 		FROM VALUEADD  " + " 		WHERE PROGRAMID = ? AND   "
 				+ "           PROPOSED_DATE >= DATE_SUB(NOW(),INTERVAL 1 YEAR)   "
 				+ "           AND (VALUEADD_STATUS != 'Proposed' AND VALUEADD_STATUS != 'Rejected')   "
-				+ "           GROUP BY PROJECTID   " + " 		) VALUE   " + " GROUP BY VALUE.PROJECTID;";
+				+ "           GROUP BY PROJECTID,QUARTER   " + " 		) VALUE   " + " GROUP BY VALUE.PROJECTID;";
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(economicValueAddQuery, new Object[] { programId });
+		for (Map<String, Object> row : list) {
+			graphdata.add((Double) row.get("Q1") + (Double) row.get("Q2"));
+			graphdata.add((Double) row.get("Q3") + (Double) row.get("Q4"));
+		}
+		economicValue.setGraphdata(graphdata);
+		return economicValue;
+	}
+	
+	@Override
+	public ValueAddAcceptedIdeas getEconomicValueAddByPortfolio(Integer portfolioId) {
+		ValueAddAcceptedIdeas economicValue = new ValueAddAcceptedIdeas();
+		ArrayList<String> labels = new ArrayList<String>();
+		labels.addAll(Arrays.asList("H1", "H2"));
+		economicValue.setName("Economic value addition");
+		economicValue.setLabels(labels);
+		ArrayList<Double> graphdata = new ArrayList<Double>();
+		String economicValueAddQuery = " SELECT VALUE.PROJECTID,  "
+				+ " SUM(IF(QUARTER = '1', VALUE.TOTAL, 0)) AS 'Q1',   "
+				+ " SUM(IF(QUARTER = '2', VALUE.TOTAL, 0)) AS 'Q2',   "
+				+ " SUM(IF(QUARTER = '3', VALUE.TOTAL, 0)) AS 'Q3',   "
+				+ " SUM(IF(QUARTER = '4', VALUE.TOTAL, 0)) AS 'Q4'  FROM   "
+				+ " ( SELECT PROJECTID,  QUARTER(PROPOSED_DATE) as QUARTER, SUM(ECONOMIC_VALUE) AS TOTAL  "
+				+ " FROM VALUEADD va, PROGRAM prog, PORTFOLIO pf"
+				+ "  WHERE pf.PORTFOLIO_ID=prog.PORTFOLIO_ID "
+				+ "  AND  prog.PROGRAMID = va.PROGRAMID"
+				+ "  AND  pf.PORTFOLIO_ID=?"
+				+ "  AND PROPOSED_DATE >= DATE_SUB(NOW(),INTERVAL 1 YEAR)   "
+				+ "  AND (VALUEADD_STATUS != 'Proposed' AND VALUEADD_STATUS != 'Rejected')   "
+				+ "  GROUP BY PROJECTID,QUARTER) VALUE   GROUP BY VALUE.PROJECTID;";
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(economicValueAddQuery, new Object[] { portfolioId });
 		for (Map<String, Object> row : list) {
 			graphdata.add((Double) row.get("Q1") + (Double) row.get("Q2"));
 			graphdata.add((Double) row.get("Q3") + (Double) row.get("Q4"));

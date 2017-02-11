@@ -30,4 +30,6 @@ public interface ValueAddManagementDAO {
 	
 	ValueAddAcceptedIdeas getEconomicValueAdd(Integer programId);
 
+	ValueAddAcceptedIdeas getEconomicValueAddByPortfolio(Integer portfolioId);
+
 }

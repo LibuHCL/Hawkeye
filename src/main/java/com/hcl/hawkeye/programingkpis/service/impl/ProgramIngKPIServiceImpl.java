@@ -2,6 +2,7 @@ package com.hcl.hawkeye.programingkpis.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -256,5 +257,76 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 		}
 		return kVList;
 		
+	}
+
+	@Override
+	public Result getStrategicalKpiResults(int portfolioId) {
+		Result res = new Result();
+		try {
+			KPIType kp = new KPIType();
+			kp.setProgramName(env.getProperty("strategicalkpi.programname"));
+			kp.setProgramId(Integer.parseInt(env.getProperty("strategicalkpi.programId")));
+			List<KPIValue> kVList = getListOfStrategicalKpi(portfolioId);
+			kp.setKpis(kVList);
+			
+			
+			res.setResult(kp);
+		
+		} catch (Exception e) {
+			Locale locale=new Locale("en", "IN");
+			String errorMsg=messageSource.getMessage("error.get.ingkpi", new Object[] {}, locale);
+			logger.error(errorMsg, e);
+			throw new IngKpiRetrievalException(errorMsg, e);
+		}
+		
+		return res;
+	}
+
+	private List<KPIValue> getListOfStrategicalKpi(int portfolioId) {
+		List<KPIValue> StrkVList = new ArrayList<KPIValue>();
+		int[] intVal = {1,2,3,4}; 
+		
+		for (int i : intVal) {
+			if(i == 1) {
+				KPIValue kv1 = new KPIValue();
+				kv1.setName(env.getProperty("strategicalkpi.name1"));
+				Graph escDetails = emService.noOfEscAtPortfolioLevelPerQt(portfolioId);				
+				kv1.setGraphdataOfIdeas(escDetails.getGraphData());
+				kv1.setLabels(escDetails.getLabels());				
+				StrkVList.add(kv1);
+			}
+			
+			if(i == 2) {
+				Graph eDetails = null;
+				KPIValue kv2 = new KPIValue();
+				kv2.setName(env.getProperty("strategicalkpi.name2"));
+				
+				StrkVList.add(kv2);
+			}
+			
+			if(i == 3) {
+				
+				String[] labels = env.getProperty("strategicalkpi.satakeholders").split(",");
+				ArrayList<String> labelsList = new ArrayList<String>();
+				Collections.addAll(labelsList, labels);
+				
+				KPIValue kv2 = new KPIValue();
+
+				kv2.setName(env.getProperty("strategicalkpi.name3"));
+				kv2.setLabels(labelsList);
+				StrkVList.add(kv2);
+			}
+			
+			if(i == 4) {
+				ValueAddAcceptedIdeas valueForQuater = vmService.getEconomicValueAddByPortfolio(portfolioId);
+				KPIValue kv2 = new KPIValue();
+				kv2.setName(env.getProperty("tacticalKpi.name4"));
+
+				kv2.setGraphdataOfIdeas(valueForQuater.getGraphdata());
+				kv2.setLabels(valueForQuater.getLabels());
+				StrkVList.add(kv2);
+			}
+		}
+		return StrkVList;
 	}
 }

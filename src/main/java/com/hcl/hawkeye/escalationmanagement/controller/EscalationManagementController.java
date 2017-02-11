@@ -63,6 +63,17 @@ public class EscalationManagementController {
 		return new ResponseEntity<List<Graph>>(noofEscalations, HttpStatus.CREATED);
 	}
 	
+	@RequestMapping(value = "/noOfEscPerQtProject/{portfolioId}", method = RequestMethod.GET, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<Graph>  noOfEscPerQtPortfolio(@PathVariable int portfolioId) {
+		
+		logger.info("Inside noOfEscPerQtPortfolio method in Controller:"+portfolioId);
+		Graph escdet= escMgmtService.noOfEscAtPortfolioLevelPerQt(portfolioId);
+		
+		logger.info("Escalation Details recieved: " +escdet);
+		
+		return new ResponseEntity<Graph>(escdet, HttpStatus.CREATED);
+	}
+	
 	
 
 }

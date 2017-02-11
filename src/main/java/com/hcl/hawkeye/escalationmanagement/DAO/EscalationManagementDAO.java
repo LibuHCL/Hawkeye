@@ -12,4 +12,6 @@ public interface EscalationManagementDAO {
 
 	List<Graph> noOfEscPerQtAtProgram(Integer programId);
 
+	Graph noOfEscAtPortfolioLevelPerQt(int portfolioId);
+
 }
