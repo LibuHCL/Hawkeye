@@ -1,5 +1,6 @@
 package com.hcl.hawkeye.programingkpis.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -52,11 +53,11 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 	EscalationManagementService emService;
 	
 	@Override
-	public Result getOperationalKpiResults() {
+	public Result getOperationalKpiResults(int projectId) {
 		Result res = new Result();
 		try {
 			KPIType kp = new KPIType();
-			List<KPIValue> kVList = getListOfKpi();
+			List<KPIValue> kVList = getListOfKpi(projectId);
 			kp.setKpis(kVList);
 			kp.setProgramId(Integer.parseInt(env.getProperty("program.programid")));
 			kp.setProgramName(env.getProperty("program.programname"));
@@ -72,7 +73,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 		return res;
 	}
 	
-	private List<KPIValue> getListOfKpi() {
+	private List<KPIValue> getListOfKpi(int projectId) {
 		List<KPIValue> kVList = new ArrayList<KPIValue>();
 		int[] intVal = {1,2,3,4}; 
 		
@@ -80,7 +81,9 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 			if(i == 1) {
 				KPIValue kv1 = new KPIValue();
 				List<Integer> grapIntData = new ArrayList<>();
+				grapIntData.add(75); grapIntData.add(72); grapIntData.add(81); grapIntData.add(74);
 				List<String> labelData = new ArrayList<>();
+				labelData.add("Sprint1"); labelData.add("Sprint2");  labelData.add("Sprint3"); labelData.add("Sprint4");
 				kv1.setGraphdataOfVelocity(grapIntData);
 				kv1.setLabels(labelData);
 				kv1.setName(env.getProperty("kpi.name1"));
@@ -88,8 +91,8 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 			}
 			
 			if(i == 2) {
-				Map<String, Integer> priorityHighVal = pmService.getPriorityOfIssue(Integer.parseInt(env.getProperty("project.projectid")), env.getProperty("project.priority.high"));
-				Map<String, Integer> priorityCriVal = pmService.getPriorityOfIssue(Integer.parseInt(env.getProperty("project.projectid")), env.getProperty("project.priority.critical"));
+				Map<String, Integer> priorityHighVal = pmService.getPriorityOfIssue(projectId, env.getProperty("project.priority.high"));
+				Map<String, Integer> priorityCriVal = pmService.getPriorityOfIssue(projectId, env.getProperty("project.priority.critical"));
 				KPIValue kv2 = new KPIValue();
 				List<Integer[]> grapData = new ArrayList<>();
 				List<Integer> grapIntData1 = new ArrayList<>();
@@ -131,7 +134,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 			}
 			
 			if(i == 4) {
-				List<VelocityOfProject> priorityHighVal = pmService.getVelocityOfSprint(Integer.parseInt(env.getProperty("project.projectid")));
+				List<VelocityOfProject> priorityHighVal = pmService.getVelocityOfSprint(projectId);
 				KPIValue kv2 = new KPIValue();
 				List<String> labelData = new ArrayList<>();
 				List<Integer> grapIntData = new ArrayList<>();
@@ -152,11 +155,11 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 	}
 
 	@Override
-	public Result getTacticalKpiResults() {
+	public Result getTacticalKpiResults( int projectId) {
 		Result res = new Result();
 		try {
 			KPIType kp = new KPIType();
-			List<KPIValue> kVList = getListOfTacticalKpi();
+			List<KPIValue> kVList = getListOfTacticalKpi(projectId);
 			kp.setKpis(kVList);
 			kp.setProgramId(Integer.parseInt(env.getProperty("program.tacticalProgramId")));
 			kp.setProgramName(env.getProperty("program.tacticalProgramName"));
@@ -172,23 +175,36 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 		return res;
 	}
 
-	private List<KPIValue> getListOfTacticalKpi() {
+	private List<KPIValue> getListOfTacticalKpi(int projectId) {
 		List<KPIValue> kVList = new ArrayList<KPIValue>();
 		int[] intVal = {1,2,3,4}; 
 		
 		for (int i : intVal) {
 			if(i == 1) {
 				KPIValue kv1 = new KPIValue();
-				List<Integer> grapIntData = new ArrayList<>();
+				List<Long> grapIntData = new ArrayList<>();
 				List<String> labelData = new ArrayList<>();
-				kv1.setGraphdataOfVelocity(grapIntData);
+				Map<Integer, BigDecimal> mp = rmService.getResourceAttritionByQuarter("2017");
+				for (Integer string : mp.keySet()) {
+					if (1==string) {
+						labelData.add("Q1");
+					} else if (2 == string) {
+						labelData.add("Q2");
+					} else if (3 == string) {
+						labelData.add("Q3");
+					} else if (4 == string) {
+						labelData.add("Q4");
+					}
+					grapIntData.add(mp.get(string).longValue());
+				}
+				kv1.setLongraphData(grapIntData);
 				kv1.setLabels(labelData);
 				kv1.setName(env.getProperty("tacticalKpi.name1"));
 				kVList.add(kv1);
 			}
 			
 			if(i == 2) {
-				Graph eDetails = emService.noOfEscAtProject(27);
+				Graph eDetails = emService.noOfEscAtProject(projectId);
 				KPIValue kv2 = new KPIValue();
 				kv2.setLabels(eDetails.getLabels());
 				List<Double> grahData = eDetails.getGraphData();
@@ -200,7 +216,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 			}
 			
 			if(i == 3) {
-				List<VelocityOfProject> sprintVelocity = pmService.getVelocityOfSprint(Integer.parseInt(env.getProperty("project.projectid")));
+				List<VelocityOfProject> sprintVelocity = pmService.getVelocityOfSprint(projectId);
 				
 				List<String> labelData = new ArrayList<>();
 				List<Integer> graphData = new ArrayList<>();
