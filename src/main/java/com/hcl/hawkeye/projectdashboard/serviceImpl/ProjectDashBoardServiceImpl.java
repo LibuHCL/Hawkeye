@@ -75,8 +75,7 @@ public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 
 		project.setProjectslist(listDBProjects);
 		project.setRunnningprojects(listOfProjects.size());
-		pd.setProjects(project);
-		
+		pd.setProjects(project);		
 		return pd;
 	}
 	

@@ -310,8 +310,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 				kv2.setGraphdataOfIdeas(feedDetails.getGraphData());
 				kv2.setLabels(labelsList);		
 				StrkVList.add(kv2);
-			}
-			
+			}			
 			if(i == 3) {
 				Graph feedDetails = feedBackService.getnoofFeedBacksPerQtAtPerfolioLevel(portfolioId, "VENDOR");
 				KPIValue kv2 = new KPIValue();
