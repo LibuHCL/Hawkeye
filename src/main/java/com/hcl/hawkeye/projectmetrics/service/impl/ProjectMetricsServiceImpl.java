@@ -180,8 +180,8 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 		Metrics codeMet = new Metrics();
 		
 		codeMet.setKey(env.getProperty("metric.code.progname"));
-		codeMet.setGraphdata(engMap.get("Code Violation").getGraphData());
-		codeMet.setLabels(engMap.get("Code Violation").getLabels());		
+		codeMet.setGraphdata(engMap.get("Code Complexity").getGraphData());
+		codeMet.setLabels(engMap.get("Code Complexity").getLabels());		
 		engMetrics.add(codeMet);
 		
 		Metrics techDebtMet = new Metrics();
@@ -203,8 +203,8 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 		Metrics commnetMet = new Metrics();
 		
 		commnetMet.setKey(env.getProperty("metric.commnetMet.progname"));
-		commnetMet.setGraphdata(engMap.get("Commented Lines").getGraphData());
-		commnetMet.setLabels(engMap.get("Commented Lines").getLabels());		
+		commnetMet.setGraphdata(engMap.get("Duplicate Lines").getGraphData());
+		commnetMet.setLabels(engMap.get("Duplicate Lines").getLabels());		
 		engMetrics.add(commnetMet);
 		
 		pMetResults.setMetrics(engMetrics);

@@ -15,7 +15,7 @@ import com.hcl.hawkeye.programingkpis.DO.Result;
 import com.hcl.hawkeye.programingkpis.service.ProgramIngKPIService;
 
 @RestController
-//@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class ProgramIngKPIController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ProgramIngKPIController.class);

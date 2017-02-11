@@ -91,7 +91,7 @@ public class SonarMetricsManagementServiceImpl implements
 		
 		duplicatedLineGraph.setGraphData(duplicateLineGraphData);
 		duplicatedLineGraph.setLabels(codeComplexityLabels);
-		engMap.put("Commented Lines", duplicatedLineGraph);
+		engMap.put("Duplicate Lines", duplicatedLineGraph);
 		
 		return engMap;
 
