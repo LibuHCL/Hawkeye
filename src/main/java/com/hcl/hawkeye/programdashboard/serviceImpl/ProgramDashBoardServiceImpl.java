@@ -42,6 +42,7 @@ public class ProgramDashBoardServiceImpl implements ProgramDashBoardService {
 		List<Project> activeList =new ArrayList<>();
 		List<Project> closedList =new ArrayList<>();
 		List<Project> upComingList =new ArrayList<>();
+		Map<String, List<ProjectStates>> pStateMap = new HashMap<>();
 		
 		for (Project project : projectsfromdb) {
 			
@@ -59,11 +60,19 @@ public class ProgramDashBoardServiceImpl implements ProgramDashBoardService {
 			}
 			
 		}
+		ProgramTypes pt = new ProgramTypes();
+		List<ProjectStates> d = new ArrayList<>();
+		processList(activeList, programTypeMap, "ACTIVE", pStateMap);
+		processList(closedList, programTypeMap, "CLOSED", pStateMap);
+		processList(upComingList, programTypeMap, "UPCOMING", pStateMap);
+		for (String pSt : pStateMap.keySet()) {
+			d.addAll(pStateMap.get(pSt));
+		}
+		pt.setProgramSubArr(d);
+		pt.setProgramName("App Development");
+		pt.setProgramId(1001);
+		programTypeMap.put("DEV", pt);
 		
-		
-		processList(activeList, programTypeMap, "ACTIVE");
-		processList(closedList, programTypeMap, "CLOSED");
-		processList(upComingList, programTypeMap, "UPCOMING");
 		for (String programTypes : programTypeMap.keySet()) {
 			proTypes.add(programTypeMap.get(programTypes));
 		}
@@ -71,11 +80,8 @@ public class ProgramDashBoardServiceImpl implements ProgramDashBoardService {
 		return programdashboard;
 	}
 
-	private void processList(List<Project> activeList, Map<String, ProgramTypes> programTypeMap, String type) {
+	private void processList(List<Project> activeList, Map<String, ProgramTypes> programTypeMap, String type, Map<String, List<ProjectStates>> pStateMap) {
 		Map<String, List<ProjectDetails>> devMap = new HashMap<>();
-		Map<String, List<ProjectStates>> pStateMap = new HashMap<>();
-		List<ProjectStates> d = new ArrayList<>();
-		ProgramTypes pt = new ProgramTypes();
 		for (Project project : activeList) {
 			processDevProjects(project, devMap);
 		}
@@ -88,14 +94,6 @@ public class ProgramDashBoardServiceImpl implements ProgramDashBoardService {
 			getProjectTypes(devMap, pStateMap, type);
 		}
 		
-		//getProjectTypes(devMap, pStateMap, type);
-		for (String pSt : pStateMap.keySet()) {
-			d.addAll(pStateMap.get(pSt));
-		}
-		pt.setProgramSubArr(d);
-		pt.setProgramName("App Development");
-		pt.setProgramId(1001);
-		programTypeMap.put("DEV", pt);
 	}
 
 	private void getProjectTypes(Map<String, List<ProjectDetails>> devMap, Map<String, List<ProjectStates>> pStateMap2, String type) {
