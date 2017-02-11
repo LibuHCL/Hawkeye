@@ -143,12 +143,12 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 				KPIValue kv2 = new KPIValue();
 				List<String> labelData = new ArrayList<>();
 				List<Integer> grapIntData = new ArrayList<>();
-				
 				for (VelocityOfProject string : priorityHighVal) {
-					labelData.add(string.getSprintName().replace(" ", ""));
-					grapIntData.add((int)string.getCompletedValue());
+					if (!(0 == (int)string.getCompletedValue())) {
+						labelData.add(string.getSprintName().replace(" ", ""));
+						grapIntData.add((int)string.getCompletedValue());
+					}
 				}
-				
 				kv2.setGraphdataOfVelocity(grapIntData);
 				kv2.setLabels(labelData);
 				kv2.setName(env.getProperty("kpi.name4"));

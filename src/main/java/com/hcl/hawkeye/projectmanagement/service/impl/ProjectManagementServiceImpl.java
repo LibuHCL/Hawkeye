@@ -52,6 +52,7 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 		if (27 == projectId) {
 			Velocityinfo vInfo = pmDAO.getVelocityOfProject(projectId);
 			List<VelocityOfProject> velocityList = getVelocityList(vInfo);
+			logger.info("@@@  {}",velocityList);
 			Double estimated = 0.0;
 			Double completed = 0.0;
 			if(!velocityList.isEmpty()){
