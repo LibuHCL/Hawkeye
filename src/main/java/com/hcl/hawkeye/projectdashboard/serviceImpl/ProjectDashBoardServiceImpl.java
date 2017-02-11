@@ -76,6 +76,7 @@ public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 		return pd;
 	}
 	
+	
 	public int getCostData(int projectId){
 		logger.info("getCostData: {}",projectId);
 		ProjectCostDetails costDetails = projCostService.getProjectCostData(projectId);

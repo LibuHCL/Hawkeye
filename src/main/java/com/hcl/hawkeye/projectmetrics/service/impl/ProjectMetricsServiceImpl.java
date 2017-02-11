@@ -93,10 +93,6 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 		return projMet;
 	}
 
-
-	
-
-
 	private void addProject(ProjectMetrics projMet, int projectId) {
 		logger.info("addProject: {}",projectId);
 		//To Get project Details
