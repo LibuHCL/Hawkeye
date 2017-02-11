@@ -14,5 +14,6 @@ public interface PortfolioManagementDAO {
 	Integer noOfPrgmsPerPortFolio(Integer portFoId);
 	
 	String getPortfolioNameById(Integer portfolioId);
+	Integer noOfProjectsPerPortFolio(Integer portFolioId);
 	
 }

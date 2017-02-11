@@ -92,5 +92,13 @@ public class PortfolioManagementDAOImpl implements PortfolioManagementDAO {
 		String portfolioName = (String) jdbcTemplate.queryForObject(portfolioQuery,String.class);
 		return portfolioName;
 	}
+	
+	@Override
+	public Integer noOfProjectsPerPortFolio(Integer portFolioId) {
+		logger.info("Inside noOfProjectsPerPortFolio method in PortfolioManagementDAOImpl");
+		String sql_nofProgms = "SELECT COUNT(*) FROM PROJECT WHERE PROGRAM_ID IN (SELECT PROGRAMID FROM PROGRAM WHERE PORTFOLIO_ID=?)";
+		return jdbcTemplate.queryForObject(sql_nofProgms,Integer.class,new Object[]{portFolioId});
+	}
+
 
 }

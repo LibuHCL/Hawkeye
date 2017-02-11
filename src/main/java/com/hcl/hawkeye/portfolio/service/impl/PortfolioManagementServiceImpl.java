@@ -115,12 +115,16 @@ public class PortfolioManagementServiceImpl implements PortfolioManagementServic
 
 			for (int j = 0; j < portfoliosList.size(); j++) {
 				PortfolioColl portfolioDetail = new PortfolioColl();
+				int projectsCount = 0;
 				String currentKey = "Q" + portfoliosList.get(j).getQuarter() + " - " + portfoliosList.get(j).getYear();
 				if (currentKey.equalsIgnoreCase(s)) {
-					String portfolioName = portfolioDAO.getPortfolioNameById(portfoliosList.get(j).getPortfolioId());
-					Map<Integer,ValueIndex> valueAdds = valueAddService.getValueAddByIds(portfoliosList.get(j).getPortfolioId());
-					portfolioDetail.setId(portfoliosList.get(j).getPortfolioId());
+					Integer portfolioId = portfoliosList.get(j).getPortfolioId();
+					String portfolioName = portfolioDAO.getPortfolioNameById(portfolioId);
+					Map<Integer,ValueIndex> valueAdds = valueAddService.getValueAddByIds(portfolioId);
+					projectsCount = portfolioDAO.noOfProjectsPerPortFolio(portfolioId);
+					portfolioDetail.setId(portfolioId);
 					portfolioDetail.setName(portfolioName);
+					portfolioDetail.setCount(projectsCount);
 					ArrayList<Cost> costs = new ArrayList<>();
 					Cost cost = new Cost();
 					cost.setKey("Planned Cost");
