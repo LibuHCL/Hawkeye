@@ -189,7 +189,8 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 		ArrayList<Double> graphdata = new ArrayList<Double>();
 		ArrayList<String> labels = new ArrayList<String>();
 		for (Map<String, Object> row : list) {
-			graphdata.add(((BigDecimal) row.get("GRAPHDATA")).doubleValue());
+			if(null != row.get("GRAPHDATA")){
+			graphdata.add(((BigDecimal) row.get("GRAPHDATA")).doubleValue());}
 			labels.add("Q" + ((Long) row.get("QUARTERS")).toString());
 		}
 		valueAddAcceptedIdeas.setName("Accepted ideas");
