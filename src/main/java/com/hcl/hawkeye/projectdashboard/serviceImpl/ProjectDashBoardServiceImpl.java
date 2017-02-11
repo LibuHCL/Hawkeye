@@ -19,6 +19,7 @@ import com.hcl.hawkeye.projectdashboard.DO.ProjectDashBoard;
 import com.hcl.hawkeye.projectdashboard.DO.Projects;
 import com.hcl.hawkeye.projectdashboard.service.ProjectDashBoardService;
 import com.hcl.hawkeye.projectmanagement.service.ProjectManagementService;
+import com.hcl.hawkeye.resourcemanagement.service.ResourceManagementService;
 import com.hcl.hawkeye.utils.HawkEyeConstants;
 import com.hcl.hawkeye.utils.HawkEyeUtils;
 

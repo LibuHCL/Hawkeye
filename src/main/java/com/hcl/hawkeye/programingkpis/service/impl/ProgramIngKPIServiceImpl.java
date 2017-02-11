@@ -301,8 +301,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 				kv1.setGraphdataOfIdeas(escDetails.getGraphData());
 				kv1.setLabels(escDetails.getLabels());				
 				StrkVList.add(kv1);
-			}
-			
+			}			
 			if(i == 2) {
 				Graph feedDetails = feedBackService.getnoofFeedBacksPerQtAtPerfolioLevel(portfolioId, "STAKEHOLDER");
 				
