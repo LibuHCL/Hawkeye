@@ -138,7 +138,7 @@ public class ValueAddManagementServiceImpl implements ValueAddManagementService 
 	}
 	
 	@Override
-	public ValueAddAcceptedIdeas getEconomicValueAddByPortfolio(int portfolioId) {
+	public ValueAddAcceptedIdeas getEconomicValueAddByPortfolio(Integer portfolioId) {
 		logger.info("Request in getEconomicValueAdd of ValueAddManagementServiceImpl");
 		try {
 			return valueAddManagementDAO.getEconomicValueAddByPortfolio(portfolioId);

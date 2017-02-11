@@ -29,5 +29,5 @@ public interface ValueAddManagementService {
 	
 	ValueAddAcceptedIdeas getEconomicValueAdd(Integer programId);
 
-	ValueAddAcceptedIdeas getEconomicValueAddByPortfolio(int portfolioId);
+	ValueAddAcceptedIdeas getEconomicValueAddByPortfolio(Integer portfolioId);
 }
