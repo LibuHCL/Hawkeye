@@ -194,4 +194,20 @@ public class ResourceManagementDAOImpl implements ResourceManagementDAO {
 		return graph;		
 	}
 	
+	@Override
+	public String getProgramManager(Integer programId)
+	{
+		String managerQuery = "SELECT CONCAT(FIRSTNAME,' ',LASTNAME) program_manager FROM RESOURCE WHERE EMPLOYEEID = (SELECT PROGRAM_MANANGER_ID FROM PROGRAM WHERE PROGRAMID="+programId+")";
+		String programManagerName = (String) jdbcTemplate.queryForObject(managerQuery,String.class);
+		return programManagerName;
+	}
+	
+	@Override
+	public String getProjectManager(Integer projectId)
+	{
+		String prjctManagerQuery = "SELECT CONCAT(FIRSTNAME,' ',LASTNAME) project_manager FROM RESOURCE WHERE EMPLOYEEID = (SELECT TECHNICAL_PROJECT_MANAGER_ID FROM PROJECT WHERE PROJECTID="+projectId+")";
+		String prjctManagerName = (String) jdbcTemplate.queryForObject(prjctManagerQuery,String.class);
+		return prjctManagerName;
+	}
+	
 }

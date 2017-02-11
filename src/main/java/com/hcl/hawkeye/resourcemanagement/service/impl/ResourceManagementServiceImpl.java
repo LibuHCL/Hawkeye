@@ -72,5 +72,13 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
 		// TODO Auto-generated method stub
 		return resourceDAO.getOffshorePerQtPerProject(projectId);
 	}
+	@Override
+	public String getProgramManager(Integer programId) {
+		return resourceDAO.getProgramManager(programId);
+	}
+	@Override
+	public String getProjectManager(Integer projectId) {
+		return resourceDAO.getProjectManager(projectId);
+	}
 
 }

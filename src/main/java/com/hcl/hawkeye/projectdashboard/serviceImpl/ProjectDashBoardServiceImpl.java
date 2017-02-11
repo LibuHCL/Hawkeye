@@ -38,6 +38,9 @@ public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 	
 	@Autowired
 	CodeQualityService codeQService;
+	
+	@Autowired
+	ResourceManagementService resourceService;
 
 	@Override
 	public ProjectDashBoard getProjectDashBoard(Integer programId) {
@@ -61,8 +64,8 @@ public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 			projList.setCost(getCostData(proj1.getProjectId()));
 			projList.setSchedule(projMgmtService.getVelocityOfProject(proj1.getProjectId()));
 			projList.setQuality(codeQService.getCodeQualityRAGStatus());
-			projList.setTechmanager("NULL");
-			projList.setProgrammanager("NULL");
+			projList.setTechmanager(resourceService.getProjectManager(proj1.getProjectId()));
+			projList.setProgrammanager(resourceService.getProgramManager(programId));
 			projList.setCurrentsprint(1);
 			projList.setTotalsprinits(2);
 			projList.setResource(res);

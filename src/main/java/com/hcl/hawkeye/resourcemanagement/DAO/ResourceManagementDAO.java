@@ -17,4 +17,6 @@ public interface ResourceManagementDAO {
 	List<ProgramResourceCount> getResourcesCountByProgram(int programId);
 	Double getResourcesPercentByPortfolio(int portfolioId);
 	Graph getOffshorePerQtPerProject(int projectId);
+	String getProgramManager(Integer programId);
+	String getProjectManager(Integer projectId);
 }
