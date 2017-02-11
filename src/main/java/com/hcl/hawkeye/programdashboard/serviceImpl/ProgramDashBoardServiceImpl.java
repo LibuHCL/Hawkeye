@@ -34,44 +34,24 @@ public class ProgramDashBoardServiceImpl implements ProgramDashBoardService {
 	public ProgramDashBoard getProgramDashBoard(int programId) {
 		logger.info("Requested to get the programDasboard Data for Project ID: {}", programId);
 		List<Project> projectsfromdb = progMgmtService.getProjectsPerProgramId(programId);
+		
 		ProgramDashBoard programdashboard = new ProgramDashBoard();
-
 		List<ProgramTypes> proTypes = new ArrayList<>();
 		Map<String, ProgramTypes> programTypeMap = new HashMap<>();
 		
-		List<Project> activeList =new ArrayList<>();
-		List<Project> closedList =new ArrayList<>();
-		List<Project> upComingList =new ArrayList<>();
-		Map<String, List<ProjectStates>> pStateMap = new HashMap<>();
+		List<Project> devProjects =new ArrayList<>();
+		List<Project> asmProjects =new ArrayList<>();
 		
 		for (Project project : projectsfromdb) {
-			
 			if ("DEV".equals(project.getProjType())) {
-				if ("ACTIVE".equals(project.getStatus())) {
-					activeList.add(project);
-				} else if ("CLOSED".equals(project.getStatus())) {
-					closedList.add(project);
-				} else if ("UPCOMING".equals(project.getStatus())) {
-					upComingList.add(project);
-				}
-				//processDevProjects(project, pDetailListDev, devMap);
+				devProjects.add(project);
 			} else if ("ASM".equals(project.getProjType())) {
-				//processDevProjects(project, pDetailListASM, asmMap);
+				asmProjects.add(project);
 			}
-			
 		}
-		ProgramTypes pt = new ProgramTypes();
-		List<ProjectStates> d = new ArrayList<>();
-		processList(activeList, programTypeMap, "ACTIVE", pStateMap);
-		processList(closedList, programTypeMap, "CLOSED", pStateMap);
-		processList(upComingList, programTypeMap, "UPCOMING", pStateMap);
-		for (String pSt : pStateMap.keySet()) {
-			d.addAll(pStateMap.get(pSt));
-		}
-		pt.setProgramSubArr(d);
-		pt.setProgramName("App Development");
-		pt.setProgramId(1001);
-		programTypeMap.put("DEV", pt);
+		
+		processProjectList(devProjects, programTypeMap, "DEV");
+		processProjectList(asmProjects, programTypeMap, "ASM");
 		
 		for (String programTypes : programTypeMap.keySet()) {
 			proTypes.add(programTypeMap.get(programTypes));
@@ -80,12 +60,71 @@ public class ProgramDashBoardServiceImpl implements ProgramDashBoardService {
 		return programdashboard;
 	}
 
-	private void processList(List<Project> activeList, Map<String, ProgramTypes> programTypeMap, String type, Map<String, List<ProjectStates>> pStateMap) {
+	private void processProjectList(List<Project> devProjects, Map<String, ProgramTypes> programTypeMap, String string) {
+		Map<String, List<ProjectStates>> pStateMap = new HashMap<>();
+		List<Project> activeList =new ArrayList<>();
+		List<Project> closedList =new ArrayList<>();
+		List<Project> upComingList =new ArrayList<>();
+		if ("DEV".equals(string)) {
+			for (Project project : devProjects) {
+				if ("ACTIVE".equals(project.getStatus())) {
+					activeList.add(project);
+				} else if ("CLOSED".equals(project.getStatus())) {
+					closedList.add(project);
+				} else if ("UPCOMING".equals(project.getStatus())) {
+					upComingList.add(project);
+				}
+			}
+			
+		} else if ("ASM".equals(string)) {
+			for (Project project : devProjects) {
+				if ("ACTIVE".equals(project.getStatus())) {
+					activeList.add(project);
+				} else if ("CLOSED".equals(project.getStatus())) {
+					closedList.add(project);
+				} else if ("UPCOMING".equals(project.getStatus())) {
+					upComingList.add(project);
+				}
+			}
+			processList(activeList, "ACTIVE", pStateMap);
+			processList(closedList, "CLOSED", pStateMap);
+			processList(upComingList, "UPCOMING", pStateMap);
+		}
+		
+		processList(activeList, "ACTIVE", pStateMap);
+		processList(closedList, "CLOSED", pStateMap);
+		processList(upComingList, "UPCOMING", pStateMap);
+		
+		if ("DEV".equals(string)) {
+			ProgramTypes pt = new ProgramTypes();
+			List<ProjectStates> d = new ArrayList<>();
+			
+			for (String pSt : pStateMap.keySet()) {
+				d.addAll(pStateMap.get(pSt));
+			}
+			pt.setProgramSubArr(d);
+			pt.setProgramName("App Development");
+			pt.setProgramId(1001);
+			programTypeMap.put("DEV", pt);
+		} else if ("ASM".equals(string)) {
+			ProgramTypes pt = new ProgramTypes();
+			List<ProjectStates> d = new ArrayList<>();
+			
+			for (String pSt : pStateMap.keySet()) {
+				d.addAll(pStateMap.get(pSt));
+			}
+			pt.setProgramSubArr(d);
+			pt.setProgramName("App Maintenance & Support");
+			pt.setProgramId(1002);
+			programTypeMap.put("ASM", pt);
+		}
+	}
+	
+	private void processList(List<Project> activeList, String type, Map<String, List<ProjectStates>> pStateMap) {
 		Map<String, List<ProjectDetails>> devMap = new HashMap<>();
 		for (Project project : activeList) {
 			processDevProjects(project, devMap);
 		}
-		
 		if ("ACTIVE".equals(type)) {
 			getProjectTypes(devMap, pStateMap, type);
 		} else if ("CLOSED".equals(type)) {
@@ -201,74 +240,6 @@ public class ProgramDashBoardServiceImpl implements ProgramDashBoardService {
 			}
 
 		}
-	}
-
-	private void processActiveProjects(Project project, List<ProjectSubTypes> subTypeList,
-			Map<String, List<ProjectSubTypes>> subMap, Map<String, List<ProjectDetails>> devMap, String string,
-			Map<String, ProgramTypes> programTypeMap) {
-		List<ProjectStates> pStateList = new ArrayList<>();
-		
-		if ("ACTIVE".equals(project.getStatus())) {
-			getSubType(devMap, subTypeList, subMap, project.getStatus());
-			ProjectStates pSubType = new ProjectStates();
-			pSubType.setProgramStatus("Active Projects");
-			pSubType.setStream(subMap.get(project.getStatus()));
-			pSubType.setProgramCount(subMap.get(project.getStatus()).size());
-			pStateList.add(pSubType);
-		} else if ("CLOSED".equals(project.getStatus())) {
-			getSubType(devMap, subTypeList, subMap, project.getStatus());
-			ProjectStates pSubType = new ProjectStates();
-			pSubType.setProgramStatus("Closed Projects");
-			pSubType.setStream(subMap.get(project.getStatus()));
-			pSubType.setProgramCount(subMap.get(project.getStatus()).size());
-			pStateList.add(pSubType);
-		} else if ("UPCOMING".equals(project.getStatus())) {
-			//getSubType(devMap, subTypeList, subMap, project.getStatus());
-			ProjectStates pSubType = new ProjectStates();
-			pSubType.setProgramStatus("Forth Coming Projects");
-			pSubType.setStream(subMap.get(project.getStatus()));
-			pSubType.setProgramCount(subMap.get(project.getStatus()).size());
-			pStateList.add(pSubType);
-		}
-		ProgramTypes type = new ProgramTypes();
-		if ("DEV".equals(string)) {
-			type.setProgramName("App Development");
-			type.setProgramId(1001);
-		} else if ("ASM".equals(string)) {
-			type.setProgramName("App Maintenance & Support");
-			type.setProgramId(1002);
-		}
-		type.setProgramSubArr(pStateList);
-		programTypeMap.put(string, type);
-	}
-
-	private void getSubType(Map<String, List<ProjectDetails>> devMap, List<ProjectSubTypes> subTypeList,
-			Map<String, List<ProjectSubTypes>> subMap, String string) {
-		for (String key : devMap.keySet()) {
-			if ("WEB".equals(key)) {
-				ProjectSubTypes subType = new ProjectSubTypes();
-				subType.setStreamName(key);
-				subType.setProjects(devMap.get(key));
-				subTypeList.add(subType);
-			} else if ("DATA".equals(key)) {
-				ProjectSubTypes subType = new ProjectSubTypes();
-				subType.setStreamName(key);
-				subType.setProjects(devMap.get(key));
-				subTypeList.add(subType);
-			} else if ("LEGACY".equals(key)) {
-				ProjectSubTypes subType = new ProjectSubTypes();
-				subType.setStreamName(key);
-				subType.setProjects(devMap.get(key));
-				subTypeList.add(subType);
-			} else if ("MOBILE".equals(key)) {
-				ProjectSubTypes subType = new ProjectSubTypes();
-				subType.setStreamName(key);
-				subType.setProjects(devMap.get(key));
-				subTypeList.add(subType);
-			}
-
-		}
-		subMap.put(string, subTypeList);
 	}
 
 	private ProjectDetails processProject(Project project) {
