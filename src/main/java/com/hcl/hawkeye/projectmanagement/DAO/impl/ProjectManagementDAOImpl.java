@@ -29,6 +29,11 @@ import com.hcl.hawkeye.projectmanagement.DO.SprintDetailsOfProject;
 import com.hcl.hawkeye.projectmanagement.DO.StoryPoint;
 import com.hcl.hawkeye.projectmanagement.DO.Velocityinfo;
 
+/**
+ * 
+ * @author Haribabu
+ *
+ */
 @Repository
 public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 	
@@ -45,21 +50,27 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 	@Override
 	public SprintDetailsOfProject getProjectDetails(int projectId) {
 		logger.info("Request to get project details with project id: {}", projectId);
-		ProjectDetails pDetails = getProjectDetailsOfSprints(projectId);
-		int countOfSprints = 0;
 		SprintDetailsOfProject sProject = new SprintDetailsOfProject();
-		if (null != pDetails && !pDetails.getValues().isEmpty()) {
-			for (ProjectValues pValue : pDetails.getValues()) {
-				if ("active".equals(pValue.getState())) {
-					sProject.setCurrentSprint(pValue.getName());
-					countOfSprints++;
-				} else {
-					countOfSprints++;
+		try {
+			int countOfSprints = 0;
+			ProjectDetails pDetails = getProjectDetailsOfSprints(projectId);
+			if (null != pDetails && !pDetails.getValues().isEmpty()) {
+				for (ProjectValues pValue : pDetails.getValues()) {
+					if ("active".equals(pValue.getState())) {
+						sProject.setCurrentSprint(pValue.getName());
+						countOfSprints++;
+					} else {
+						countOfSprints++;
+					}
 				}
 			}
+			sProject.setNoOfSprintPerProject(countOfSprints);
+		} catch (Exception e) {
+			Locale locale=new Locale("en", "IN");
+			String errorMsg=messageSource.getMessage("error.get.project", new Object[] {}, locale);
+			logger.error(errorMsg, e);
+			throw new NoProjectDetailsException(errorMsg, e);
 		}
-		sProject.setNoOfSprintPerProject(countOfSprints);
-		
 		return sProject;
 	}
 	
@@ -102,8 +113,9 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 	public Velocityinfo getVelocityOfProject(int projectId) {
 		logger.info("Request to get velocity of project info");
 		Velocityinfo velInfo;
+		Locale locale=new Locale("en", "IN");
 		try {
-			Locale locale=new Locale("en", "IN");
+			
 			String url = messageSource.getMessage("jira.agile.rest.api.velocity.url", new Object[]{}, locale);
 			String velocityInfo = jrCall.callRestAPI(url+projectId);
 			gson = new Gson();
@@ -119,7 +131,6 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 				}
 			}
 		} catch (Exception e) {
-			Locale locale=new Locale("en", "IN");
 			String errorMsg=messageSource.getMessage("error.get.velocity", new Object[] {}, locale);
 			logger.error(errorMsg, e);
 			throw new NoProjectDetailsException(errorMsg, e);
@@ -196,19 +207,17 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 
 	@Override
 	public DefectTypes getDefectTypesOfProject(int projectId) {
+		logger.info("Request to get issues of projects");
 		String issueType = "Defect";
 		int invalidDefects = 0;
 		int uatDefects = 0;
 		DefectTypes dTypes = null;
+		Locale locale=new Locale("en", "IN");
 		try {
-			logger.info("Request to get issues of projects");
-			Locale locale=new Locale("en", "IN");
 			ProjectDetails pDetails = getProjectDetailsOfSprints(projectId);
 			List<ProjectValues> pValues = pDetails.getValues();
 			String url = messageSource.getMessage("jira.agile.rest.api.board.url", new Object[]{}, locale);
 			for (ProjectValues projectValues : pValues) {
-				
-				
 				String issuesInfo = jrCall.callRestAPI(url+projectId+"/sprint/"+projectValues.getId()+"/issue?fields=issuetype");
 				ProjectIssues pIssues = gson.fromJson(issuesInfo, ProjectIssues.class);
 				
@@ -221,7 +230,6 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 						uatDefects++;
 					}
 				}
-				
 			}
 			dTypes = new DefectTypes();
 			dTypes.setInternalDefects(invalidDefects);
@@ -229,7 +237,6 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 			dTypes.setUatDefects(uatDefects);
 			dTypes.setDefectLekage(uatDefects);
 		} catch (Exception e) {
-			Locale locale=new Locale("en", "IN");
 			String errorMsg=messageSource.getMessage("error.get.defects", new Object[] {}, locale);
 			logger.error(errorMsg, e);
 			throw new NoProjectDetailsException(errorMsg, e);

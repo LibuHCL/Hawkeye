@@ -1,7 +1,13 @@
 package com.hcl.hawkeye.projectmanagement.DO;
 
-public class VelocityOfProject {
+import java.io.Serializable;
 
+public class VelocityOfProject implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int sprintId;
 	private String sprintName;
 	private String sprintState;
@@ -86,21 +92,53 @@ public class VelocityOfProject {
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
-	/*@Override
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (completedValue ^ (completedValue >>> 32));
-		result = prime * result + (int) (estimatedValue ^ (estimatedValue >>> 32));
+		long temp;
+		temp = Double.doubleToLongBits(completedValue);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(estimatedValue);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + sprintId;
 		result = prime * result + ((sprintName == null) ? 0 : sprintName.hashCode());
 		result = prime * result + ((sprintState == null) ? 0 : sprintState.hashCode());
 		return result;
-	}*/
+	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		VelocityOfProject other = (VelocityOfProject) obj;
+		if (Double.doubleToLongBits(completedValue) != Double.doubleToLongBits(other.completedValue))
+			return false;
+		if (Double.doubleToLongBits(estimatedValue) != Double.doubleToLongBits(other.estimatedValue))
+			return false;
+		if (sprintId != other.sprintId)
+			return false;
+		if (sprintName == null) {
+			if (other.sprintName != null)
+				return false;
+		} else if (!sprintName.equals(other.sprintName))
+			return false;
+		if (sprintState == null) {
+			if (other.sprintState != null)
+				return false;
+		} else if (!sprintState.equals(other.sprintState))
+			return false;
+		return true;
+	}
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -109,4 +147,5 @@ public class VelocityOfProject {
 				+ ", estimatedValue=" + estimatedValue + ", completedValue=" + completedValue + "]";
 	}
 
+	
 }
