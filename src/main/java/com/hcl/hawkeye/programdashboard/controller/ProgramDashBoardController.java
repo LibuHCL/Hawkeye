@@ -6,6 +6,7 @@ package com.hcl.hawkeye.programdashboard.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,6 +16,7 @@ import com.hcl.hawkeye.programdashboard.DO.ProgramDashBoard;
 import com.hcl.hawkeye.programdashboard.service.ProgramDashBoardService;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class ProgramDashBoardController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ProgramDashBoardController.class);
@@ -26,7 +28,6 @@ public class ProgramDashBoardController {
 	public ProgramDashBoard getProgramDashBoard(@PathVariable("programId") int programId){
 		logger.info("Inside getProgramDashBoard ProgramDashBoardController:" + programId);
 		ProgramDashBoard programDashBoard = programDashBoardService.getProgramDashBoard(programId);
-		logger.info("getProgramDashBoard successfully: " +programDashBoard);
 		return programDashBoard;
 		
 		

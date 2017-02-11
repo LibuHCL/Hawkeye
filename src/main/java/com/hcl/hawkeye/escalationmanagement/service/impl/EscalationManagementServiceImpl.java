@@ -64,4 +64,17 @@ public class EscalationManagementServiceImpl implements EscalationManagementServ
 		}
 	}
 
+	@Override
+	public Graph noOfEscAtPortfolioLevelPerQt(int portfolioId) {
+		try {
+			return escMgmtDao.noOfEscAtPortfolioLevelPerQt(portfolioId);
+			
+		} catch (Exception e) {
+			Locale locale=new Locale("en", "IN");
+			String errorMsg=messageSource.getMessage("error.noof.escalations", new Object[] {}, locale);
+			logger.error(errorMsg, e);	
+			throw new PortfolioCreationException(errorMsg, e);
+		}
+	}
+
 }

@@ -136,5 +136,19 @@ public class ValueAddManagementServiceImpl implements ValueAddManagementService 
 			throw new ValueAddDataRetrievalException(errorMsg, dae);
 		}
 	}
-
+	
+	@Override
+	public ValueAddAcceptedIdeas getEconomicValueAddByPortfolio(int portfolioId) {
+		logger.info("Request in getEconomicValueAdd of ValueAddManagementServiceImpl");
+		try {
+			return valueAddManagementDAO.getEconomicValueAddByPortfolio(portfolioId);
+		} catch (DataAccessException dae) {
+			Locale locale=new Locale("en", "IN");
+			String errorMsg=messageSource.getMessage("error.create.getvalueadd", new Object[] {}, locale);
+			logger.error(errorMsg, dae);			
+			throw new ValueAddDataRetrievalException(errorMsg, dae);
+		}
+	}
+	
+	
 }

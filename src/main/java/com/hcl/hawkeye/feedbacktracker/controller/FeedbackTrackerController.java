@@ -31,12 +31,12 @@ public class FeedbackTrackerController {
   
     /* To Capture the feedbackTrack Details */
     @RequestMapping(value = "/feedbacktrack", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<FeedbackDetails> capFeedBackDetails(@RequestBody FeedbackDetails feedback){
+    public ResponseEntity<Integer> capFeedBackDetails(@RequestBody FeedbackDetails feedback){
     	
     	logger.info("Inside capFeedBackDetails method in Controller:"+feedback.getFeedbackId());
-    	FeedbackDetails feedbackdetails = feedbkService.capFeedbackTrackDetails(feedback);
+    	int feedbackdetails = feedbkService.capFeedbackTrackDetails(feedback);
     	logger.info("Feedback Details recieved: " + feedbackdetails);
-    	return new ResponseEntity<FeedbackDetails> (feedbackdetails, HttpStatus.CREATED);
+    	return new ResponseEntity<Integer> (feedbackdetails, HttpStatus.CREATED);
        	
     }
     

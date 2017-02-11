@@ -28,4 +28,6 @@ public interface ValueAddManagementService {
 	ValueCreationQuarterly getQuarterlyValueByProgramId(Integer programId);
 	
 	ValueAddAcceptedIdeas getEconomicValueAdd(Integer programId);
+
+	ValueAddAcceptedIdeas getEconomicValueAddByPortfolio(int portfolioId);
 }

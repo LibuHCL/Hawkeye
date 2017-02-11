@@ -1,8 +1,6 @@
 package com.hcl.hawkeye.projectmetrics.service.impl;
 
-import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -32,9 +30,7 @@ import com.hcl.hawkeye.projectmetrics.DO.ProjectMetrics;
 import com.hcl.hawkeye.projectmetrics.service.ProjectMetricsService;
 import com.hcl.hawkeye.resourcemanagement.service.ResourceManagementService;
 import com.hcl.hawkeye.sonarmetrics.service.SonarMetricsManagementService;
-import com.hcl.hawkeye.teamhappiness.DO.TeamHappinessDetails;
 import com.hcl.hawkeye.teamhappiness.service.TeamHappinessManagementService;
-import com.hcl.hawkeye.utils.HawkEyeConstants;
 import com.hcl.hawkeye.valueaddmanagement.DO.ValueCreation;
 import com.hcl.hawkeye.valueaddmanagement.service.ValueAddManagementService;
 
@@ -97,11 +93,8 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 		return projMet;
 	}
 
-
-	
-
-
 	private void addProject(ProjectMetrics projMet, int projectId) {
+		logger.info("addProject: {}",projectId);
 		//To Get project Details
 		Project proj = progMgmtService.getProject(projectId);
 		
@@ -123,6 +116,8 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 		
 	}
 	private ProjectMetricResults addProjectMetrics(int projectId) {
+		
+		logger.info("addProjectMetrics: {}",projectId);
 		
 		ArrayList<Metrics> metrics= new ArrayList<Metrics>();
 		
@@ -171,6 +166,8 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 	}
 	
 	private ProjectMetricResults addEngineeringMetrics(int projectId) {
+		
+		logger.info("addEngineeringMetrics: {}",projectId);
 		
 		Map <String,Graph> engMap = sonMetService.getSonarMetricsData(projectId);
 		
@@ -271,12 +268,4 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 				
 	}
 	
-	private void prepareGraphData(ArrayList<Double> graphdata,ArrayList<String> labels,
-			Map<String, Double> teamHap) {
-		for(String q : teamHap.keySet()){
-			labels.add(q.equals("1")? "Q1":(q.equals("2") ? "Q2" : (q.equals("3") ? "Q3" :"Q4")));
-			graphdata.add(teamHap.get(q));
-		}
-		
-	}
 }

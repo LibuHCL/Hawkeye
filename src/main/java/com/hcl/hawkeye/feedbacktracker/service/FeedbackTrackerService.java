@@ -6,7 +6,7 @@ import com.hcl.hawkeye.FeedbackTrackerDO.FeedbackDetails;
 
 public interface FeedbackTrackerService {
 	
-	FeedbackDetails capFeedbackTrackDetails(FeedbackDetails feedbackdetails);
+	int capFeedbackTrackDetails(FeedbackDetails feedbackdetails);
 
 	FeedbackDetails getFeedbackPerProject(String reporterType, int projectId);
 

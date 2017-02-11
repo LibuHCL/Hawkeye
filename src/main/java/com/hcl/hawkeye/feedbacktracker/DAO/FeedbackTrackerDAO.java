@@ -6,7 +6,7 @@ import com.hcl.hawkeye.FeedbackTrackerDO.FeedbackDetails;
 
 public interface FeedbackTrackerDAO {
 
-	FeedbackDetails capFeedbackTrackDetails(FeedbackDetails feedbackdetails);
+	int capFeedbackTrackDetails(FeedbackDetails feedbackdetails);
 		// TODO Auto-generated method stub
 	FeedbackDetails getFeedbackPerProject(String reporterType, int projectId);
 	List<FeedbackDetails> getFeedbackPerProgram(String reporterType, int projectId);

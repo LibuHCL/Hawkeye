@@ -14,12 +14,11 @@ import com.hcl.hawkeye.programmanagement.service.ProgramManagementService;
 import com.hcl.hawkeye.projectcost.DO.ProjectCostDetails;
 import com.hcl.hawkeye.projectcost.service.ProjectCostService;
 import com.hcl.hawkeye.projectdashboard.DO.DashBoardProjectslist;
+import com.hcl.hawkeye.projectdashboard.DO.DashBoardResource;
 import com.hcl.hawkeye.projectdashboard.DO.ProjectDashBoard;
 import com.hcl.hawkeye.projectdashboard.DO.Projects;
-import com.hcl.hawkeye.projectdashboard.DO.DashBoardResource;
 import com.hcl.hawkeye.projectdashboard.service.ProjectDashBoardService;
 import com.hcl.hawkeye.projectmanagement.service.ProjectManagementService;
-import com.hcl.hawkeye.resourcemanagement.service.ResourceManagementService;
 import com.hcl.hawkeye.utils.HawkEyeConstants;
 import com.hcl.hawkeye.utils.HawkEyeUtils;
 
@@ -45,6 +44,7 @@ public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 
 	@Override
 	public ProjectDashBoard getProjectDashBoard(Integer programId) {
+		logger.info("Inside getProjectDashBoard method in ProjectDashBoardServiceImpl for program Id : {}",programId);
 		List <Project> listOfProjects = progMgmtService.getProjectsPerProgramId(programId);
 		ProjectDashBoard pd= new ProjectDashBoard();
 		Projects project = new Projects();
@@ -78,6 +78,7 @@ public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 		
 		return pd;
 	}
+	
 	
 	public int getCostData(int projectId){
 		logger.info("getCostData: {}",projectId);
