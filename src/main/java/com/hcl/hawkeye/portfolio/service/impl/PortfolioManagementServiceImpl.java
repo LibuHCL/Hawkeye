@@ -145,7 +145,7 @@ public class PortfolioManagementServiceImpl implements PortfolioManagementServic
 					cost.setValue(String.valueOf(portfoliosList.get(j).getRoi()));
 					costs.add(cost);
 					portfolioDetail.setCost(costs);
-					ValueIndex v = valueAdds.get(portfoliosList.get(j).getYear());
+					ValueIndex v = valueAdds.get(portfoliosList.get(j).getYear().intValue());
 					ValueCreation value = new ValueCreation();
 					if(null != v && null != v.getLabels())
 					{
