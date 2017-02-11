@@ -18,4 +18,6 @@ public interface ResourceManagementService {
 	Double getResourcesPercentByPortfolio(int portfolioId);
 	
 	Graph getOffshorePerQtPerProject(int projectId);
+	String getProgramManager(Integer programId);
+	String getProjectManager(Integer projectId);
 }
