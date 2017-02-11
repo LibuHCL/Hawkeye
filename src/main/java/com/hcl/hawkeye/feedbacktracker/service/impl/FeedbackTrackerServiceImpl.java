@@ -19,7 +19,7 @@ public class FeedbackTrackerServiceImpl implements FeedbackTrackerService {
 	@Autowired
 	FeedbackTrackerDAO feedbkDao;
 	@Override
-	public FeedbackDetails capFeedbackTrackDetails(FeedbackDetails feedbackdetails) {
+	public int capFeedbackTrackDetails(FeedbackDetails feedbackdetails) {
 		// TODO Auto-generated method stub
 		
 		logger.info("Inside capFeedbackTrackDetails method in FeedbackTrackerServiceImpl");

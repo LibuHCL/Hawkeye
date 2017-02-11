@@ -31,9 +31,10 @@ public class FeedbackTrackerDAOImpl implements FeedbackTrackerDAO {
 	}
 
 	@Override
-	public FeedbackDetails capFeedbackTrackDetails(FeedbackDetails fbk) {
+	public int capFeedbackTrackDetails(FeedbackDetails fbk) {
 		// TODO Auto-generated method stub
 		logger.info("Getting the feedbackTrack details: {}", fbk);
+		int count = 0;
 		FeedbackDetails feebkdetail = new FeedbackDetails();
 		feebkdetail.setFeedbackId(fbk.getFeedbackId());
 		feebkdetail.setProjectId(fbk.getProjectId());
@@ -50,7 +51,7 @@ public class FeedbackTrackerDAOImpl implements FeedbackTrackerDAO {
 				+ "REPORTER_RESOURCE_ID,REPORTER_COMPANY_ID,REPORTER_TYPE,REPORTEE_ID) VALUES(?,?,?,?,?,?,?,?,?,?) ";
 		
 		try{
-			jdbcTemplate.update(feedBack_SQL,new Object[] {fbk.getFeedbackId(),fbk.getProjectId(),fbk.getParamaterId(),fbk.getFeedback_value(),fbk.getWeightage(),
+			count = jdbcTemplate.update(feedBack_SQL,new Object[] {fbk.getFeedbackId(),fbk.getProjectId(),fbk.getParamaterId(),fbk.getFeedback_value(),fbk.getWeightage(),
 					fbk.getFeedback_Date(),fbk.getReporter_resource_Id(),fbk.getReporter_company_Id(),fbk.getReporter_Type(),fbk.getReportee()});
 		  }
 		catch (DataAccessException dae) {
@@ -58,7 +59,7 @@ public class FeedbackTrackerDAOImpl implements FeedbackTrackerDAO {
 			throw new FeedbackTrackException("Exception in Feedbacktrack Details", dae);
 		
 	     }
-		return feebkdetail;
+		return count;
 
 	}
 
