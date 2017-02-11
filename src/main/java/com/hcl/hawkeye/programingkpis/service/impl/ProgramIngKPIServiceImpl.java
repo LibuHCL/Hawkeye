@@ -324,7 +324,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 			if(i == 4) {
 				ValueAddAcceptedIdeas valueForQuater = vmService.getEconomicValueAddByPortfolio(portfolioId);
 				KPIValue kv2 = new KPIValue();
-				kv2.setName(env.getProperty("tacticalKpi.name4"));
+				kv2.setName(env.getProperty("strategicalkpi.name4"));
 
 				kv2.setGraphdataOfIdeas(valueForQuater.getGraphdata());
 				kv2.setLabels(valueForQuater.getLabels());
