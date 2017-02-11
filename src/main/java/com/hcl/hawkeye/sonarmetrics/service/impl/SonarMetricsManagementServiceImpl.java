@@ -25,8 +25,10 @@ import com.hcl.hawkeye.sonarmetrics.service.SonarMetricsManagementService;
  *
  */
 @Service
-public class SonarMetricsManagementServiceImpl implements SonarMetricsManagementService {
-	private static final Logger logger = LoggerFactory.getLogger(SonarMetricsManagementService.class);
+public class SonarMetricsManagementServiceImpl implements
+		SonarMetricsManagementService {
+	private static final Logger logger = LoggerFactory
+			.getLogger(SonarMetricsManagementService.class);
 
 	@Autowired
 	SonarMetricsManagementDAO sonarMetricsManagementDAO;
@@ -35,52 +37,64 @@ public class SonarMetricsManagementServiceImpl implements SonarMetricsManagement
 	MessageSource messageSource;
 
 	@Override
-	public Map <String, Graph> getSonarMetricsData(Integer projectId) {
+	public Map<String, Graph> getSonarMetricsData(Integer projectId) {
 		logger.info("Request in getSonarMetricsData of SonarMetricsManagementServiceImpl");
-		Map <String, Graph> engMap= new HashMap<String, Graph>();
+		Map<String, Graph> engMap = new HashMap<String, Graph>();
 		List<SonarMetrics> sonarMetrics = new ArrayList<SonarMetrics>();
-		List<Trackers> trackers = sonarMetricsManagementDAO.getSonarMetricsData(projectId);
+		List<Trackers> trackers = sonarMetricsManagementDAO
+				.getSonarMetricsData(projectId);
+		
+		Graph codeComplexityGraph = new Graph();
+		ArrayList<Double> codeComplexityGraphData = new ArrayList<Double>();
+		ArrayList<String> codeComplexityLabels = new ArrayList<String>();
+
+		Graph blockerGraph = new Graph();
+		ArrayList<Double> blockerIssueGraphData = new ArrayList<Double>();
+		ArrayList<String> blockerIssueLabels = new ArrayList<String>();
+
+		Graph technicalDebtGraph = new Graph();
+		ArrayList<Double> technicalDebtGraphData = new ArrayList<Double>();
+		ArrayList<String> technicalDebtLables = new ArrayList<String>();
+
+		Graph duplicatedLineGraph = new Graph();
+		ArrayList<Double> duplicateLineGraphData = new ArrayList<Double>();
+		ArrayList<String> duplicateLineLabels = new ArrayList<String>();
+
 		for (Trackers track : trackers) {
-			Graph g = new Graph();
-			ArrayList<Double> graphData = new ArrayList<Double>();
-			ArrayList<String> labels = new ArrayList<String>();
-			graphData.add((track.getComplexity()));
-			labels.add(track.getSprint());
-			g.setGraphData(graphData);
-			g.setLabels(labels);
-			engMap.put("Code Violation",g);
-			
-			
-			Graph g1 = new Graph();
-			ArrayList<Double> graphData1 = new ArrayList<Double>();
-			ArrayList<String> labels1 = new ArrayList<String>();
-			graphData1.add((track.getBlockers().doubleValue()));
-			labels1.add(track.getSprint());
-			g1.setGraphData(graphData1);
-			g1.setLabels(labels1);
-			engMap.put("Blockers",g1);
-			
-			
-			Graph g2 = new Graph();
-			ArrayList<Double> graphData2 = new ArrayList<Double>();
-			ArrayList<String> labels2 = new ArrayList<String>();
-			graphData2.add((track.getTechnicalDebt()));
-			labels2.add(track.getSprint());
-			g2.setGraphData(graphData2);
-			g2.setLabels(labels2);
-			engMap.put("Technical Debt",g2);
-			
-			
-			Graph g3 = new Graph();
-			ArrayList<Double> graphData3 = new ArrayList<Double>();
-			ArrayList<String> labels3 = new ArrayList<String>();
-			graphData3.add((track.getCommentedLines().doubleValue()));
-			labels3.add(track.getSprint());
-			g3.setGraphData(graphData3);
-			g3.setLabels(labels);
-			engMap.put("Commented Lines",g3);
+
+			codeComplexityGraphData.add((track.getComplexity()));
+			codeComplexityLabels.add(track.getSprint());
+
+			blockerIssueGraphData.add((track.getBlockers().doubleValue()));
+			blockerIssueLabels.add(track.getSprint());
+
+			technicalDebtGraphData.add((track.getTechnicalDebt()));
+			technicalDebtLables.add(track.getSprint());
+
+			duplicateLineGraphData
+					.add((track.getDuplicateLines().doubleValue()));
+			duplicateLineLabels.add(track.getSprint());
 
 		}
+
+		codeComplexityGraph.setGraphData(codeComplexityGraphData);
+		codeComplexityGraph.setLabels(codeComplexityLabels);
+		engMap.put("Code Complexity", codeComplexityGraph);
+
+		blockerGraph.setGraphData(blockerIssueGraphData);
+		blockerGraph.setLabels(blockerIssueLabels);
+		engMap.put("Blockers", blockerGraph);
+
+		technicalDebtGraph.setGraphData(technicalDebtGraphData);
+		technicalDebtGraph.setLabels(technicalDebtLables);
+		engMap.put("Technical Debt", technicalDebtGraph);
+		
+		duplicatedLineGraph.setGraphData(duplicateLineGraphData);
+		duplicatedLineGraph.setLabels(codeComplexityLabels);
+		engMap.put("Commented Lines", duplicatedLineGraph);
+		
 		return engMap;
+
+		
 	}
 }
