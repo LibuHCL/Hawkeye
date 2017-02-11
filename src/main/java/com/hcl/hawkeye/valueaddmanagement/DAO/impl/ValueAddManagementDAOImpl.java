@@ -103,7 +103,7 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 	}
 
 	private void updateValueIndex(Map<Integer, ValueIndex> valueIndex, Integer portfolioId) {
-		String proposedIdeasQuery = " SELECT VALUE.PROJECTID,  VALUE.YR, "
+		String proposedIdeasQuery = " SELECT VALUE.PORTFOLIOID,  VALUE.YR, "
 				+ "  SUM(IF(MON = 'January', VALUE.TOTAL, 0)) AS 'JAN',  "
 				+ " SUM(IF(MON = 'February', VALUE.TOTAL, 0)) AS 'FEB',  "
 				+ " SUM(IF(MON = 'March', VALUE.TOTAL, 0)) AS 'MAR',  "
@@ -116,11 +116,11 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 				+ " SUM(IF(MON = 'October', VALUE.TOTAL, 0)) AS 'OCT',  "
 				+ " SUM(IF(MON = 'November', VALUE.TOTAL, 0)) AS 'NOV',  "
 				+ " SUM(IF(MON = 'December', VALUE.TOTAL, 0)) AS 'DEC'  " + " FROM   "
-				+ " ( SELECT PROJECTID,  MONTHNAME(PROPOSED_DATE) as MON, YEAR(PROPOSED_DATE) AS YR,   "
+				+ " ( SELECT PORTFOLIOID,  MONTHNAME(PROPOSED_DATE) as MON, YEAR(PROPOSED_DATE) AS YR,   "
 				+ " COUNT(1) AS TOTAL   " + " FROM VALUEADD   " + " WHERE             " + " PORTFOLIOID = ?   "
-				+ " GROUP BY PROJECTID, YR   " + " ) VALUE   " + " GROUP BY VALUE.PROJECTID, VALUE.YR;";
+				+ " GROUP BY PORTFOLIOID, YR   " + " ) VALUE   " + " GROUP BY VALUE.PORTFOLIOID, VALUE.YR;";
 
-		String acceptedIdeasQuery = "  SELECT VALUE.PROJECTID,  VALUE.YR, "
+		String acceptedIdeasQuery = "  SELECT VALUE.PORTFOLIOID,  VALUE.YR, "
 				+ "  SUM(IF(MON = 'January', VALUE.TOTAL, 0)) AS 'JAN',  "
 				+ "   SUM(IF(MON = 'February', VALUE.TOTAL, 0)) AS 'FEB',  "
 				+ "   SUM(IF(MON = 'March', VALUE.TOTAL, 0)) AS 'MAR',  "
@@ -133,10 +133,10 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 				+ "  SUM(IF(MON = 'October', VALUE.TOTAL, 0)) AS 'OCT',  "
 				+ "  SUM(IF(MON = 'November', VALUE.TOTAL, 0)) AS 'NOV',  "
 				+ "   SUM(IF(MON = 'December', VALUE.TOTAL, 0)) AS 'DEC'  " + "   FROM  "
-				+ "  ( SELECT PROJECTID,  MONTHNAME(PROPOSED_DATE) as MON, YEAR(PROPOSED_DATE) AS YR,  "
+				+ "  ( SELECT PORTFOLIOID,  MONTHNAME(PROPOSED_DATE) as MON, YEAR(PROPOSED_DATE) AS YR,  "
 				+ "  COUNT(1) AS TOTAL  " + "  	FROM VALUEADD  " + "  	WHERE             " + "   PORTFOLIOID = ? AND  "
 				+ "   (VALUEADD_STATUS != 'Proposed' AND VALUEADD_STATUS != 'Rejected')  "
-				+ "   GROUP BY PROJECTID, YR  " + "  ) VALUE  " + "  GROUP BY VALUE.PROJECTID, VALUE.YR; ";
+				+ "   GROUP BY PORTFOLIOID, YR  " + "  ) VALUE  " + "  GROUP BY VALUE.PORTFOLIOID, VALUE.YR; ";
 		List<Map<String, Object>> proposedList = jdbcTemplate.queryForList(proposedIdeasQuery,
 				new Object[] { portfolioId });
 		List<Map<String, Object>> acceptedList = jdbcTemplate.queryForList(acceptedIdeasQuery,
@@ -260,7 +260,7 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 
 	private ArrayList<Integer> getValueAddAccepted(Integer id, String queryCondition) {
 		ArrayList<Integer> acceptedList = new ArrayList<Integer>();
-		String valueAddAcceptedQuery = " SELECT VALUE.PROGRAMID, "
+		String valueAddAcceptedQuery = " SELECT VALUE."+queryCondition+", "
 				+ "  SUM(IF(MON = 'January', VALUE.TOTAL, 0)) AS 'JAN', "
 				+ "  SUM(IF(MON = 'February', VALUE.TOTAL, 0)) AS 'FEB', "
 				+ "   SUM(IF(MON = 'March', VALUE.TOTAL, 0)) AS 'MAR', "
@@ -273,10 +273,10 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 				+ " SUM(IF(MON = 'October', VALUE.TOTAL, 0)) AS 'OCT', "
 				+ " SUM(IF(MON = 'November', VALUE.TOTAL, 0)) AS 'NOV', "
 				+ " SUM(IF(MON = 'December', VALUE.TOTAL, 0)) AS 'DEC' " + "  FROM   "
-				+ " (SELECT PROGRAMID,  MONTHNAME(PROPOSED_DATE) as MON,  " + " COUNT(1) AS TOTAL  "
+				+ " (SELECT "+queryCondition+", MONTHNAME(PROPOSED_DATE) as MON,  " + " COUNT(1) AS TOTAL  "
 				+ " 	FROM VALUEADD  " + " 	WHERE " + queryCondition + " = ? " + " AND  "
 				+ " 	VALUEADD_STATUS != 'Rejected' AND   " + "  PROPOSED_DATE >= DATE_SUB(NOW(),INTERVAL 1 YEAR)  "
-				+ "  GROUP BY PROGRAMID  " + " ) VALUE  " + " GROUP BY VALUE.PROGRAMID; ";
+				+ "  GROUP BY "+ queryCondition + " ) VALUE  " + " GROUP BY VALUE."+queryCondition+"; ";
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(valueAddAcceptedQuery, new Object[] { id });
 		for (Map<String, Object> row : list) {
 			updateListMonthwise(row, acceptedList);
@@ -286,7 +286,7 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 
 	private ArrayList<Integer> getValueAddProposed(Integer id, String queryCondition) {
 		ArrayList<Integer> proposedList = new ArrayList<Integer>();
-		String valueAddProposedQuery = " SELECT VALUE.PROGRAMID, "
+		String valueAddProposedQuery = " SELECT VALUE."+queryCondition+", "
 				+ "  SUM(IF(MON = 'January', VALUE.TOTAL, 0)) AS 'JAN', "
 				+ "  SUM(IF(MON = 'February', VALUE.TOTAL, 0)) AS 'FEB', "
 				+ "   SUM(IF(MON = 'March', VALUE.TOTAL, 0)) AS 'MAR', "
@@ -299,10 +299,10 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 				+ " SUM(IF(MON = 'October', VALUE.TOTAL, 0)) AS 'OCT', "
 				+ " SUM(IF(MON = 'November', VALUE.TOTAL, 0)) AS 'NOV', "
 				+ " SUM(IF(MON = 'December', VALUE.TOTAL, 0)) AS 'DEC' " + "  FROM   "
-				+ " (SELECT PROGRAMID,  MONTHNAME(PROPOSED_DATE) as MON,  " + " COUNT(1) AS TOTAL  "
+				+ " (SELECT "+queryCondition+",  MONTHNAME(PROPOSED_DATE) as MON,  " + " COUNT(1) AS TOTAL  "
 				+ " 	FROM VALUEADD  " + " 	WHERE " + queryCondition + " = ? AND  "
-				+ "  PROPOSED_DATE >= DATE_SUB(NOW(),INTERVAL 1 YEAR)  " + "  GROUP BY PROGRAMID  " + " ) VALUE  "
-				+ " GROUP BY VALUE.PROGRAMID; ";
+				+ "  PROPOSED_DATE >= DATE_SUB(NOW(),INTERVAL 1 YEAR)  " + "  GROUP BY "+queryCondition+  " ) VALUE  "
+				+ " GROUP BY VALUE."+queryCondition+"; ";
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(valueAddProposedQuery, new Object[] { id });
 		for (Map<String, Object> row : list) {
 			updateListMonthwise(row, proposedList);
@@ -390,15 +390,15 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 
 	private ArrayList<Integer> getImplValueAddQuarterly(Integer id, String queryCondition) {
 		ArrayList<Integer> implementedList = new ArrayList<Integer>();
-		String valueAddImplementedQuery = " SELECT VALUE.PROJECTID,  "
+		String valueAddImplementedQuery = " SELECT VALUE."+queryCondition+",  "
 				+ " SUM(IF(QUARTER = '1', VALUE.TOTAL, 0)) AS 'Q1', "
 				+ "  SUM(IF(QUARTER = '2', VALUE.TOTAL, 0)) AS 'Q2', "
 				+ " SUM(IF(QUARTER = '3', VALUE.TOTAL, 0)) AS 'Q3', "
 				+ " SUM(IF(QUARTER = '4', VALUE.TOTAL, 0)) AS 'Q4'  " + " FROM "
-				+ " ( SELECT PROJECTID,  QUARTER(PROPOSED_DATE) as QUARTER,  " + " 	COUNT(1) AS TOTAL "
+				+ " ( SELECT "+queryCondition+",  QUARTER(PROPOSED_DATE) as QUARTER,  " + " 	COUNT(1) AS TOTAL "
 				+ " FROM VALUEADD " + " WHERE " + queryCondition + "= ? AND     "
 				+ " PROPOSED_DATE >= DATE_SUB(NOW(),INTERVAL 1 YEAR) " + " AND VALUEADD_STATUS = 'Implemented' "
-				+ " GROUP BY PROJECTID " + " ) VALUE " + " GROUP BY VALUE.PROJECTID; ";
+				+ " GROUP BY "+queryCondition + " ) VALUE " + " GROUP BY VALUE."+queryCondition+"; ";
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(valueAddImplementedQuery, new Object[] { id });
 		for (Map<String, Object> row : list) {
 			updateListQuarterly(row, implementedList);
@@ -409,16 +409,16 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 
 	private ArrayList<Integer> getApprovedValueAddQuarterly(Integer id, String queryCondition) {
 		ArrayList<Integer> approvedList = new ArrayList<Integer>();
-		String valueAddImplementedQuery = " SELECT VALUE.PROJECTID,  "
+		String valueAddImplementedQuery = " SELECT VALUE."+queryCondition+",  "
 				+ " SUM(IF(QUARTER = '1', VALUE.TOTAL, 0)) AS 'Q1',   "
 				+ " SUM(IF(QUARTER = '2', VALUE.TOTAL, 0)) AS 'Q2',   "
 				+ " SUM(IF(QUARTER = '3', VALUE.TOTAL, 0)) AS 'Q3',   "
 				+ " SUM(IF(QUARTER = '4', VALUE.TOTAL, 0)) AS 'Q4'      " + " FROM   "
-				+ " ( SELECT PROJECTID,  QUARTER(PROPOSED_DATE) as QUARTER,    " + " COUNT(1) AS TOTAL   "
+				+ " ( SELECT "+queryCondition+",  QUARTER(PROPOSED_DATE) as QUARTER,    " + " COUNT(1) AS TOTAL   "
 				+ " 		FROM VALUEADD   " + " WHERE " + queryCondition + "= ? AND        "
 				+ "             PROPOSED_DATE >= DATE_SUB(NOW(),INTERVAL 1 YEAR)   "
 				+ "             AND (VALUEADD_STATUS != 'Proposed' AND VALUEADD_STATUS != 'Rejected')   "
-				+ "             GROUP BY PROJECTID  " + " 			) VALUE   " + " GROUP BY VALUE.PROJECTID; ";
+				+ "             GROUP BY "+queryCondition+  " ) VALUE   " + " GROUP BY VALUE."+queryCondition+"; ";
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(valueAddImplementedQuery, new Object[] { id });
 		for (Map<String, Object> row : list) {
 			updateListQuarterly(row, approvedList);
