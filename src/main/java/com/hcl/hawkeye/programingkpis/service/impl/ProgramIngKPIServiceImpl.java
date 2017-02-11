@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.hcl.hawkeye.Exceptions.IngKpiRetrievalException;
 import com.hcl.hawkeye.escalationmanagement.service.EscalationManagementService;
+import com.hcl.hawkeye.feedbacktracker.service.impl.FeedbackTrackerServiceImpl;
 import com.hcl.hawkeye.portfolio.DO.Graph;
 import com.hcl.hawkeye.programingkpis.DO.KPIType;
 import com.hcl.hawkeye.programingkpis.DO.KPIValue;
@@ -52,6 +53,9 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 	
 	@Autowired
 	EscalationManagementService emService;
+	
+	@Autowired
+	FeedbackTrackerServiceImpl feedBackService;
 	
 	@Override
 	public Result getOperationalKpiResults(int projectId) {
@@ -287,6 +291,9 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 		int[] intVal = {1,2,3,4}; 
 		
 		for (int i : intVal) {
+			String[] labels = env.getProperty("strategicalkpi.satakeholders").split(",");
+			ArrayList<String> labelsList = new ArrayList<String>();
+			Collections.addAll(labelsList, labels);
 			if(i == 1) {
 				KPIValue kv1 = new KPIValue();
 				kv1.setName(env.getProperty("strategicalkpi.name1"));
@@ -297,22 +304,21 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 			}
 			
 			if(i == 2) {
-				Graph eDetails = null;
+				Graph feedDetails = feedBackService.getnoofFeedBacksPerQtAtPerfolioLevel(portfolioId, "STAKEHOLDER");
+				
 				KPIValue kv2 = new KPIValue();
 				kv2.setName(env.getProperty("strategicalkpi.name2"));
-				
+				kv2.setGraphdataOfIdeas(feedDetails.getGraphData());
+				kv2.setLabels(labelsList);		
 				StrkVList.add(kv2);
 			}
 			
 			if(i == 3) {
-				
-				String[] labels = env.getProperty("strategicalkpi.satakeholders").split(",");
-				ArrayList<String> labelsList = new ArrayList<String>();
-				Collections.addAll(labelsList, labels);
-				
+				Graph feedDetails = feedBackService.getnoofFeedBacksPerQtAtPerfolioLevel(portfolioId, "VENDOR");
 				KPIValue kv2 = new KPIValue();
 
 				kv2.setName(env.getProperty("strategicalkpi.name3"));
+				kv2.setGraphdataOfIdeas(feedDetails.getGraphData());
 				kv2.setLabels(labelsList);
 				StrkVList.add(kv2);
 			}

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import com.hcl.hawkeye.Exceptions.FeedbackTrackException;
 import com.hcl.hawkeye.FeedbackTrackerDO.FeedbackDetails;
 import com.hcl.hawkeye.feedbacktracker.DAO.FeedbackTrackerDAO;
+import com.hcl.hawkeye.portfolio.DO.Graph;
 
 @Repository
 public class FeedbackTrackerDAOImpl implements FeedbackTrackerDAO {
@@ -131,4 +132,45 @@ public class FeedbackTrackerDAOImpl implements FeedbackTrackerDAO {
 		return feebkdetailList;
 	}
 
+	@Override
+	public Graph getnoofFeedBacksPerQtAtPerfolioLevel(int portfolioId, String repType){
+		ArrayList<Double> graphData = new ArrayList<Double>();
+		ArrayList<String> labels = new ArrayList<String>();
+		
+		Graph escDetList = new Graph();
+		String sql_noofesc = "SELECT  VALUE.PORTFOLIO_ID ,"
+			 +" SUM(IF(QUARTER = '1', VALUE.TOTAL, 0)) AS 'Q1', "
+			 +" SUM(IF(QUARTER = '2', VALUE.TOTAL, 0)) AS 'Q2'," 
+			 +" SUM(IF(QUARTER = '3', VALUE.TOTAL, 0)) AS 'Q3', " 
+			 +" SUM(IF(QUARTER = '4', VALUE.TOTAL, 0)) AS 'Q4' FROM " 
+			 +" (SELECT esc.FEEDBACKID,pf.PORTFOLIO_ID, QUARTER(esc.FEEDBACK_DATE) as QUARTER,  COUNT(1) AS TOTAL" 
+			 +" FROM FEEDBACK_TRACKER esc, PROJECT proj,PROGRAM prog, PORTFOLIO pf "
+			 +" WHERE pf.PORTFOLIO_ID=prog.PORTFOLIO_ID "
+			 +" AND  prog.PROGRAMID = proj.PROGRAM_ID "
+             +" AND  proj.PROJECTID =esc.PROJECTID"
+			 +" AND  pf.PORTFOLIO_ID=? AND REPORTER_TYPE=?" 
+			 +" AND esc.FEEDBACK_DATE >= DATE_SUB(NOW(),INTERVAL 1 YEAR)"
+			+" GROUP BY esc.FEEDBACKID, QUARTER) VALUE GROUP BY VALUE.PORTFOLIO_ID";
+               
+		
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql_noofesc, new Object[] { portfolioId,repType });
+		for (Map<String, Object> row : list) {
+			graphData.add(Double.parseDouble(String.valueOf(row.get("Q1"))));
+			graphData.add(Double.parseDouble(String.valueOf(row.get("Q2"))));
+			graphData.add(Double.parseDouble(String.valueOf(row.get("Q3"))));
+			graphData.add(Double.parseDouble(String.valueOf(row.get("Q4"))));
+		}
+		updateQuarterlyLabels(labels);
+		escDetList.setGraphData(graphData);
+		escDetList.setLabels(labels);
+
+		return escDetList;
+	}
+	
+	private void updateQuarterlyLabels(ArrayList<String> labels) {
+		labels.add("Q1");
+		labels.add("Q2");
+		labels.add("Q3");
+		labels.add("Q4");
+	}
 }

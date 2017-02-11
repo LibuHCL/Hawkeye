@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.hcl.hawkeye.FeedbackTrackerDO.FeedbackDetails;
 import com.hcl.hawkeye.feedbacktracker.DAO.FeedbackTrackerDAO;
 import com.hcl.hawkeye.feedbacktracker.service.FeedbackTrackerService;
+import com.hcl.hawkeye.portfolio.DO.Graph;
 
 @Service
 public class FeedbackTrackerServiceImpl implements FeedbackTrackerService {
@@ -36,6 +37,14 @@ public class FeedbackTrackerServiceImpl implements FeedbackTrackerService {
 		// TODO Auto-generated method stub
 		logger.info("Inside getFeedbackPerQtProject method in FeedbackTrackerServiceImpl");
 		return feedbkDao.getFeedbackPerProgram(reporterType,programId);
+		
+	}
+	
+	@Override
+	public Graph getnoofFeedBacksPerQtAtPerfolioLevel(int portfolioId,String reporterType) {
+		// TODO Auto-generated method stub
+		logger.info("Inside getFeedbackPerQtProject method in FeedbackTrackerServiceImpl");
+		return feedbkDao.getnoofFeedBacksPerQtAtPerfolioLevel( portfolioId, reporterType);
 		
 	}
 

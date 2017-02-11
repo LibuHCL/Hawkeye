@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
+
 import com.hcl.hawkeye.FeedbackTrackerDO.FeedbackDetails;
 import com.hcl.hawkeye.feedbacktracker.service.FeedbackTrackerService;
+import com.hcl.hawkeye.portfolio.DO.Graph;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -63,5 +65,16 @@ public class FeedbackTrackerController {
     	return new ResponseEntity<List<FeedbackDetails>> (feedbackdetails, HttpStatus.CREATED);
     	
     }
-       
+     
+    
+    @RequestMapping(value = "/getnoofFeedBacksPerQtAtPerfolioLevel/{portfolioId}/{reporterType}", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public ResponseEntity<Graph>  getnoofFeedBacksPerQtAtPerfolioLevel(@PathVariable("reporterType") String reporterType,@PathVariable("portfolioId") int portfolioId){
+    	
+    	logger.info("Inside getnoofFeedBacksPerQtAtPerfolioLevel method in Controller:"+reporterType+portfolioId);
+    	Graph feedbackdetails = feedbkService.getnoofFeedBacksPerQtAtPerfolioLevel(portfolioId,reporterType);
+    	logger.info("reporterType and projectid Details recieved: " + feedbackdetails);
+    	return new ResponseEntity<Graph> (feedbackdetails, HttpStatus.CREATED);
+    	
+    } 
   }
