@@ -182,7 +182,7 @@ public class ResourceManagementDAOImpl implements ResourceManagementDAO {
 		ArrayList<Double> graphData = new ArrayList<Double>();
 		ArrayList<String> labels = new ArrayList<String>();
 		String sql = "select QUARTER(PROJECT_JOINING_DATE) AS quarter, count(EMPLOYEEID) as count from RESOURCE where PROJECTID=? and WORK_LOCATION='OFFSHORE' "
-				+ "group by QUARTER(PROJECT_JOINING_DATE) order by QUARTER(PROJECT_JOINING_DATE) DESC;";
+				+ "group by QUARTER(PROJECT_JOINING_DATE) order by QUARTER(PROJECT_JOINING_DATE)";
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql,new Object[] { projectId });
 		
 		for (Map<String, Object> row : list) {			
