@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +51,13 @@ public class ProjectCostServiceImpl implements ProjectCostService {
 		List<PortfolioInfo> portfoliosList = costDAO.getAllPortfolioDetails();
 		return portfoliosList;
 	}
+	
+	@Override
+	public Map<Integer, Integer> getProjectCostForProjects(List<Integer> projIdList) {
 
+		return costDAO.getProjectCostForProjects(projIdList);
+
+	}
+
+	
 }

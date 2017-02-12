@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,11 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import com.hcl.hawkeye.portfolio.DO.PortfolioInfo;
+import com.hcl.hawkeye.portfolio.DO.Project;
 import com.hcl.hawkeye.projectcost.DAO.ProjectCostDAO;
 import com.hcl.hawkeye.projectcost.DO.ProjectCostDetails;
+import com.hcl.hawkeye.utils.HawkEyeConstants;
 import com.hcl.hawkeye.utils.HawkEyeUtils;
 
 @Repository
@@ -117,7 +121,47 @@ public class ProjectCostDAOImpl implements ProjectCostDAO {
 		return portfolioList;
 
 	}
-
 	
+	@Override
+	public Map<Integer, Integer> getProjectCostForProjects(List<Integer> projIdList) {
+		logger.info("Inside getProjectCost method in ProjectCostDAOImpl::getProjectCost() ");
+
+		//List<Integer> projIdList = new ArrayList<Integer>();
+		Map<Integer,Integer> projCostMap = new HashMap<Integer, Integer>();
+			
+		String list="";
+		for (Integer i : projIdList){
+			list=list+i+",";
+		}
+		
+		list = list.substring(0,list.lastIndexOf(","));
+		try {
+		    String PROJECT_COST_WITH_ID_SQL = "SELECT * FROM PROJECT_COST WHERE PROJECT_ID IN ("+list+") ";	
+			List<Map<String,Object>> costList= jdbcTemplate.queryForList(PROJECT_COST_WITH_ID_SQL);
+			if(costList  != null && costList.size() >0){
+				for (Map<String, Object> row : costList) {
+					Double plannedCost =(Double) row.get("PLANNED_COST");
+					Double actualCost =(Double) row.get("ACTUAL_COST");
+					int ragStatus;
+					
+					if(plannedCost== null || actualCost== null){
+						ragStatus =HawkEyeConstants.GREEN;
+						
+					}
+					ragStatus =HawkEyeUtils.getRAGStatus((int) ((actualCost/plannedCost)*100));
+					projCostMap.put( Integer.parseInt((row.get("PROJECT_ID")).toString()),ragStatus);
+					
+		        } 
+			}
+		} catch (Exception e) {
+
+		}
+		
+		
+
+
+		logger.info("Project cost details are successfully fetched for project with ID: " );
+		return projCostMap;
+	}
 
 }

@@ -5,6 +5,13 @@ import java.util.ArrayList;
 public class Graph {	
 	ArrayList<Double> graphData;
 	ArrayList<String> labels;
+	ArrayList<Integer> graphDataInt;
+	public ArrayList<Integer> getGraphDataInt() {
+		return graphDataInt;
+	}
+	public void setGraphDataInt(ArrayList<Integer> graphDataInt) {
+		this.graphDataInt = graphDataInt;
+	}
 	public ArrayList<Double> getGraphData() {
 		return graphData;
 	}

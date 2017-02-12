@@ -2,6 +2,7 @@ package com.hcl.hawkeye.projectdashboard.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +52,11 @@ public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 		Projects project = new Projects();
 		List<DashBoardProjectslist> listDBProjects  = new ArrayList<DashBoardProjectslist>();
 		List<DashBoardResource>  res = new ArrayList<DashBoardResource>();
+		List<Integer> projIdList = new ArrayList<Integer>();
+		for(Project costProj :listOfProjects){
+			projIdList.add(costProj.getProjectId());
+		}
+		Map<Integer, Integer> projCostMap = projCostService.getProjectCostForProjects(projIdList);
 		
 		for(Project proj1 :listOfProjects){
 			DashBoardProjectslist projList =new DashBoardProjectslist();
@@ -62,7 +68,7 @@ public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 			projList.setStartdate(proj1.getCreationDate());
 			projList.setEnddate(proj1.getEndDate());
 			projList.setRisks(0);
-			projList.setCost(getCostData(proj1.getProjectId()));
+			projList.setCost(projCostMap.get(proj1.getProjectId()) != null ? projCostMap.get(proj1.getProjectId()) : HawkEyeConstants.GREEN);
 			projList.setSchedule(projMgmtService.getVelocityOfProject(proj1.getProjectId()));
 			projList.setQuality(codeQService.getCodeQualityRAGStatus());
 			projList.setTechmanager(resourceService.getProjectManager(proj1.getProjectId()));
