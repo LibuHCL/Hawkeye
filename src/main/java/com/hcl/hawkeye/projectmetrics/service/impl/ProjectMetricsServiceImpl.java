@@ -177,34 +177,40 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 		pMetResults.setProgramName(env.getProperty("engmetric.progname"));
 		pMetResults.setProgramId(env.getProperty("engmetric.progId"));
 		
+		
+		// Code Complexity
 		Metrics codeMet = new Metrics();
 		
 		codeMet.setKey(env.getProperty("metric.code.progname"));
-		codeMet.setGraphdata(engMap.get("Code Complexity").getGraphData());
-		codeMet.setLabels(engMap.get("Code Complexity").getLabels());		
+		codeMet.setGraphdata(engMap.get(env.getProperty("metric.code.progname")).getGraphData());
+		codeMet.setLabels(engMap.get(env.getProperty("metric.code.progname")).getLabels());		
 		engMetrics.add(codeMet);
 		
+		// Blockers
+		Metrics blockeMet = new Metrics();
+		
+		blockeMet.setKey(env.getProperty("metric.blockeMet.progname"));
+		blockeMet.setGraphdata(engMap.get(env.getProperty("metric.blockeMet.progname")).getGraphData());
+		blockeMet.setLabels(engMap.get(env.getProperty("metric.blockeMet.progname")).getLabels());		
+		engMetrics.add(blockeMet);
+		
+		//Technical DEBT
 		Metrics techDebtMet = new Metrics();
 		String[] labels = env.getProperty("metric.debt.labels").split(",");
 		ArrayList<String> labelsList = new ArrayList<String>();
 		Collections.addAll(labelsList, labels);
 		techDebtMet.setKey(env.getProperty("metric.techDebt.progname"));
-		techDebtMet.setGraphdata(engMap.get("Technical Debt").getGraphData());
+		techDebtMet.setGraphdata(engMap.get(env.getProperty("metric.techDebt.progname")).getGraphData());
 		techDebtMet.setLabels(labelsList);		
 		engMetrics.add(techDebtMet);
 		
-		Metrics blockeMet = new Metrics();
 		
-		blockeMet.setKey(env.getProperty("metric.blockeMet.progname"));
-		blockeMet.setGraphdata(engMap.get("Blockers").getGraphData());
-		blockeMet.setLabels(engMap.get("Blockers").getLabels());		
-		engMetrics.add(blockeMet);
-		
+		// Duplicate lines
 		Metrics commnetMet = new Metrics();
 		
 		commnetMet.setKey(env.getProperty("metric.commnetMet.progname"));
-		commnetMet.setGraphdata(engMap.get("Duplicate Lines").getGraphData());
-		commnetMet.setLabels(engMap.get("Duplicate Lines").getLabels());		
+		commnetMet.setGraphdata(engMap.get(env.getProperty("metric.commnetMet.progname")).getGraphData());
+		commnetMet.setLabels(engMap.get(env.getProperty("metric.commnetMet.progname")).getLabels());		
 		engMetrics.add(commnetMet);
 		
 		pMetResults.setMetrics(engMetrics);
