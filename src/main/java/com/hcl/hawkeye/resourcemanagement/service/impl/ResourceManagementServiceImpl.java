@@ -3,6 +3,7 @@ package com.hcl.hawkeye.resourcemanagement.service.impl;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,6 +81,11 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
 	@Override
 	public String getProjectManager(Integer projectId) {
 		return resourceDAO.getProjectManager(projectId);
+	}
+	@Override
+	public Map<Integer, String> getProjectCostForProjects(
+			List<Integer> projIdList) {
+		return resourceDAO.getProjectCostForProjects(projIdList);
 	}
 
 }

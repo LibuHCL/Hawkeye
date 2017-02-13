@@ -211,4 +211,26 @@ public class ResourceManagementDAOImpl implements ResourceManagementDAO {
 		return prjctManagerName;
 	}
 	
+	@Override
+	public Map<Integer, String> getProjectCostForProjects(List<Integer> projIdList)
+	{
+		String list="";
+		for (Integer i : projIdList){
+			list=list+i+",";
+		}
+		
+		list = list.substring(0,list.lastIndexOf(","));
+		
+		Map<Integer, String> proMap = new HashMap<Integer, String>();
+		String prjctManagerQuery = "SELECT proj.PROJECTID as projectId, CONCAT(FIRSTNAME,' ',LASTNAME) as project_manager FROM RESOURCE r, PROJECT proj  WHERE r.EMPLOYEEID = proj.TECHNICAL_PROJECT_MANAGER_ID AND  proj.PROJECTID IN("+list+")";
+		List<Map<String, Object>> managerList =  jdbcTemplate.queryForList(prjctManagerQuery);
+		
+		for (Map<String, Object> row : managerList) {
+			row.get("projId");
+			row.get("project_manager");
+			proMap.put(Integer.parseInt(row.get("projectId").toString()), (row.get("project_manager")).toString());
+		}
+		return proMap;
+	}
+	
 }
