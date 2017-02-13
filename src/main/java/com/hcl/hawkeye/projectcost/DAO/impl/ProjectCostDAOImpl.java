@@ -113,9 +113,9 @@ public class ProjectCostDAOImpl implements ProjectCostDAO {
 					PortfolioInfo info = new PortfolioInfo();
 					info.setActualCost((double) row.get("actual_cost"));
 					info.setPlannedCost((double) row.get("planned_cost"));
-					info.setQuarter((Long) row.get("Quarter"));
+					info.setQuarter(Long.parseLong(row.get("Quarter").toString()));
 					info.setRoi((double) row.get("roi"));
-					info.setYear((Long) row.get("yr"));
+					info.setYear(Long.parseLong(row.get("yr").toString()));
 					info.setPortfolioId(portfolioIdsList.get(i));
 					portfolioList.add(info);
 				}
