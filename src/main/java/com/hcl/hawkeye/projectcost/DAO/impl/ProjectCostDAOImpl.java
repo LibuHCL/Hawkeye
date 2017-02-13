@@ -103,8 +103,8 @@ public class ProjectCostDAOImpl implements ProjectCostDAO {
 			for (int i = 0; i < portfolioIdsList.size(); i++) {
 				
 				String sql ="SELECT QUARTER(CAPTURE_DATE) Quarter, YEAR(CAPTURE_DATE) yr, ROUND(sum(ACTUAL_COST),2) actual_cost, ROUND(sum(PLANNED_COST),2) planned_cost," 
-				+" AVG(ROI) roi from PROJECT_COST where PROJECT_ID in(select distinct(proj.PROJECTID) from PROJECT proj, PROGRAM prog "
-				+"where  proj.PROGRAM_ID = prog.PROGRAMID and prog.PORTFOLIO_ID=1) GROUP BY QUARTER(CAPTURE_DATE) ORDER BY YEAR(CAPTURE_DATE), QUARTER(CAPTURE_DATE)";
+				+" ROUND(AVG(ROI),2) roi from PROJECT_COST where PROJECT_ID in(select distinct(proj.PROJECTID) from PROJECT proj, PROGRAM prog "
+				+"where  proj.PROGRAM_ID = prog.PROGRAMID AND " + portfolioIdsList.get(i) + ") GROUP BY QUARTER(CAPTURE_DATE) ORDER BY YEAR(CAPTURE_DATE), QUARTER(CAPTURE_DATE)";
 				/*String sql = "SELECT QUARTER(CAPTURE_DATE) Quarter, YEAR(CAPTURE_DATE) yr, sum(ACTUAL_COST) actual_cost, sum(PLANNED_COST) planned_cost, sum(ROI) roi from PROJECT_COST where PROJECT_ID in(select distinct(PROJECT_ID) from PROJECT_COST,PROJECT, PROGRAM, PORTFOLIO "
 						+ "where PROJECT_COST.PROJECT_ID = PROJECT.PROJECTID and PROJECT.PROGRAM_ID = PROGRAM.PROGRAMID and "
 						+ "PROGRAM.PORTFOLIO_ID=" + portfolioIdsList.get(i) + ")";*/
