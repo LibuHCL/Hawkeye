@@ -62,8 +62,6 @@ public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 		for(Project proj1 :listOfProjects){
 			DashBoardProjectslist projList =new DashBoardProjectslist();
 			logger.info("Project Id: {}",proj1);
-			
-			//resMgmtService.getResourcesCountByProject(Integer.toString(proj1.getProjectId()));
 			projList.setId(proj1.getProjectId());
 			projList.setName(proj1.getProjName());
 			projList.setStartdate(proj1.getCreationDate());

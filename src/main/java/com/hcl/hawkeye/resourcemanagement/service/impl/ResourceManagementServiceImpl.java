@@ -76,6 +76,7 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
 	public String getProgramManager(Integer programId) {
 		return resourceDAO.getProgramManager(programId);
 	}
+	
 	@Override
 	public String getProjectManager(Integer projectId) {
 		return resourceDAO.getProjectManager(projectId);

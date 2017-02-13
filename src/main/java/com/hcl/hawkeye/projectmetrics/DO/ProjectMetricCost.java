@@ -7,6 +7,7 @@ public class ProjectMetricCost {
 	private String postfix;
 	private String symbol;
 	private int roiValue;
+	
 	public String getKey() {
 		return key;
 	}
