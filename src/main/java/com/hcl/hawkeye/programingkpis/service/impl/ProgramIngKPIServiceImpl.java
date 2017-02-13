@@ -96,7 +96,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 			}
 			
 			if(i == 2) {
-				Map<String, Integer> priorityHighVal = pmService.getPriorityOfIssue(projectId, env.getProperty("project.priority.high"));
+				Map<String, Integer> priorityBlockerVal = pmService.getPriorityOfIssue(projectId, env.getProperty("project.priority.blocker"));
 				Map<String, Integer> priorityCriVal = pmService.getPriorityOfIssue(projectId, env.getProperty("project.priority.critical"));
 				KPIValue kv2 = new KPIValue();
 				List<Integer[]> grapData = new ArrayList<>();
@@ -107,13 +107,13 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 				serires.add(env.getProperty("incident.p2"));
 				List<String> labelData = new ArrayList<>();
 				
-				for (String key : priorityCriVal.keySet()) {
-					labelData.add(key.replace(" ", ""));
-					grapIntData1.add(priorityCriVal.get(key));
+				for (String key1 : priorityBlockerVal.keySet()) {
+					grapIntData1.add(priorityBlockerVal.get(key1));
 				}
 				
-				for (String key1 : priorityHighVal.keySet()) {
-					grapIntData2.add(priorityHighVal.get(key1));
+				for (String key : priorityCriVal.keySet()) {
+					labelData.add(key.replace(" ", ""));
+					grapIntData2.add(priorityCriVal.get(key));
 				}
 				
 				grapData.add(grapIntData1.toArray(new Integer[grapIntData1.size()]));
