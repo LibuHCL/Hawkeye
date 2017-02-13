@@ -6,6 +6,7 @@ public class ProjectMetricCost {
 	private Double value;
 	private String postfix;
 	private String symbol;
+	private int roiValue;
 	public String getKey() {
 		return key;
 	}
@@ -29,6 +30,12 @@ public class ProjectMetricCost {
 	}
 	public void setSymbol(String symbol) {
 		this.symbol = symbol;
+	}
+	public int getRoiValue() {
+		return roiValue;
+	}
+	public void setRoiValue(int roiValue) {
+		this.roiValue = roiValue;
 	}
 
 	

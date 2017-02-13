@@ -247,7 +247,7 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 		//ROI
 		ProjectMetricCost pmCost2 = new ProjectMetricCost();
 		pmCost2.setKey(env.getProperty("comm.roi"));
-		pmCost2.setValue(costDetails.getPlannedCost());
+		pmCost2.setRoiValue(costDetails.getRoi());
 		pmCost2.setPostfix(env.getProperty("comm.postfix.roi"));
 		pmCost2.setSymbol(env.getProperty("comm.symbol.roi"));
 		pmCostList.add(pmCost2);

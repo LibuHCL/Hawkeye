@@ -57,6 +57,7 @@ public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 			projIdList.add(costProj.getProjectId());
 		}
 		Map<Integer, Integer> projCostMap = projCostService.getProjectCostForProjects(projIdList);
+		String pmName= resourceService.getProgramManager(programId);
 		
 		for(Project proj1 :listOfProjects){
 			DashBoardProjectslist projList =new DashBoardProjectslist();
@@ -72,7 +73,7 @@ public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 			projList.setSchedule(projMgmtService.getVelocityOfProject(proj1.getProjectId()));
 			projList.setQuality(codeQService.getCodeQualityRAGStatus());
 			projList.setTechmanager(resourceService.getProjectManager(proj1.getProjectId()));
-			projList.setProgrammanager(resourceService.getProgramManager(programId));
+			projList.setProgrammanager(pmName);
 			projList.setCurrentsprint(1);
 			projList.setTotalsprinits(2);
 			projList.setResource(res);
