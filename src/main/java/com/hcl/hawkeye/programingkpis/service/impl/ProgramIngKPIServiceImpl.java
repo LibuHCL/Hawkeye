@@ -128,7 +128,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 			}
 			
 			if(i == 3) {
-				ValueAddAcceptedIdeas acceptedIdeas = vmService.getValueAddByAcceptedIdeas(Integer.parseInt(env.getProperty("program.program.ideaNum")));
+				ValueAddAcceptedIdeas acceptedIdeas = vmService.getValueAddByAcceptedIdeas(projectId);
 				KPIValue kv2 = new KPIValue();
 				List<Double> graphData = acceptedIdeas.getGraphdata();
 				graphData.add(0.0);
@@ -245,7 +245,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 			}
 			
 			if(i == 4) {
-				ValueCreationQuarterly valueForQuater = vmService.getQuarterlyValueByProgramId(Integer.parseInt(env.getProperty("program.program.ideaNum")));
+				ValueCreationQuarterly valueForQuater = vmService.getQuarterlyValueByProgramId(projectId);
 				KPIValue kv2 = new KPIValue();
 				List<Integer[]> grapData = new ArrayList<>();
 				for (ArrayList<Integer> integer : valueForQuater.getGraphdata()) {
