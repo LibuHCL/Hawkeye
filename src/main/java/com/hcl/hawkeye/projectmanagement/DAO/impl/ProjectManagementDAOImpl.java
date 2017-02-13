@@ -56,9 +56,6 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 			ProjectDetails pDetails = getProjectDetailsOfSprints(projectId);
 			if (null != pDetails && !pDetails.getValues().isEmpty()) {
 				for (ProjectValues pValue : pDetails.getValues()) {
-					logger.info("Status - {}", pValue.getState());
-					logger.info("Sprint name- {}", pValue.getName());
-					logger.info("Sprint id -  {}", pValue.getId());
 					if ("active".equals(pValue.getState())) {
 						sProject.setCurrentSprint(pValue.getName());
 						countOfSprints++;
