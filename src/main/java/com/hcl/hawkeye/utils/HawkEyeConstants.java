@@ -10,7 +10,7 @@ public interface HawkEyeConstants {
 	
 	public static final int MODERATE= 100;
 	
-	public static final int POOR= 85;
+	public static final int POOR= 110;
 	
 	public static final int GOOD= 90;
 	
