@@ -81,6 +81,15 @@ public class ValueAddManagementController {
 		return valueCreation;
 	}
 	
+	@RequestMapping(value="/getValueCreationByProjectId/{projectId}", method = RequestMethod.GET)
+	@ResponseBody
+	public ValueCreation getValueCreationByProjectId(@PathVariable("projectId") Integer projectId) {
+		logger.info("Requested to get the valueAdd information for Program or project");
+		ValueCreation valueCreation = new ValueCreation();
+		valueCreation = valueAddManagementService.getValueCreationByProjectId(projectId);
+		return valueCreation;
+	}
+	
 	@RequestMapping(value="/getQuartValueByProjectId/{projectId}", method = RequestMethod.GET)
 	@ResponseBody
 	public ValueCreationQuarterly getQuartValueByProjectId(@PathVariable("projectId") Integer projectId) {
