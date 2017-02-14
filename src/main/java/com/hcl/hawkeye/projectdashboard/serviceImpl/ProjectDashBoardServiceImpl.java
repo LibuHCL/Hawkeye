@@ -62,6 +62,7 @@ public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 		
 		for(Project proj1 :listOfProjects){
 			DashBoardProjectslist projList =new DashBoardProjectslist();
+			int schedule =projMgmtService.getVelocityOfProject(proj1.getProjectId());
 			logger.info("Project Id: {}",proj1);
 			projList.setId(proj1.getProjectId());
 			projList.setName(proj1.getProjName());
@@ -69,8 +70,9 @@ public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 			projList.setEnddate(proj1.getEndDate());
 			projList.setRisks(0);
 			projList.setCost(projCostMap.get(proj1.getProjectId()) != null ? projCostMap.get(proj1.getProjectId()) : HawkEyeConstants.GREEN);
-			projList.setSchedule(projMgmtService.getVelocityOfProject(proj1.getProjectId()));
-			projList.setQuality(codeQService.getCodeQualityRAGStatus());
+			projList.setSchedule(schedule);
+			//projList.setQuality(codeQService.getCodeQualityRAGStatus());
+			projList.setQuality(schedule);
 			projList.setTechmanager(projManagerMap.get(proj1.getProjectId()));
 			projList.setProgrammanager(pmName);
 			projList.setCurrentsprint(1);
