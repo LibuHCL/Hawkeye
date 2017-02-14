@@ -122,10 +122,11 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 			velInfo = gson.fromJson(velocityInfo, Velocityinfo.class);
 			Type type = new TypeToken<Map<String, Object>>() {}.getType();
 			Map<String, Object> velocityData = new Gson().fromJson(velocityInfo, type);
+			Map<String, Map<String, Map<String, Double>>> velData = new TreeMap<>();
 			if(velocityData != null){
 				for (String key : velocityData.keySet()) {
 					if ("velocityStatEntries".equals(key.trim().toString())) {
-						Map<String, Map<String, Map<String, Double>>> velData  = (Map<String, Map<String, Map<String, Double>>>) velocityData.get(key);
+						velData  = (Map<String, Map<String, Map<String, Double>>>) velocityData.get(key);
 						velInfo.setVelocityStatEntries(velData);
 					}
 				}
@@ -183,12 +184,14 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 			String url = messageSource.getMessage("jira.agile.rest.api.board.url", new Object[]{}, locale);
 			int priorityIssues = 0;
 			for (ProjectValues projectValues : pValues) {
-				String issuesInfo = jrCall.callRestAPI(url+projectId+"/sprint/"+projectValues.getId()+"/issue?fields=priority");
+				String issuesInfo = jrCall.callRestAPI(url+projectId+"/sprint/"+projectValues.getId()+"/issue?fields=issuetype,priority");
 				ProjectIssues pIssues = gson.fromJson(issuesInfo, ProjectIssues.class);
 				
 				for (Issues issue : pIssues.getIssues()) {
-					if (null != issue.getFields().getPriorityIssues() && !"UAT".equals(projectValues.getName()) && issuePriority.equals(issue.getFields().getPriorityIssues().getName())) {
-						priorityIssues++;
+					if (null != issue && null != issue.getFields() && !"UAT".equals(projectValues.getName()) && "Defect".equals(issue.getFields().getIssuetype().getName())) {
+						if (null != issue.getFields().getPriorityIssues() && !"UAT".equals(projectValues.getName()) && issuePriority.equals(issue.getFields().getPriorityIssues().getName())) {
+							priorityIssues++;
+						}
 					}
 				}
 				

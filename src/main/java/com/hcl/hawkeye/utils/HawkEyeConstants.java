@@ -10,9 +10,9 @@ public interface HawkEyeConstants {
 	
 	public static final int MODERATE= 100;
 	
-	public static final int POOR= 85;
+	public static final int POOR= 105;
 	
-	public static final int GOOD= 90;
+	public static final int GOOD= 95;
 	
 	public static final String MILLION = "million";
 	

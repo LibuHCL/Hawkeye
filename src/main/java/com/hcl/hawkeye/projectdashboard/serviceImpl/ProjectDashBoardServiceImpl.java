@@ -57,12 +57,12 @@ public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 			projIdList.add(costProj.getProjectId());
 		}
 		Map<Integer, Integer> projCostMap = projCostService.getProjectCostForProjects(projIdList);
+		Map<Integer, String> projManagerMap = resourceService.getProjectCostForProjects(projIdList);
+		String pmName= resourceService.getProgramManager(programId);
 		
 		for(Project proj1 :listOfProjects){
 			DashBoardProjectslist projList =new DashBoardProjectslist();
 			logger.info("Project Id: {}",proj1);
-			
-			//resMgmtService.getResourcesCountByProject(Integer.toString(proj1.getProjectId()));
 			projList.setId(proj1.getProjectId());
 			projList.setName(proj1.getProjName());
 			projList.setStartdate(proj1.getCreationDate());
@@ -71,8 +71,8 @@ public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 			projList.setCost(projCostMap.get(proj1.getProjectId()) != null ? projCostMap.get(proj1.getProjectId()) : HawkEyeConstants.GREEN);
 			projList.setSchedule(projMgmtService.getVelocityOfProject(proj1.getProjectId()));
 			projList.setQuality(codeQService.getCodeQualityRAGStatus());
-			projList.setTechmanager(resourceService.getProjectManager(proj1.getProjectId()));
-			projList.setProgrammanager(resourceService.getProgramManager(programId));
+			projList.setTechmanager(projManagerMap.get(proj1.getProjectId()));
+			projList.setProgrammanager(pmName);
 			projList.setCurrentsprint(1);
 			projList.setTotalsprinits(2);
 			projList.setResource(res);

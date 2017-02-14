@@ -101,17 +101,21 @@ public class ProjectCostDAOImpl implements ProjectCostDAO {
 		List<Integer> portfolioIdsList = jdbcTemplate.queryForList(portfolioListQuery, Integer.class);
 		if (0 != portfolioIdsList.size()) {
 			for (int i = 0; i < portfolioIdsList.size(); i++) {
-				String sql = "SELECT QUARTER(CAPTURE_DATE) Quarter, YEAR(CAPTURE_DATE) yr, sum(ACTUAL_COST) actual_cost, sum(PLANNED_COST) planned_cost, sum(ROI) roi from PROJECT_COST where PROJECT_ID in(select distinct(PROJECT_ID) from PROJECT_COST,PROJECT, PROGRAM, PORTFOLIO "
+				
+				String sql ="SELECT QUARTER(CAPTURE_DATE) Quarter, YEAR(CAPTURE_DATE) yr, ROUND(sum(ACTUAL_COST),2) actual_cost, ROUND(sum(PLANNED_COST),2) planned_cost," 
+				+" ROUND(AVG(ROI),2) roi from PROJECT_COST where PROJECT_ID in(select distinct(proj.PROJECTID) from PROJECT proj, PROGRAM prog "
+				+"where  proj.PROGRAM_ID = prog.PROGRAMID AND " + portfolioIdsList.get(i) + ") GROUP BY QUARTER(CAPTURE_DATE) ORDER BY YEAR(CAPTURE_DATE), QUARTER(CAPTURE_DATE)";
+				/*String sql = "SELECT QUARTER(CAPTURE_DATE) Quarter, YEAR(CAPTURE_DATE) yr, sum(ACTUAL_COST) actual_cost, sum(PLANNED_COST) planned_cost, sum(ROI) roi from PROJECT_COST where PROJECT_ID in(select distinct(PROJECT_ID) from PROJECT_COST,PROJECT, PROGRAM, PORTFOLIO "
 						+ "where PROJECT_COST.PROJECT_ID = PROJECT.PROJECTID and PROJECT.PROGRAM_ID = PROGRAM.PROGRAMID and "
-						+ "PROGRAM.PORTFOLIO_ID=" + portfolioIdsList.get(i) + ")";
+						+ "PROGRAM.PORTFOLIO_ID=" + portfolioIdsList.get(i) + ")";*/
 				List<Map<String, Object>> resultsList = jdbcTemplate.queryForList(sql);
 				for (Map<String, Object> row : resultsList) {
 					PortfolioInfo info = new PortfolioInfo();
 					info.setActualCost((double) row.get("actual_cost"));
 					info.setPlannedCost((double) row.get("planned_cost"));
-					info.setQuarter((Long) row.get("Quarter"));
+					info.setQuarter(Long.parseLong(row.get("Quarter").toString()));
 					info.setRoi((double) row.get("roi"));
-					info.setYear((Long) row.get("yr"));
+					info.setYear(Long.parseLong(row.get("yr").toString()));
 					info.setPortfolioId(portfolioIdsList.get(i));
 					portfolioList.add(info);
 				}

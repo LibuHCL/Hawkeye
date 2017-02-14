@@ -108,16 +108,15 @@ public class HawkEyeUtils {
 	 * @param value
 	 * @return
 	 */
-	public static int getRAGStatus(int value){		
+	public static int getRAGStatus(int value){	
 		
-		if (value <= HawkEyeConstants.MODERATE && value >= HawkEyeConstants.GOOD) {
-			return HawkEyeConstants.GREEN;
-		} else if (value <= HawkEyeConstants.GOOD && value <= HawkEyeConstants.POOR) {
+		if(value > HawkEyeConstants.POOR){
+			return HawkEyeConstants.RED;			
+		}else if (value > HawkEyeConstants.MODERATE && value <= HawkEyeConstants.POOR) {
 			return HawkEyeConstants.AMBER;
-		} else if (value <= HawkEyeConstants.POOR) {
-			return HawkEyeConstants.POOR;
+		} else if ( value <= HawkEyeConstants.MODERATE){
+			return HawkEyeConstants.GREEN;
 		}
-		
 		return HawkEyeConstants.GREEN;
 	}
 }

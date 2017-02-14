@@ -1,6 +1,8 @@
 package com.hcl.hawkeye.projectmanagement.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -52,7 +54,6 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 		if (27 == projectId) {
 			Velocityinfo vInfo = pmDAO.getVelocityOfProject(projectId);
 			List<VelocityOfProject> velocityList = getVelocityList(vInfo);
-			logger.info("@@@  {}",velocityList);
 			Double estimated = 0.0;
 			Double completed = 0.0;
 			if(!velocityList.isEmpty()){
@@ -66,7 +67,8 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 			count = HawkEyeUtils.getRAGStatus( (int)((completed/estimated)*100));
 		} else {
 			Random rm = new Random();
-			count = rm.nextInt(100-60)+60;
+			int count1 = rm.nextInt(100-75)+75;
+			count = HawkEyeUtils.getRAGStatus(count1);
 		}
 		return count;
 	}
@@ -87,6 +89,12 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 	public List<VelocityOfProject> getVelocityOfSprint(int projectId) {
 		Velocityinfo vInfo = pmDAO.getVelocityOfProject(projectId);
 		List<VelocityOfProject> velocityList = getVelocityList(vInfo);
+		Collections.sort(velocityList,new Comparator<VelocityOfProject>() {
+	         @Override
+	        public int compare(VelocityOfProject s1, VelocityOfProject s2) {
+	                return s1.getSprintName().compareToIgnoreCase(s2.getSprintName());
+	        }
+	    });
 		return velocityList;
 	}
 	

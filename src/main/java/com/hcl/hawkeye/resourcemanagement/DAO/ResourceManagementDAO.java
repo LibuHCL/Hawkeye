@@ -3,6 +3,7 @@ package com.hcl.hawkeye.resourcemanagement.DAO;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.hcl.hawkeye.portfolio.DO.Graph;
 import com.hcl.hawkeye.resourcemanagement.DO.ProgramResourceCount;
@@ -19,4 +20,5 @@ public interface ResourceManagementDAO {
 	Graph getOffshorePerQtPerProject(int projectId);
 	String getProgramManager(Integer programId);
 	String getProjectManager(Integer projectId);
+	Map<Integer, String> getProjectCostForProjects(List<Integer> projIdList);
 }

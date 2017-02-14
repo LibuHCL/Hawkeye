@@ -206,9 +206,29 @@ public class ResourceManagementDAOImpl implements ResourceManagementDAO {
 	@Override
 	public String getProjectManager(Integer projectId)
 	{
-		String prjctManagerQuery = "SELECT CONCAT(FIRSTNAME,' ',LASTNAME) project_manager FROM RESOURCE WHERE EMPLOYEEID = (SELECT TECHNICAL_PROJECT_MANAGER_ID FROM PROJECT WHERE PROJECTID="+projectId+")";
+		String prjctManagerQuery = "SELECT CONCAT(FIRSTNAME,' ',LASTNAME) project_manager FROM RESOURCE r, PROJECT proj  WHERE r.EMPLOYEEID = proj.TECHNICAL_PROJECT_MANAGER_ID AND  proj.PROJECTID="+projectId+")";
 		String prjctManagerName = (String) jdbcTemplate.queryForObject(prjctManagerQuery,String.class);
 		return prjctManagerName;
+	}
+	
+	@Override
+	public Map<Integer, String> getProjectCostForProjects(List<Integer> projIdList)
+	{
+		String list="";
+		for (Integer i : projIdList){
+			list=list+i+",";
+		}
+		
+		list = list.substring(0,list.lastIndexOf(","));
+		
+		Map<Integer, String> proMap = new HashMap<Integer, String>();
+		String prjctManagerQuery = "SELECT proj.PROJECTID as projectId, CONCAT(FIRSTNAME,' ',LASTNAME) as project_manager FROM RESOURCE r, PROJECT proj  WHERE r.EMPLOYEEID = proj.TECHNICAL_PROJECT_MANAGER_ID AND  proj.PROJECTID IN("+list+")";
+		List<Map<String, Object>> managerList =  jdbcTemplate.queryForList(prjctManagerQuery);
+		
+		for (Map<String, Object> row : managerList) {
+			proMap.put(Integer.parseInt(row.get("projectId").toString()), (row.get("project_manager")).toString());
+		}
+		return proMap;
 	}
 	
 }
