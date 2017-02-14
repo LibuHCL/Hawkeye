@@ -9,7 +9,7 @@ public class PortfolioInfo implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	private Long quarter;
-	private Long year;
+	private Integer year;
 	private double actualCost;
 	private double plannedCost;
 	private double roi;
@@ -21,10 +21,10 @@ public class PortfolioInfo implements Serializable{
 	public void setQuarter(Long quarter) {
 		this.quarter = quarter;
 	}
-	public Long getYear() {
+	public Integer getYear() {
 		return year;
 	}
-	public void setYear(Long year) {
+	public void setYear(Integer year) {
 		this.year = year;
 	}
 	public double getActualCost() {

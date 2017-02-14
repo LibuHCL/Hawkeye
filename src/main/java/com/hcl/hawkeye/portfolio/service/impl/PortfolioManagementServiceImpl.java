@@ -1,6 +1,7 @@
 package com.hcl.hawkeye.portfolio.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -94,33 +95,35 @@ public class PortfolioManagementServiceImpl implements PortfolioManagementServic
 	public PortfolioDashboard getAllPortfolioDashboardInfo() {
 		logger.info("Inside getAllPortfolioDashboardInfo method in PortFolioMangementServiceImpl: ");
 		PortfolioDashboard dashboard = new PortfolioDashboard();
-		Set<String> quartersSet = new HashSet<String>();
+		Set<String> yearlySet = new HashSet<String>();
 		HashMap<String, PortfolioInfo> portfoliosMap = new HashMap<>();
 		List<PortfolioInfo> portfoliosList = projectCostService.getAllPortfolioDetails();
+		ArrayList<PortfolioDate> portfolioDates = new ArrayList<>();
 		if (0 != portfoliosList.size()) {
 			for (int i = 0; i < portfoliosList.size(); i++) {
-				String quartersKey = "Q" + portfoliosList.get(i).getQuarter() + " - " + portfoliosList.get(i).getYear();
-				quartersSet.add(quartersKey);
-				portfoliosMap.put(quartersKey + portfoliosList.get(i).getPortfolioId(), portfoliosList.get(i));
+				PortfolioDate portfolioDate = new PortfolioDate();
+				String yearlyKey = String.valueOf(portfoliosList.get(i).getYear());
+				yearlySet.add(yearlyKey);
+				portfolioDate.setKey(yearlyKey);
+				portfolioDate.setValue(i);
+				portfoliosMap.put(yearlyKey + " - " + portfoliosList.get(i).getPortfolioId(), portfoliosList.get(i));
+				portfolioDates.add(portfolioDate);
 			}
 		}
-		ArrayList<PortfolioDate> portfolioDates = new ArrayList<>();
-		Quarter quarter = new Quarter();
-		ArrayList<PortfolioColl> colList = new ArrayList<>();
-		for (String s : quartersSet) {
-			PortfolioDate portfolioDate = new PortfolioDate();
-			portfolioDate.setKey(s);
-			portfolioDate.setValue(Integer.parseInt(s.substring(1, 2)));
-			portfolioDates.add(portfolioDate);
 
-			for (int j = 0; j < portfoliosList.size(); j++) {
+		ArrayList<Quarter> qList = new ArrayList<>();
+		for (String s : yearlySet) {
+			Quarter quarter = new Quarter();
+			ArrayList<PortfolioColl> colList = new ArrayList<>();
+			for (String s1 : portfoliosMap.keySet()) {
 				PortfolioColl portfolioDetail = new PortfolioColl();
+				String keyString = s1.substring(0, 4);
 				int projectsCount = 0;
-				String currentKey = "Q" + portfoliosList.get(j).getQuarter() + " - " + portfoliosList.get(j).getYear();
-				if (currentKey.equalsIgnoreCase(s)) {
-					Integer portfolioId = portfoliosList.get(j).getPortfolioId();
+				if (keyString.equalsIgnoreCase(s)) {
+					Integer portfolioId = portfoliosMap.get(s1).getPortfolioId();
+					logger.info("Fetchning details for portfolio id" + portfolioId);
 					String portfolioName = portfolioDAO.getPortfolioNameById(portfolioId);
-					Map<Integer,ValueIndex> valueAdds = valueAddService.getValueAddByIds(portfolioId);
+					Map<Integer, ValueIndex> valueAdds = valueAddService.getValueAddByIds(portfolioId);
 					projectsCount = portfolioDAO.noOfProjectsPerPortFolio(portfolioId);
 					portfolioDetail.setId(portfolioId);
 					portfolioDetail.setName(portfolioName);
@@ -130,44 +133,39 @@ public class PortfolioManagementServiceImpl implements PortfolioManagementServic
 					cost.setKey("Planned Cost");
 					cost.setPostfix("million");
 					cost.setSymbol(HawkEyeConstants.SYMBOL_EURO);
-					cost.setValue(String.valueOf(portfoliosList.get(j).getPlannedCost()));
+					cost.setValue(String.valueOf(portfoliosMap.get(s1).getPlannedCost()));
 					costs.add(cost);
 					cost = new Cost();
 					cost.setKey("Actual Cost");
 					cost.setPostfix("million");
 					cost.setSymbol(HawkEyeConstants.SYMBOL_EURO);
-					cost.setValue(String.valueOf(portfoliosList.get(j).getActualCost()));
+					cost.setValue(String.valueOf(portfoliosMap.get(s1).getActualCost()));
 					costs.add(cost);
 					cost = new Cost();
 					cost.setKey("ROI (" + HawkEyeConstants.SYMBOL_EURO + ")");
 					cost.setPostfix("million");
 					cost.setSymbol(HawkEyeConstants.SYMBOL_PERCENTAGE);
-					cost.setValue(String.valueOf(portfoliosList.get(j).getRoi()));
+					cost.setValue(String.valueOf(portfoliosMap.get(s1).getRoi()));
 					costs.add(cost);
 					portfolioDetail.setCost(costs);
-					ValueIndex v = valueAdds.get(portfoliosList.get(j).getYear().intValue());
+					ValueIndex v = valueAdds.get(portfoliosMap.get(s1).getYear().intValue());
 					ValueCreation value = new ValueCreation();
-					if(null != v && null != v.getLabels())
-					{
-					value.setLabels(v.getLabels());
-					value.setLinedata(v.getLinedata());
-					value.setSeries(v.getSeries());
-					portfolioDetail.setValueCreation(value);
+					if (null != v && null != v.getLabels()) {
+						value.setLabels(v.getLabels());
+						value.setLinedata(v.getLinedata());
+						value.setSeries(v.getSeries());
+						portfolioDetail.setValueCreation(value);
+						colList.add(portfolioDetail);
 					}
-					colList.add(portfolioDetail);
-					
-					
 				}
 			}
-
+			quarter.setPortfolioColl(colList);
+			qList.add(quarter);
 		}
-		ArrayList<Quarter> qList = new ArrayList<>();
-		quarter.setPortfolioColl(colList);
-		qList.add(quarter);
 		dashboard.setQuarters(qList);
 		dashboard.setPortfolioDates(portfolioDates);
 		logger.info("returning all dashboard info successfully");
 		return dashboard;
-	}
 
+	}
 }
