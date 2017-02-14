@@ -226,8 +226,6 @@ public class ResourceManagementDAOImpl implements ResourceManagementDAO {
 		List<Map<String, Object>> managerList =  jdbcTemplate.queryForList(prjctManagerQuery);
 		
 		for (Map<String, Object> row : managerList) {
-			row.get("projId");
-			row.get("project_manager");
 			proMap.put(Integer.parseInt(row.get("projectId").toString()), (row.get("project_manager")).toString());
 		}
 		return proMap;
