@@ -80,7 +80,6 @@ public class ProjectDashBoardServiceImpl implements ProjectDashBoardService{
 			projList.setResource(res);
 			listDBProjects.add(projList);	
 		}
-
 		project.setProjectslist(listDBProjects);
 		project.setRunnningprojects(listOfProjects.size());
 		pd.setProjects(project);		
