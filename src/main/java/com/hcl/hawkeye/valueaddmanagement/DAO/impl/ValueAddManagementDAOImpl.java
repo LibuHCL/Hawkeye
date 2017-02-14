@@ -276,7 +276,7 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 				+ " SUM(IF(MON = 'December', VALUE.TOTAL, 0)) AS 'DEC' " + "  FROM   "
 				+ " (SELECT "+queryCondition+", MONTHNAME(PROPOSED_DATE) as MON,  " + " COUNT(1) AS TOTAL  "
 				+ " 	FROM VALUEADD  " + " 	WHERE " + queryCondition + " = ? " + " AND  "
-				+ " 	VALUEADD_STATUS != 'Rejected' AND   " + "  PROPOSED_DATE >= DATE_SUB(NOW(),INTERVAL 1 YEAR)  "
+				+ " 	(VALUEADD_STATUS != 'Rejected' AND VALUEADD_STATUS != 'Proposed') AND   " + "  PROPOSED_DATE >= DATE_SUB(NOW(),INTERVAL 1 YEAR)  "
 				+ "  GROUP BY "+ queryCondition + ", MON ) VALUE  " + " GROUP BY VALUE."+queryCondition+"; ";
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(valueAddAcceptedQuery, new Object[] { id });
 		for (Map<String, Object> row : list) {
