@@ -5,6 +5,7 @@ package com.hcl.hawkeye.programdashboard.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +38,7 @@ public class ProgramDashBoardServiceImpl implements ProgramDashBoardService {
 		
 		ProgramDashBoard programdashboard = new ProgramDashBoard();
 		List<ProgramTypes> proTypes = new ArrayList<>();
-		Map<String, ProgramTypes> programTypeMap = new HashMap<>();
+		Map<String, ProgramTypes> programTypeMap = new LinkedHashMap<>();
 		
 		List<Project> devProjects =new ArrayList<>();
 		List<Project> asmProjects =new ArrayList<>();
@@ -61,7 +62,7 @@ public class ProgramDashBoardServiceImpl implements ProgramDashBoardService {
 	}
 
 	private void processProjectList(List<Project> devProjects, Map<String, ProgramTypes> programTypeMap, String string) {
-		Map<String, List<ProjectStates>> pStateMap = new HashMap<>();
+		Map<String, List<ProjectStates>> pStateMap = new LinkedHashMap<>();
 		List<Project> activeList =new ArrayList<>();
 		List<Project> closedList =new ArrayList<>();
 		List<Project> upComingList =new ArrayList<>();
@@ -121,7 +122,7 @@ public class ProgramDashBoardServiceImpl implements ProgramDashBoardService {
 	}
 	
 	private void processList(List<Project> activeList, String type, Map<String, List<ProjectStates>> pStateMap) {
-		Map<String, List<ProjectDetails>> devMap = new HashMap<>();
+		Map<String, List<ProjectDetails>> devMap = new LinkedHashMap<>();
 		for (Project project : activeList) {
 			processDevProjects(project, devMap);
 		}
