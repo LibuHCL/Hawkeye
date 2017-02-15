@@ -1,20 +1,30 @@
 package com.hcl.hawkeye.projectmanagement.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
+import com.hcl.hawkeye.Exceptions.NoProjectDetailsException;
 import com.hcl.hawkeye.projectmanagement.DAO.ProjectManagementDAO;
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
 import com.hcl.hawkeye.projectmanagement.DO.DefectTypes;
+import com.hcl.hawkeye.projectmanagement.DO.Issues;
+import com.hcl.hawkeye.projectmanagement.DO.KanbanProDetails;
+import com.hcl.hawkeye.projectmanagement.DO.ProjectIssues;
 import com.hcl.hawkeye.projectmanagement.DO.SprintDetailsOfProject;
 import com.hcl.hawkeye.projectmanagement.DO.Sprints;
 import com.hcl.hawkeye.projectmanagement.DO.VelocityOfProject;
@@ -34,6 +44,9 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 
 	@Autowired
 	ProjectManagementDAO pmDAO;
+	
+	@Autowired
+	MessageSource messageSource;
 	
 	@Override
 	public SprintDetailsOfProject getProjectDetails(int projectId) {
@@ -136,4 +149,83 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 		return dTypes;
 	}
 
+	@Override
+	public KanbanProDetails  getKanbanProjectDetails(int projectId) {
+		logger.info("Requested to get the kanban project details with project Id: {}", projectId);
+		int totalTickets = 0;
+		int activeTickets = 0;
+		int ticketsPerMonth = 0;
+		int ticPerMonth = 0;
+		Map<String, Integer> completedInMonth= new LinkedHashMap<>();
+		Map<String, Integer> createdInMonth= new LinkedHashMap<>();
+		ProjectIssues pIssues = pmDAO.getKanbanProjectDetails(projectId);
+		KanbanProDetails kDetails = new KanbanProDetails();
+		try {
+			if (null != pIssues && null != pIssues.getIssues() && !pIssues.getIssues().isEmpty()) {
+				for (Issues issue : pIssues.getIssues()) {
+					totalTickets++;
+					if (null != issue.getFields().getResolutiondate()) {
+						String monthName = getMonthOfDate(getFormattedDate(issue.getFields().getResolutiondate().replace("T", " ")));
+						if (!completedInMonth.containsKey(monthName)) {
+							ticketsPerMonth++;
+							completedInMonth.put(monthName, ticketsPerMonth);
+						} else {
+							ticketsPerMonth++;
+							completedInMonth.put(monthName, ticketsPerMonth);
+						}
+					}
+					
+					if (null != issue.getFields().getCreated()) {
+						String monthName = getMonthOfDate(getFormattedDate(issue.getFields().getCreated().replace("T", " ")));
+						if (!createdInMonth.containsKey(monthName)) {
+							ticPerMonth++;
+							createdInMonth.put(monthName, ticPerMonth);
+						} else {
+							ticPerMonth++;
+							createdInMonth.put(monthName, ticPerMonth);
+						}
+					}
+					
+					if (!"done".equals(issue.getFields().getStatus().getStatusCategory().getKey())) {
+						activeTickets++;
+					}
+				}
+			}
+			kDetails.setTotalTickets(totalTickets);
+			kDetails.setActiveTickets(activeTickets);
+			kDetails.setResolvedTicketsOfMonth(completedInMonth);
+			kDetails.setCreatedTicketsOfMonth(createdInMonth);
+		} catch (Exception e) {
+			Locale locale=new Locale("en", "IN");
+			String errorMsg=messageSource.getMessage("error.get.defects", new Object[] {}, locale);
+			logger.error(errorMsg, e);
+			throw new NoProjectDetailsException(errorMsg, e);
+		}
+		
+		return kDetails;
+	}
+
+	private String getFormattedDate(String time) throws ParseException {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		String date;
+		Date d = simpleDateFormat.parse(time);
+		date = new SimpleDateFormat("yyyy-MMM-dd").format(d);
+		return date;
+	}
+	
+	private String getMonthOfDate(String date) throws ParseException {
+		int val = new SimpleDateFormat("yyyy-MMM-dd").parse(date).getMonth();
+		return getMonthName(val);
+	}
+	
+	private String getMonthName(int val) {
+		switch (val) {
+		case 0: return "Jan"; case 1: return "Feb"; case 2: return "Mar";
+		case 3: return "Apr"; case 4: return "May"; case 5: return "Jun";
+		case 6: return "Jul"; case 7: return "Aug"; case 8: return "Sep";
+		case 9: return "Oct"; case 10: return "Nov"; case 11: return "Dec";
+
+		default: return "Jan";
+		}
+	}
 }

@@ -1,6 +1,10 @@
 package com.hcl.hawkeye.projectmanagement.DAO.impl;
 
 import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -20,6 +24,7 @@ import com.hcl.hawkeye.projectmanagement.DAO.ProjectManagementDAO;
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
 import com.hcl.hawkeye.projectmanagement.DO.DefectTypes;
 import com.hcl.hawkeye.projectmanagement.DO.Issues;
+import com.hcl.hawkeye.projectmanagement.DO.KanbanProDetails;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectDetails;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectIssues;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectValues;
@@ -145,6 +150,7 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 		try {
 			ProjectDetails pDetails = getProjectDetailsOfSprints(projectId);
 			List<ProjectValues> pValues = pDetails.getValues();
+			gson = new Gson();
 			String url = messageSource.getMessage("jira.agile.rest.api.board.url", new Object[]{}, locale);
 			for (ProjectValues projectValues : pValues) {
 				int count = 0;
@@ -183,6 +189,7 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 			String url = messageSource.getMessage("jira.agile.rest.api.board.url", new Object[]{}, locale);
 			int blockerIssues = 0;
 			int criticalIssues = 0;
+			gson = new Gson();
 			for (ProjectValues projectValues : pValues) {
 				String issuesInfo = jrCall.callRestAPI(url+projectId+"/sprint/"+projectValues.getId()+"/issue?fields=issuetype,priority");
 				ProjectIssues pIssues = gson.fromJson(issuesInfo, ProjectIssues.class);
@@ -228,6 +235,7 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 			ProjectDetails pDetails = getProjectDetailsOfSprints(projectId);
 			List<ProjectValues> pValues = pDetails.getValues();
 			String url = messageSource.getMessage("jira.agile.rest.api.board.url", new Object[]{}, locale);
+			gson = new Gson();
 			for (ProjectValues projectValues : pValues) {
 				String issuesInfo = jrCall.callRestAPI(url+projectId+"/sprint/"+projectValues.getId()+"/issue?fields=issuetype");
 				ProjectIssues pIssues = gson.fromJson(issuesInfo, ProjectIssues.class);
@@ -254,6 +262,23 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 		}
 		return dTypes;
 	}
-	
 
+	@Override
+	public ProjectIssues getKanbanProjectDetails(int projectId) {
+		logger.info("Requesting to get the kanban project details for projectid: {}", projectId);
+		Locale locale=new Locale("en", "IN");
+		ProjectIssues pIssues = null;
+		try {
+			gson = new Gson();
+			String url = messageSource.getMessage("jira.agile.rest.api.board.url", new Object[]{}, locale);
+			String issuesInfo = jrCall.callRestAPI(url+projectId+"/issue?fields=status,created,resolutiondate");
+			pIssues = gson.fromJson(issuesInfo, ProjectIssues.class);
+		} catch (Exception e) {
+			String errorMsg=messageSource.getMessage("error.get.defects", new Object[] {}, locale);
+			logger.error(errorMsg, e);
+			throw new NoProjectDetailsException(errorMsg, e);
+		}
+		return pIssues;
+	}
+	
 }

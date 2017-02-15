@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
 import com.hcl.hawkeye.projectmanagement.DO.DefectTypes;
+import com.hcl.hawkeye.projectmanagement.DO.ProjectIssues;
 import com.hcl.hawkeye.projectmanagement.DO.SprintDetailsOfProject;
 import com.hcl.hawkeye.projectmanagement.DO.Velocityinfo;
 
@@ -57,5 +58,11 @@ public interface ProjectManagementDAO {
 	 * @return
 	 */
 	DefectTypes getDefectTypesOfProject(int projectId);
+	
+	/**
+	 * 
+	 * @param projectId
+	 */
+	ProjectIssues getKanbanProjectDetails(int projectId);
 
 }

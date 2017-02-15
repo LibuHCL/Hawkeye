@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
 import com.hcl.hawkeye.projectmanagement.DO.DefectTypes;
+import com.hcl.hawkeye.projectmanagement.DO.KanbanProDetails;
 import com.hcl.hawkeye.projectmanagement.DO.SprintDetailsOfProject;
 import com.hcl.hawkeye.projectmanagement.DO.VelocityOfProject;
 import com.hcl.hawkeye.projectmanagement.service.ProjectManagementService;
@@ -126,5 +127,12 @@ public class ProjectManagementController {
 		return dTypes;
 	}
 
+	@RequestMapping(value="/getKanbanProjectDetails/project/{projectId}", method = RequestMethod.GET)
+	@ResponseBody
+	public KanbanProDetails getKanbanProjectDetails(@PathVariable("projectId") int projectId) {
+		logger.info("Requesting to get the project details for the given project id: {}", projectId);
+		KanbanProDetails kDetails = pmService.getKanbanProjectDetails(projectId);
+		return kDetails;
+	}
 
 }
