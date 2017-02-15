@@ -60,7 +60,7 @@ public interface ProjectManagementService {
 	 * @param issuePriority
 	 * @return
 	 */
-	Map<String, Integer> getPriorityOfIssue(int projectId, String issuePriority);
+	Map<String, Map<String, Integer>> getPriorityOfIssue(int projectId, String blockerType, String criticalType);
 	
 	/**
 	 * This method will return how many UAT issues are there in project

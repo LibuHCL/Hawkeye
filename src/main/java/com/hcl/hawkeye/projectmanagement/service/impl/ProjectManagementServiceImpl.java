@@ -80,8 +80,8 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 	}
 
 	@Override
-	public Map<String, Integer> getPriorityOfIssue(int projectId, String issuePriority) {
-		Map<String, Integer> priorityIssue = pmDAO.getPriorityOfIssue(projectId, issuePriority);
+	public Map<String, Map<String, Integer>> getPriorityOfIssue(int projectId, String blockerType, String criticalType) {
+		Map<String, Map<String, Integer>> priorityIssue = pmDAO.getPriorityOfIssue(projectId, blockerType, criticalType);
 		return priorityIssue;
 	}
 

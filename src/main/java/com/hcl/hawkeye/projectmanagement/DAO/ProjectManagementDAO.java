@@ -46,9 +46,10 @@ public interface ProjectManagementDAO {
 	 * 
 	 * @param projectId
 	 * @param issuePriority
+	 * @param criticalType 
 	 * @return
 	 */
-	Map<String, Integer> getPriorityOfIssue( int projectId, String issuePriority);
+	Map<String, Map<String, Integer>> getPriorityOfIssue( int projectId, String blockerType, String criticalType);
 	
 	/**
 	 * 

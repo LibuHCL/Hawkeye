@@ -105,11 +105,11 @@ public class ProjectManagementController {
 	 * @param issuePriority
 	 * @return
 	 */
-	@RequestMapping(value="/getIssues/project/{id}/issuePriority/{issuePriority}", method = RequestMethod.GET)
+	@RequestMapping(value="/getIssues/project/{id}/blocker/{blockerType}/critical/{criticalType}", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Integer> getPriorityOfIssues(@PathVariable("id") int projectId, @PathVariable("issuePriority") String issuePriority) {
-		logger.info("Requesting api to get the issues of project with project id: {} and priority of Issue: {}", projectId, issuePriority);
-		Map<String, Integer> priorityIssues = pmService.getPriorityOfIssue(projectId, issuePriority);
+	public Map<String, Map<String, Integer>> getPriorityOfIssues(@PathVariable("id") int projectId, @PathVariable("blockerType") String blockerType, @PathVariable("criticalType") String criticalType) {
+		logger.info("Requesting api to get the issues of project with project id: {} and priority of IssueTypes: {}",new Object[]{projectId, blockerType, criticalType});
+		Map<String, Map<String, Integer>> priorityIssues = pmService.getPriorityOfIssue(projectId, blockerType, criticalType);
 		return priorityIssues;
 	}
 	

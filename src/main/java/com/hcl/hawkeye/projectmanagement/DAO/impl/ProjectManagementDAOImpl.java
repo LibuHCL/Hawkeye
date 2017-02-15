@@ -1,7 +1,6 @@
 package com.hcl.hawkeye.projectmanagement.DAO.impl;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -21,12 +20,10 @@ import com.hcl.hawkeye.projectmanagement.DAO.ProjectManagementDAO;
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
 import com.hcl.hawkeye.projectmanagement.DO.DefectTypes;
 import com.hcl.hawkeye.projectmanagement.DO.Issues;
-import com.hcl.hawkeye.projectmanagement.DO.PriorityOfIssue;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectDetails;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectIssues;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectValues;
 import com.hcl.hawkeye.projectmanagement.DO.SprintDetailsOfProject;
-import com.hcl.hawkeye.projectmanagement.DO.StoryPoint;
 import com.hcl.hawkeye.projectmanagement.DO.Velocityinfo;
 
 /**
@@ -174,32 +171,43 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 	}
 
 	@Override
-	public Map<String, Integer> getPriorityOfIssue(int projectId, String issuePriority) {
+	public Map<String, Map<String, Integer>> getPriorityOfIssue(int projectId, String blockerType, String criticalType) {
 		logger.info("Request to get issues of projects");
-		Map<String, Integer> priorityMap = new TreeMap<String, Integer>();
+		Map<String, Map<String, Integer>> priorityMap = new TreeMap<>();
+		Map<String, Integer> blockerTypeIssues = new TreeMap<>();
+		Map<String, Integer> criticalTypeIssues = new TreeMap<>();
 		Locale locale=new Locale("en", "IN");
 		try {
 			ProjectDetails pDetails = getProjectDetailsOfSprints(projectId);
 			List<ProjectValues> pValues = pDetails.getValues();
 			String url = messageSource.getMessage("jira.agile.rest.api.board.url", new Object[]{}, locale);
-			int priorityIssues = 0;
+			int blockerIssues = 0;
+			int criticalIssues = 0;
 			for (ProjectValues projectValues : pValues) {
 				String issuesInfo = jrCall.callRestAPI(url+projectId+"/sprint/"+projectValues.getId()+"/issue?fields=issuetype,priority");
 				ProjectIssues pIssues = gson.fromJson(issuesInfo, ProjectIssues.class);
 				
 				for (Issues issue : pIssues.getIssues()) {
 					if (null != issue && null != issue.getFields() && !"UAT".equals(projectValues.getName()) && "Defect".equals(issue.getFields().getIssuetype().getName())) {
-						if (null != issue.getFields().getPriorityIssues() && !"UAT".equals(projectValues.getName()) && issuePriority.equals(issue.getFields().getPriorityIssues().getName())) {
-							priorityIssues++;
+						if (null != issue.getFields().getPriorityIssues() && !"UAT".equals(projectValues.getName()) && blockerType.equals(issue.getFields().getPriorityIssues().getName())) {
+							blockerIssues++;
+						}
+					}
+					
+					if (null != issue && null != issue.getFields() && !"UAT".equals(projectValues.getName()) && "Defect".equals(issue.getFields().getIssuetype().getName())) {
+						if (null != issue.getFields().getPriorityIssues() && !"UAT".equals(projectValues.getName()) && criticalType.equals(issue.getFields().getPriorityIssues().getName())) {
+							criticalIssues++;
 						}
 					}
 				}
 				
 				if (!"UAT".equals(projectValues.getName())) {
-					priorityMap.put(projectValues.getName(), priorityIssues);
+					blockerTypeIssues.put(projectValues.getName(), blockerIssues);
+					criticalTypeIssues.put(projectValues.getName(), criticalIssues);
 				}
 				
 			}
+			priorityMap.put(blockerType, blockerTypeIssues);priorityMap.put(criticalType, criticalTypeIssues);
 		} catch (Exception e) {
 			String errorMsg=messageSource.getMessage("error.get.defects", new Object[] {}, locale);
 			logger.error(errorMsg, e);

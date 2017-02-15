@@ -3,6 +3,7 @@ package com.hcl.hawkeye.programingkpis.service.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -60,13 +61,19 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 	@Override
 	public Result getOperationalKpiResults(int projectId) {
 		Result res = new Result();
+		Date d1 = new Date();
+		Date d2 = new Date();
 		try {
+			
 			KPIType kp = new KPIType();
+			logger.info("starting Date - {}",d1.getSeconds());
+			logger.info("starting Date - {}",new Date());
 			List<KPIValue> kVList = getListOfKpi(projectId);
 			kp.setKpis(kVList);
 			kp.setProgramId(Integer.parseInt(env.getProperty("program.programid")));
 			kp.setProgramName(env.getProperty("program.programname"));
 			res.setResult(kp);
+			
 		
 		} catch (Exception e) {
 			Locale locale=new Locale("en", "IN");
@@ -74,16 +81,17 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 			logger.error(errorMsg, e);
 			throw new IngKpiRetrievalException(errorMsg, e);
 		}
-		
+		logger.info("ending Date - {}",d2.getSeconds());
+		logger.info("starting Date - {}",new Date());
 		return res;
 	}
 	
 	private List<KPIValue> getListOfKpi(int projectId) {
 		List<KPIValue> kVList = new ArrayList<KPIValue>();
-		int[] intVal = {1,2,3,4}; 
+		int[] intVal = {1,2}; 
 		
 		for (int i : intVal) {
-			if(i == 1) {
+			/*if(i == 1) {
 				KPIValue kv1 = new KPIValue();
 				List<Integer> grapIntData = new ArrayList<>();
 				grapIntData.add(75); grapIntData.add(72); grapIntData.add(81); grapIntData.add(74);
@@ -94,10 +102,10 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 				kv1.setName(env.getProperty("kpi.name1"));
 				kVList.add(kv1);
 			}
-			
-			if(i == 2) {
-				Map<String, Integer> priorityBlockerVal = pmService.getPriorityOfIssue(projectId, env.getProperty("project.priority.blocker"));
-				Map<String, Integer> priorityCriVal = pmService.getPriorityOfIssue(projectId, env.getProperty("project.priority.critical"));
+			*/
+			if(i == 1) {
+				logger.info("starting Date first kpi - {}",new Date());
+				Map<String, Map<String, Integer>> priorityBlockerVal = pmService.getPriorityOfIssue(projectId, env.getProperty("project.priority.blocker"), env.getProperty("project.priority.critical"));
 				KPIValue kv2 = new KPIValue();
 				List<Integer[]> grapData = new ArrayList<>();
 				List<Integer> grapIntData1 = new ArrayList<>();
@@ -107,13 +115,19 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 				serires.add(env.getProperty("incident.p2"));
 				List<String> labelData = new ArrayList<>();
 				
-				for (String key1 : priorityBlockerVal.keySet()) {
-					grapIntData1.add(priorityBlockerVal.get(key1));
-				}
-				
-				for (String key : priorityCriVal.keySet()) {
-					labelData.add(key.replace(" ", ""));
-					grapIntData2.add(priorityCriVal.get(key));
+				for (String string : priorityBlockerVal.keySet()) {
+					if (env.getProperty("project.priority.blocker").equals(string)) {
+						for (String key1 : priorityBlockerVal.get(string).keySet()) {
+							labelData.add(key1);
+							grapIntData1.add(priorityBlockerVal.get(string).get(key1));
+						}
+					}
+					
+					if (env.getProperty("project.priority.critical").equals(string)) {
+						for (String key1 : priorityBlockerVal.get(string).keySet()) {
+							grapIntData2.add(priorityBlockerVal.get(string).get(key1));
+						}
+					}
 				}
 				
 				grapData.add(grapIntData1.toArray(new Integer[grapIntData1.size()]));
@@ -122,11 +136,11 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 				kv2.setLabels(labelData);
 				kv2.setGraphdata(grapData);
 				
-				
 				kv2.setName(env.getProperty("kpi.name2"));
 				kVList.add(kv2);
+				logger.info("Ending Date first kpi - {}",new Date());
 			}
-			
+			/*
 			if(i == 3) {
 				ValueAddAcceptedIdeas acceptedIdeas = vmService.getValueAddByAcceptedIdeas(projectId);
 				KPIValue kv2 = new KPIValue();
@@ -136,9 +150,10 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 				kv2.setLabels(acceptedIdeas.getLabels());
 				kv2.setName(acceptedIdeas.getName());
 				kVList.add(kv2);
-			}
+			}*/
 			
-			if(i == 4) {
+			if(i == 2) {
+				logger.info("starting Date second kpi - {}",new Date());
 				List<VelocityOfProject> priorityHighVal = pmService.getVelocityOfSprint(projectId);
 				KPIValue kv2 = new KPIValue();
 				List<String> labelData = new ArrayList<>();
@@ -153,6 +168,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 				kv2.setLabels(labelData);
 				kv2.setName(env.getProperty("kpi.name4"));
 				kVList.add(kv2);
+				logger.info("ending Date second kpi - {}",new Date());
 			}
 		}
 		return kVList;
