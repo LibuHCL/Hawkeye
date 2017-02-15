@@ -98,7 +98,7 @@ public class ProgramManagementDAOImpl implements ProgramManagementDAO {
 		logger.info("Inside getProjectsPerProgramId method in ProgramManagementDAOImpl");	
 		List<Project> projectsList = new ArrayList<Project>();
 		String sql_getProjects = "SELECT PROJECTID,PROJECT_NAME,PROGRAM_ID,CLIENT_ID,VENDOR_ID,PROJECT_TYPE,"
-				+ "SUBTYPE,TECHNICAL_PROJECT_MANAGER_ID,CREATION_DATE,END_DATE,PROJECT_STATUS FROM PROJECT WHERE PROGRAM_ID=?";
+				+ "SUBTYPE,TECHNICAL_PROJECT_MANAGER_ID,CREATION_DATE,END_DATE,PROJECT_STATUS FROM PROJECT WHERE PROGRAM_ID=? ORDER BY PROJECT_STATUS,PROJECTID";
 		List<Map<String, Object>> projList = jdbcTemplate.queryForList(sql_getProjects,new Object[]{progId});
 		
 		if(projList  != null && projList.size() >0){
