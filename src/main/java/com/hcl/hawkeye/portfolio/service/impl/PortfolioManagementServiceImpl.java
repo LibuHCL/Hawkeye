@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -96,7 +97,7 @@ public class PortfolioManagementServiceImpl implements PortfolioManagementServic
 		logger.info("Inside getAllPortfolioDashboardInfo method in PortFolioMangementServiceImpl: ");
 		PortfolioDashboard dashboard = new PortfolioDashboard();
 		Set<String> yearlySet = new HashSet<String>();
-		HashMap<String, PortfolioInfo> portfoliosMap = new HashMap<>();
+		LinkedHashMap<String, PortfolioInfo> portfoliosMap = new LinkedHashMap<>();
 		List<PortfolioInfo> portfoliosList = projectCostService.getAllPortfolioDetails();
 		ArrayList<PortfolioDate> portfolioDates = new ArrayList<>();
 		if (0 != portfoliosList.size()) {
