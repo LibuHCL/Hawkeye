@@ -21,7 +21,7 @@ import com.hcl.hawkeye.portfolio.DO.Graph;
 import com.hcl.hawkeye.teamhappiness.DO.TeamHappiness;
 import com.hcl.hawkeye.teamhappiness.service.TeamHappinessManagementService;
 /**
- * @author HCL
+ * @author SamrajT
  *
  */
 @RestController
