@@ -19,7 +19,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.hcl.hawkeye.Exceptions.SonarMetricsDataRetrievalException;
+
+import com.hcl.hawkeye.sonarmetrics.exception.SonarMetricsDataRetrievalException;
 import com.hcl.hawkeye.sonarmetrics.DAO.SonarMetricsManagementDAO;
 import com.hcl.hawkeye.sonarmetrics.DO.Metrics;
 import com.hcl.hawkeye.sonarmetrics.DO.SonarMetrics;

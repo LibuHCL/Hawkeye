@@ -6,11 +6,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -21,6 +24,7 @@ import com.hcl.hawkeye.portfolio.DO.PortfolioInfo;
 import com.hcl.hawkeye.portfolio.DO.Project;
 import com.hcl.hawkeye.projectcost.DAO.ProjectCostDAO;
 import com.hcl.hawkeye.projectcost.DO.ProjectCostDetails;
+import com.hcl.hawkeye.projectcost.exception.ProjectCostException;
 import com.hcl.hawkeye.utils.HawkEyeConstants;
 import com.hcl.hawkeye.utils.HawkEyeUtils;
 
@@ -32,6 +36,9 @@ public class ProjectCostDAOImpl implements ProjectCostDAO {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
+	@Autowired
+	MessageSource messageSource;
+
 	@Override
 	public ProjectCostDetails addProjectCostDetails(ProjectCostDetails cost) {
 		logger.info(
@@ -39,9 +46,15 @@ public class ProjectCostDAOImpl implements ProjectCostDAO {
 						+ cost.getProjectID());
 
 		String projectCostDetailsInsert_SQL = "INSERT INTO PROJECT_COST(PROJECTID, PLANNED_COST, ACTUAL_COST) VALUES(?, ?, ?)";
-
-		jdbcTemplate.update(projectCostDetailsInsert_SQL,
-				new Object[] { cost.getProjectID(), cost.getPlannedCost(), cost.getActualCost() });
+		try {
+			jdbcTemplate.update(projectCostDetailsInsert_SQL,
+					new Object[] { cost.getProjectID(), cost.getPlannedCost(), cost.getActualCost() });
+		} catch (DataAccessException dae) {
+			Locale locale = new Locale("en", "IN");
+			String errorMsg = messageSource.getMessage("error.create.addProjectCost", new Object[] {}, locale);
+			logger.error(errorMsg, dae);
+			throw new ProjectCostException(errorMsg, dae);
+		}
 
 		logger.info("Project cost details added with project id :" + cost.getProjectID());
 
@@ -52,10 +65,19 @@ public class ProjectCostDAOImpl implements ProjectCostDAO {
 	public List<ProjectCostDetails> getAllProjectCost() {
 		logger.info("Inside getAllProjectCost method in ProjectCostDAOImpl::getAllProjectCost()");
 
+		List<ProjectCostDetails> allProjectCost;
 		String ALL_PROJECT_COST_SQL = "SELECT * FROM PROJECT_COST";
+		try {
 
-		List<ProjectCostDetails> allProjectCost = jdbcTemplate.query(ALL_PROJECT_COST_SQL,
-				new BeanPropertyRowMapper<ProjectCostDetails>(ProjectCostDetails.class));
+			allProjectCost = jdbcTemplate.query(ALL_PROJECT_COST_SQL,
+					new BeanPropertyRowMapper<ProjectCostDetails>(ProjectCostDetails.class));
+
+		} catch (DataAccessException dae) {
+			Locale locale = new Locale("en", "IN");
+			String errorMsg = messageSource.getMessage("error.get.getAllProjectCost", new Object[] {}, locale);
+			logger.error(errorMsg, dae);
+			throw new ProjectCostException(errorMsg, dae);
+		}
 
 		logger.info("All project cost details are successfully fetched.");
 		return allProjectCost;
@@ -71,8 +93,11 @@ public class ProjectCostDAOImpl implements ProjectCostDAO {
 		try {
 			projectCost = (ProjectCostDetails) jdbcTemplate.queryForObject(PROJECT_COST_WITH_ID_SQL,
 					projectCostRowMapper);
-		} catch (Exception e) {
-
+		} catch (DataAccessException dae) {
+			Locale locale = new Locale("en", "IN");
+			String errorMsg = messageSource.getMessage("error.get.getProjectCostPerId", new Object[] {}, locale);
+			logger.error(errorMsg, dae);
+			throw new ProjectCostException(errorMsg, dae);
 		}
 
 		logger.info("Project cost details are successfully fetched for project with ID: " + projectID);
@@ -157,8 +182,11 @@ public class ProjectCostDAOImpl implements ProjectCostDAO {
 					
 		        } 
 			}
-		} catch (Exception e) {
-
+		} catch (DataAccessException dae) {
+			Locale locale = new Locale("en", "IN");
+			String errorMsg = messageSource.getMessage("error.get.getProjectCostPerId", new Object[] {}, locale);
+			logger.error(errorMsg, dae);
+			throw new ProjectCostException(errorMsg, dae);
 		}
 		
 		
