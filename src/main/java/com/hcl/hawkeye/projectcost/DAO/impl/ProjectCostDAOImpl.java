@@ -124,7 +124,9 @@ public class ProjectCostDAOImpl implements ProjectCostDAO {
 		List<PortfolioInfo> portfolioList = new ArrayList<PortfolioInfo>();
 		String portfolioListQuery = "select PORTFOLIO_ID from PROGRAM where PROGRAMID IN (select PROGRAM_ID from PROJECT where PROJECTID in (select distinct(PROJECTID) from PROJECT_COST))";
 		List<Integer> portfolioIdsList = jdbcTemplate.queryForList(portfolioListQuery, Integer.class);
-		if (0 != portfolioIdsList.size()) {
+		try {
+			if (0 != portfolioIdsList.size()) {
+		
 			for (int i = 0; i < portfolioIdsList.size(); i++) {
 				
 				String sql ="SELECT YEAR(CAPTURE_DATE) yr, ROUND(sum(ACTUAL_COST),2) actual_cost, ROUND(sum(PLANNED_COST),2) planned_cost," 
@@ -145,6 +147,13 @@ public class ProjectCostDAOImpl implements ProjectCostDAO {
 					portfolioList.add(info);
 				}
 			}
+		}
+		}
+		catch(DataAccessException dae) {
+			Locale locale = new Locale("en", "IN");
+			String errorMsg = messageSource.getMessage("error.get.getAllProjectCost", new Object[] {}, locale);
+			logger.error(errorMsg, dae);
+			throw new ProjectCostException(errorMsg, dae);
 		}
 		logger.info("Portfolio details fetched successfully");
 		return portfolioList;

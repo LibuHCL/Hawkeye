@@ -27,7 +27,6 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
 		logger.info("Request in getResourcesData of ResourceServiceImpl");
 		Resource resource = null;
 		resource = resourceDAO.getResourceData();
-		logger.info("Resource list size is");
 		return resource;
 	}
 	@Override
@@ -70,7 +69,6 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
 	}
 	@Override
 	public Graph getOffshorePerQtPerProject(int projectId) {
-		// TODO Auto-generated method stub
 		return resourceDAO.getOffshorePerQtPerProject(projectId);
 	}
 	@Override
