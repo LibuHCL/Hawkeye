@@ -172,4 +172,63 @@ public class FeedbackTrackerDAOImpl implements FeedbackTrackerDAO {
 		labels.add("Q3");
 		labels.add("Q4");
 	}
+	
+	
+	@Override
+	public List<FeedbackDetails> getFeedBackCategoryId() {
+		// TODO Auto-generated method stub
+		List<FeedbackDetails> feebkdetailList = new ArrayList<FeedbackDetails>();
+		String sql = "SELECT CATEGORY_ID,CATEGORY_NAME FROM FEEDBACK_CATEGORY";
+		try{
+		List<Map<String, Object>> categoryList = jdbcTemplate.queryForList(sql);
+		System.out.println("categoryListcategoryListcategoryListcategoryListcategoryListcategoryList:"+categoryList);
+		if(categoryList  != null && categoryList.size() >0)  
+		{
+			for (Map<String, Object> row : categoryList) {
+				
+				FeedbackDetails category = new FeedbackDetails();
+				category.setCategory_Id(Integer.valueOf(row.get("CATEGORY_ID").toString()));
+				category.setCategory_Name((String)row.get("CATEGORY_NAME"));
+				feebkdetailList.add(category);
+				
+	        } 
+		}
+		}
+		catch (DataAccessException dae) {
+			logger.error("Exception in getFeedBackCategoryId method");
+			throw new FeedbackTrackException("Exception in Feedbacktrack Details", dae);
+		
+	     }
+		return feebkdetailList;
+		
+	}
+
+	@Override
+	public List<FeedbackDetails> getFeedbackParameter(int category_Id) {
+		// TODO Auto-generated method stub
+		List<FeedbackDetails> parameterList = new ArrayList<FeedbackDetails>();
+		String getFeedBackperProject_SQL = "SELECT * FROM FEEDBACK_PARAMETER WHERE CATEGORYID = ? ";
+		try{
+			List<Map<String, Object>> prmList = jdbcTemplate.queryForList(getFeedBackperProject_SQL,new Object[] {category_Id});
+			System.out.println("prmListprmListprmListprmListprmList:"+prmList);
+			if(prmList  != null && prmList.size() >0)  
+			{
+				for (Map<String, Object> row : prmList) {
+					
+					FeedbackDetails feedback = new FeedbackDetails();
+					feedback.setParamaterId(Integer.valueOf(row.get("PARAMETERID").toString()));
+					feedback.setParameterName((String)row.get("PARAM_NAME"));
+					parameterList.add(feedback);
+					
+		        } 
+			}
+		   }
+		
+		catch (DataAccessException dae) {
+			logger.error("Exception in getFeedbackParameter");
+			throw new FeedbackTrackException("Exception in Feedbacktrack Details", dae);
+		
+	     }
+		return parameterList;
+	}
 }

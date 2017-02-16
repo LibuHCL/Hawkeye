@@ -11,6 +11,11 @@ public class FeedbackDetails {
 	private int reporter_company_Id;
 	private String reporter_Type;
 	private int reportee;
+	private String category_Name;
+	private int parameterId; 
+	private String parameterName;
+	private int category_Id;
+	
 	
 	public FeedbackDetails(int feedbackId, int projectId, int paramaterId, int feedback_value, int weightage,
 			String feedback_Date, int reporter_resource_Id, int reporter_company_Id, String reporter_Type,
@@ -27,6 +32,39 @@ public class FeedbackDetails {
 		this.reporter_Type = reporter_Type;
 		this.reportee = reportee;
 	}
+	public int getCategory_Id() {
+		return category_Id;
+	}
+
+	public void setCategory_Id(int category_Id) {
+		this.category_Id = category_Id;
+	}
+
+	public String getCategory_Name() {
+		return category_Name;
+	}
+
+	public void setCategory_Name(String category_Name) {
+		this.category_Name = category_Name;
+	}
+
+	public int getParameterId() {
+		return parameterId;
+	}
+
+	public void setParameterId(int parameterId) {
+		this.parameterId = parameterId;
+	}
+
+	public String getParameterName() {
+		return parameterName;
+	}
+
+	public void setParameterName(String parameterName) {
+		this.parameterName = parameterName;
+	}
+
+	
 	
 	public FeedbackDetails() {
 		// TODO Auto-generated constructor stub

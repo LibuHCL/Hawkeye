@@ -66,7 +66,7 @@ public class FeedbackTrackerController {
     	
     }
      
-    
+    /* To Get the FeedBacksPerQtAtPerfolioLevel Details */
     @RequestMapping(value = "/getnoofFeedBacksPerQtAtPerfolioLevel/{portfolioId}/{reporterType}", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
    
     public ResponseEntity<Graph>  getnoofFeedBacksPerQtAtPerfolioLevel(@PathVariable("reporterType") String reporterType,@PathVariable("portfolioId") int portfolioId){
@@ -77,4 +77,24 @@ public class FeedbackTrackerController {
     	return new ResponseEntity<Graph> (feedbackdetails, HttpStatus.CREATED);
     	
     } 
+    /* To Get the FeedBackCategoryId Details */
+    @RequestMapping(value = "/getFeedBackCategoryId", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public ResponseEntity <List<FeedbackDetails>> getFeedBackCategoryId(){
+    	logger.info("Inside getFeedBackCategoryId method in Controller:");
+    	List<FeedbackDetails> feedbackdetails = feedbkService.getFeedBackCategoryId();
+    	return new ResponseEntity<List<FeedbackDetails>> (feedbackdetails, HttpStatus.CREATED);
+    	
+    }
+    /* To Get the getFeedbackParameter Details*/
+    @RequestMapping(value ="/getFeedBackParameterId/{category_Id}",method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE )
+    @ResponseBody
+    public ResponseEntity<List<FeedbackDetails>>  getFeedbackParameter(@PathVariable("category_Id") int category_Id){
+    	logger.info("Inside getFeedbackParameter method in Controller:"+category_Id);
+    	List<FeedbackDetails> feedbackdetails = feedbkService.getFeedbackParameter(category_Id);
+    	logger.info("category_Id Details recieved: " + category_Id);
+    	return new ResponseEntity<List<FeedbackDetails>> (feedbackdetails, HttpStatus.CREATED);
+      
+    
+  }
   }

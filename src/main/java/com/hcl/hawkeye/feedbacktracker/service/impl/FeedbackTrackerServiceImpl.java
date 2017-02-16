@@ -46,5 +46,19 @@ public class FeedbackTrackerServiceImpl implements FeedbackTrackerService {
 		return feedbkDao.getnoofFeedBacksPerQtAtPerfolioLevel( portfolioId, reporterType);
 		
 	}
+	
+	@Override
+	public List<FeedbackDetails> getFeedBackCategoryId() {
+		// TODO Auto-generated method stub
+		logger.info("Inside getFeedBackCategoryId method in FeedbackTrackerServiceImpl");
+		return feedbkDao.getFeedBackCategoryId();
+		
+	}
+	@Override
+	public List<FeedbackDetails> getFeedbackParameter(int category_Id) {
+		// TODO Auto-generated method stub
+		logger.info("Inside getFeedbackParameter method in FeedbackTrackerServiceImpl");
+		return feedbkDao.getFeedbackParameter(category_Id);
+	}
 
 }

@@ -14,5 +14,9 @@ public interface FeedbackTrackerService {
 	List<FeedbackDetails> getFeedbackPerProgram(String reporterType, int programId);
 
 	Graph getnoofFeedBacksPerQtAtPerfolioLevel(int portfolioId,	String reporterType);
+	
+	List<FeedbackDetails> getFeedBackCategoryId();
+
+	List<FeedbackDetails> getFeedbackParameter(int category_Id);
 
 }
