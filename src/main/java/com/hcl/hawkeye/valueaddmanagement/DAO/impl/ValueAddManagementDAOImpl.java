@@ -46,13 +46,21 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 	public Value createValueAdd(Value value) {
 		String createValueAddQuery = "INSERT INTO VALUEADD (PROJECTID, PROGRAMID, PORTFOLIOID, DESCRIPTION, PROPOSED_DATE, VALUEADD_STATUS, STATUS_UPDATE_DATE, ECONOMIC_VALUE) "
 				+ "VALUES (?,?,?,?,?,?,?,?)";
+		int valueId;
+		try {
 		jdbcTemplate.update(createValueAddQuery,
 				new Object[] { value.getProjectId(), value.getProgramId(), value.getPortfolioId(),
 						value.getDescription(), HawkEyeUtils.getTimeStamp(value.getProposedDate()),
 						value.getValueAddStatu(), HawkEyeUtils.getTimeStamp(value.getStatusUpdateDate()),
 						value.getEconomicValue() });
-		int valueId = getValueId();
+		valueId = getValueId();		
 		logger.info("Portfolio added with portfolio id :" + valueId);
+		} catch (DataAccessException dae) {
+		Locale locale = new Locale("en", "IN");
+		String errorMsg = messageSource.getMessage("error.create.getvalueadd", new Object[] {}, locale);
+		logger.error(errorMsg, dae);
+		throw new ValueAddDataRetrievalException(errorMsg, dae);
+		}		
 		return HawkEyeUtils.populateValueId(value, valueId);
 	}
 
@@ -98,7 +106,14 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 	public Map<Integer, ValueIndex> getValueAddByIds(Integer portfolioId) {
 		logger.info("Request to get the data of number of Value Add by portfolio");
 		Map<Integer, ValueIndex> valueIndex = new HashMap<Integer, ValueIndex>();
+		try {
 		updateValueIndex(valueIndex, portfolioId);
+		} catch (DataAccessException dae) {
+			Locale locale = new Locale("en", "IN");
+			String errorMsg = messageSource.getMessage("error.get.getvalueadd", new Object[] {}, locale);
+			logger.error(errorMsg, dae);
+			throw new ValueAddDataRetrievalException(errorMsg, dae);
+		}
 		return valueIndex;
 	}
 
@@ -180,12 +195,8 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 		String valueAddAcceptedQuery = "SELECT PROGRAMID, " + " QUARTER(PROPOSED_DATE) AS QUARTERS, "
 				+ " SUM(CASE WHEN VALUEADD_STATUS = 'Implemented' THEN 1 ELSE 0 END)/SUM(CASE WHEN VALUEADD_STATUS != 'Implemented' THEN 1 ELSE 0 END) AS GRAPHDATA FROM VALUEADD "
 				+ " WHERE YEAR(PROPOSED_DATE) = YEAR(NOW()) AND " + " PROGRAMID = ? " + "	GROUP BY PROGRAMID, QUARTERS; ";
-		/*
-		 * valueAddAcceptedIdeas =
-		 * jdbcTemplate.queryForObject(valueAddAcceptedQuery,
-		 * VALUEADDACCEPTEDROWMAPPER, new Object[] { programId });
-		 */
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(valueAddAcceptedQuery, new Object[] { programId });
+		try {
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(valueAddAcceptedQuery, new Object[] { programId });		
 		ArrayList<Double> graphdata = new ArrayList<Double>();
 		ArrayList<String> labels = new ArrayList<String>();
 		for (Map<String, Object> row : list) {
@@ -196,6 +207,12 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 		valueAddAcceptedIdeas.setName("Accepted ideas");
 		valueAddAcceptedIdeas.setGraphdata(graphdata);
 		valueAddAcceptedIdeas.setLabels(labels);
+		} catch (DataAccessException dae) {
+			Locale locale = new Locale("en", "IN");
+			String errorMsg = messageSource.getMessage("error.get.getvalueadd", new Object[] {}, locale);
+			logger.error(errorMsg, dae);
+			throw new ValueAddDataRetrievalException(errorMsg, dae);
+		}
 		return valueAddAcceptedIdeas;
 	}
 
@@ -215,6 +232,7 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 		ValueCreation valueCreation = new ValueCreation();
 		Integer id = null;
 		String queryCondition = null;
+		try {
 		ArrayList<String> series = new ArrayList<String>();
 		if (0 != programId) {
 			id = programId;
@@ -224,6 +242,12 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 		valueCreation.setSeries(series);
 		ArrayList<ArrayList<Integer>> lineData = updateLineDatabyId(id, queryCondition);
 		valueCreation.setLinedata(lineData);
+	} catch (DataAccessException dae) {
+		Locale locale = new Locale("en", "IN");
+		String errorMsg = messageSource.getMessage("error.get.getvalueadd", new Object[] {}, locale);
+		logger.error(errorMsg, dae);
+		throw new ValueAddDataRetrievalException(errorMsg, dae);
+	}
 		return valueCreation;
 	}
 
@@ -243,10 +267,17 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 			id = projectId;
 			queryCondition = "PROJECTID";
 		}
+		try {
 		updateSeries(series);
 		valueCreation.setSeries(series);
 		ArrayList<ArrayList<Integer>> lineData = updateLineDatabyId(id, queryCondition);
 		valueCreation.setLinedata(lineData);
+		} catch (DataAccessException dae) {
+			Locale locale = new Locale("en", "IN");
+			String errorMsg = messageSource.getMessage("error.get.getvalueadd", new Object[] {}, locale);
+			logger.error(errorMsg, dae);
+			throw new ValueAddDataRetrievalException(errorMsg, dae);
+		}
 		return valueCreation;
 	}
 
@@ -339,12 +370,19 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 			id = program;
 			queryCondition = "PROGRAMID";
 		}
+		try {
 		updateQuarterlySeries(series);
 		updateQuarterlyLabels(labels);
 		valueCreation.setSeries(series);
 		valueCreation.setLabels(labels);
 		ArrayList<ArrayList<Integer>> lineData = updateQuarterlyLineDatabyId(id, queryCondition);
 		valueCreation.setGraphdata(lineData);
+		} catch (DataAccessException dae) {
+			Locale locale = new Locale("en", "IN");
+			String errorMsg = messageSource.getMessage("error.get.getvalueadd", new Object[] {}, locale);
+			logger.error(errorMsg, dae);
+			throw new ValueAddDataRetrievalException(errorMsg, dae);
+		}
 		return valueCreation;
 	}
 
@@ -455,6 +493,7 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 				+ "           PROPOSED_DATE >= DATE_SUB(NOW(),INTERVAL 1 YEAR)   "
 				+ "           AND (VALUEADD_STATUS != 'Proposed' AND VALUEADD_STATUS != 'Rejected')   "
 				+ "           GROUP BY PROJECTID,QUARTER   " + " 		) VALUE   " + " GROUP BY VALUE.PROJECTID;";
+		try {
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(economicValueAddQuery, new Object[] { programId });
 		for (Map<String, Object> row : list) {
 			h1Total = (Double) row.get("Q1") + (Double) row.get("Q2");
@@ -463,6 +502,12 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 		graphdata.add(h1Total*100/(h1Total+h2Total));
 		graphdata.add(h2Total*100/(h1Total+h2Total));
 		economicValue.setGraphdata(graphdata);
+		} catch (DataAccessException dae) {
+			Locale locale = new Locale("en", "IN");
+			String errorMsg = messageSource.getMessage("error.get.getvalueadd", new Object[] {}, locale);
+			logger.error(errorMsg, dae);
+			throw new ValueAddDataRetrievalException(errorMsg, dae);
+		}
 		return economicValue;
 	}
 	
@@ -488,6 +533,7 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 				+ "  AND PROPOSED_DATE >= DATE_SUB(NOW(),INTERVAL 1 YEAR)   "
 				+ "  AND (VALUEADD_STATUS != 'Proposed' AND VALUEADD_STATUS != 'Rejected')   "
 				+ "  GROUP BY PORTFOLIOID,QUARTER) VALUE   GROUP BY VALUE.PORTFOLIOID;";
+		try {
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(economicValueAddQuery, new Object[] { portfolioId });
 		for (Map<String, Object> row : list) {
 			h1Total = (Double) row.get("Q1") + (Double) row.get("Q2");
@@ -500,6 +546,12 @@ public class ValueAddManagementDAOImpl implements ValueAddManagementDAO {
 		graphdata.add(h1Total*100/(h1Total+h2Total));
 		graphdata.add(h2Total*100/(h1Total+h2Total));
 		economicValue.setGraphdata(graphdata);
+		} catch (DataAccessException dae) {
+			Locale locale = new Locale("en", "IN");
+			String errorMsg = messageSource.getMessage("error.get.getvalueadd", new Object[] {}, locale);
+			logger.error(errorMsg, dae);
+			throw new ValueAddDataRetrievalException(errorMsg, dae);
+		}
 		return economicValue;
 	}
 

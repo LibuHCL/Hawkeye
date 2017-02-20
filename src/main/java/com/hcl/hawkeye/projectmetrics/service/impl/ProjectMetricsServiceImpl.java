@@ -22,8 +22,10 @@ import com.hcl.hawkeye.projectcost.service.ProjectCostService;
 import com.hcl.hawkeye.projectmanagement.DO.DefectTypes;
 import com.hcl.hawkeye.projectmanagement.DO.SprintDetailsOfProject;
 import com.hcl.hawkeye.projectmanagement.service.ProjectManagementService;
+import com.hcl.hawkeye.projectmetrics.DAO.ProjectMetricsDAO;
 import com.hcl.hawkeye.projectmetrics.DO.Metrics;
 import com.hcl.hawkeye.projectmetrics.DO.MetricsValueCreation;
+import com.hcl.hawkeye.projectmetrics.DO.ProjectDetails;
 import com.hcl.hawkeye.projectmetrics.DO.ProjectMetricCost;
 import com.hcl.hawkeye.projectmetrics.DO.ProjectMetricResults;
 import com.hcl.hawkeye.projectmetrics.DO.ProjectMetrics;
@@ -64,6 +66,9 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 	
 	@Autowired
 	SonarMetricsManagementService sonMetService;
+	
+	@Autowired
+	ProjectMetricsDAO projectMetricsDAO;
 
 	@Override
 	public ProjectMetrics getProjMetricsData(int projectId) {
@@ -271,6 +276,12 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 		
 		return pMetResults;
 				
+	}
+
+	@Override
+	public ProjectDetails getProjectByProgramId(Integer programId) {
+		logger.info("Request in getProjectByProgramId of ProjectMetricsServiceImpl");
+		return projectMetricsDAO.getProjectByProgramId(programId);
 	}
 	
 }

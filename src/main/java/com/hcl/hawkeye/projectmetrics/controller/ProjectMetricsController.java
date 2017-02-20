@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hcl.hawkeye.projectmetrics.DO.ProjectDetails;
 import com.hcl.hawkeye.projectmetrics.DO.ProjectMetrics;
 import com.hcl.hawkeye.projectmetrics.service.ProjectMetricsService;
 
@@ -29,5 +30,14 @@ public class ProjectMetricsController {
 		ProjectMetrics projMet = null;
 		projMet = projMetservice.getProjMetricsData(projectId);
 		return projMet;
+	}
+	
+	@RequestMapping(value="/getProjectByProgramId/{programId}", method = RequestMethod.GET)
+	@ResponseBody
+	public ProjectDetails getProjectByProgramId(@PathVariable("programId") Integer programId) {
+		logger.info("getProjectByProgramId inside ProjectMetricsController: {}", programId);
+		ProjectDetails projectDetails = new ProjectDetails();
+		projectDetails = projMetservice.getProjectByProgramId(programId);
+		return projectDetails;
 	}
 }
