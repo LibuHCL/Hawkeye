@@ -26,6 +26,7 @@ import com.hcl.hawkeye.portfolio.DO.PortfolioDashboard;
 import com.hcl.hawkeye.portfolio.DO.PortfolioDate;
 import com.hcl.hawkeye.portfolio.DO.PortfolioInfo;
 import com.hcl.hawkeye.portfolio.DO.Program;
+import com.hcl.hawkeye.portfolio.DO.ProgramInfo;
 import com.hcl.hawkeye.portfolio.DO.Quarter;
 import com.hcl.hawkeye.portfolio.DO.ValueCreation;
 import com.hcl.hawkeye.portfolio.service.PortfolioManagementService;
@@ -168,5 +169,19 @@ public class PortfolioManagementServiceImpl implements PortfolioManagementServic
 		logger.info("returning all dashboard info successfully");
 		return dashboard;
 
+	}
+
+	@Override
+	public List<ProgramInfo> getProgramsForPortfolio(Integer portfolioId) {
+		logger.info("Inside getProgramsForPortfolio method in PortFolioMangementServiceImpl: " + portfolioId);
+
+		try {
+			return portfolioDAO.getProgramDetailsByPortfolio(portfolioId);
+		} catch (DataAccessException e) {
+			Locale locale = new Locale("en", "IN");
+			String errorMsg = messageSource.getMessage("error.get.noofprogram", new Object[] {}, locale);
+			logger.error(errorMsg, e);
+			throw new PortfolioCreationException(errorMsg, e);
+		}
 	}
 }

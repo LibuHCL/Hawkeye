@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.hcl.hawkeye.portfolio.DO.Portfolio;
 import com.hcl.hawkeye.portfolio.DO.Program;
+import com.hcl.hawkeye.portfolio.DO.ProgramInfo;
 
 public interface PortfolioManagementDAO {
 
@@ -15,5 +16,7 @@ public interface PortfolioManagementDAO {
 	
 	String getPortfolioNameById(Integer portfolioId);
 	Integer noOfProjectsPerPortFolio(Integer portFolioId);
+	
+	List<ProgramInfo> getProgramDetailsByPortfolio(Integer portfolioId);
 	
 }
