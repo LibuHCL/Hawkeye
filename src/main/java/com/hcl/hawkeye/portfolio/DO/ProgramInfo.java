@@ -1,14 +1,16 @@
 package com.hcl.hawkeye.portfolio.DO;
 
+import java.sql.Timestamp;
+
 public class ProgramInfo {
 	
 	
 	private String programName;
 	
-	private Integer projectsCount;
+	private Long projectsCount;
 	
-	private String startDate;
-	private String endDate;
+	private Timestamp startDate;
+	private Timestamp endDate;
 	
 	private String status;
 
@@ -20,27 +22,27 @@ public class ProgramInfo {
 		this.programName = programName;
 	}
 
-	public Integer getProjectsCount() {
+	public Long getProjectsCount() {
 		return projectsCount;
 	}
 
-	public void setProjectsCount(Integer projectsCount) {
+	public void setProjectsCount(Long projectsCount) {
 		this.projectsCount = projectsCount;
 	}
 
-	public String getStartDate() {
+	public Timestamp getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(String startDate) {
+	public void setStartDate(Timestamp startDate) {
 		this.startDate = startDate;
 	}
 
-	public String getEndDate() {
+	public Timestamp getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(String endDate) {
+	public void setEndDate(Timestamp endDate) {
 		this.endDate = endDate;
 	}
 

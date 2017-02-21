@@ -3,6 +3,7 @@ package com.hcl.hawkeye.portfolio.DAO.impl;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -114,10 +115,10 @@ public class PortfolioManagementDAOImpl implements PortfolioManagementDAO {
 		List<ProgramInfo> prgmsList = new ArrayList<>();
 		for (Map<String, Object> row : list) {
 			ProgramInfo programInfo = new ProgramInfo();
-			programInfo.setProjectsCount((Integer) row.get("PROJECT_COUNT"));
+			programInfo.setProjectsCount((Long) row.get("PROJECT_COUNT"));
 			programInfo.setProgramName((String)row.get("PROGRAM_NAME"));
-			programInfo.setEndDate((String)row.get("END_DATE"));
-			programInfo.setStartDate((String)row.get("START_DATE"));
+			programInfo.setEndDate((Timestamp)row.get("END_DATE"));
+			programInfo.setStartDate((Timestamp)row.get("START_DATE"));
 			programInfo.setStatus((String)row.get("PRGRM_STATUS"));
 			prgmsList.add(programInfo);
 		}
