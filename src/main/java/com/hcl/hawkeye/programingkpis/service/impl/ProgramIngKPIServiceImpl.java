@@ -2,6 +2,7 @@ package com.hcl.hawkeye.programingkpis.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -242,6 +243,14 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 					}
 					grapIntData.add(mp.get(string).longValue());
 				}
+				ArrayList<String> series = new ArrayList<String>();
+				ArrayList<String> color = updateColor("tacticalKpi.name1.color");
+				updateSeries(series, "tacticalKpi.series1");
+
+				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("tacticalKpi.screen1"));
+				kv1.setType(graph.getGraph_Type());	
+				kv1.setSeries(series);
+				kv1.setColor(color);
 				kv1.setLongraphData(grapIntData);
 				kv1.setLabels(labelData);
 				kv1.setName(env.getProperty("tacticalKpi.name1"));
@@ -255,7 +264,13 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				List<Double> grahData = eDetails.getGraphData();
 						grahData.add(0.0);
 				kv2.setGraphdataOfIdeas(grahData);
-				
+				ArrayList<String> series = new ArrayList<String>();
+				ArrayList<String> color = updateColor("tacticalKpi.name2.color");
+				updateSeries(series, "tacticalKpi.series2");				
+				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("tacticalKpi.screen2"));
+				kv2.setType(graph.getGraph_Type());
+				kv2.setSeries(series);
+				kv2.setColor(color);
 				kv2.setName(env.getProperty("tacticalKpi.name2"));
 				kVList.add(kv2);
 			}
@@ -267,6 +282,13 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				List<Integer> graphData = new ArrayList<>();
 				graphData.add(0);
 				KPIValue kv2 = new KPIValue();
+				ArrayList<String> series = new ArrayList<String>();
+				ArrayList<String> color = updateColor("tacticalKpi.name3.color");
+				updateSeries(series, "tacticalKpi.series3");
+				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("tacticalKpi.screen3"));
+				kv2.setType(graph.getGraph_Type());
+				kv2.setSeries(series);
+				kv2.setColor(color);
 				for (VelocityOfProject velocityOfProject : sprintVelocity) {
 					labelData.add(velocityOfProject.getSprintName().replace(" ", ""));
 					Double completed = velocityOfProject.getCompletedValue();
@@ -293,6 +315,10 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 					
 				}
 				kv2.setGraphdata(grapData);
+				ArrayList<String> color = updateColor("tacticalKpi.name4.color");
+				kv2.setColor(color);
+				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("tacticalKpi.screen4"));
+				kv2.setType(graph.getGraph_Type());
 				kv2.setLabels(valueForQuater.getLabels());
 				kv2.setSeries(valueForQuater.getSeries());
 				kv2.setName(env.getProperty("tacticalKpi.name4"));
@@ -471,6 +497,15 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 		series.add(env.getProperty("Economic.color1"));
 		series.add(env.getProperty("Economic.color2"));
 		
+	}
+	
+	private ArrayList<String> updateColor(String colorCode) {
+		ArrayList<String> color = new ArrayList<>( Arrays.asList(env.getProperty(colorCode)));	
+		return color;
+	}
+
+	private void updateSeries(ArrayList<String> series, String seriesName) {
+		series.add(env.getProperty(seriesName));	
 	}
 	
 	
