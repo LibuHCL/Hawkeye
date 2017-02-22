@@ -6,8 +6,6 @@ import com.hcl.hawkeye.MetricDataDO.MetricDataDO;
 
 public interface MetricDataDAO {
 
-	MetricDataDO getMetricGraph(int companyid, String screenname);
-
+	MetricDataDO getMetricGraph(String screenname);
 	List<MetricDataDO> getNumberofMetricName(String screenName);
-
 }

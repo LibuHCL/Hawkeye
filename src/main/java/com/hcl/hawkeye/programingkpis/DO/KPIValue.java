@@ -10,13 +10,49 @@ public class KPIValue implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String name;
+	private String          name;
 	private List<Integer[]> graphdata;
-	private List<Integer> graphdataOfVelocity;
-	private List<Double> graphdataOfIdeas;
-	private List<String> labels;
-	private List<String> series;
-	private List<Long> longraphData;
+	private List<Integer>   graphdataOfVelocity;
+	private List<Double>    graphdataOfIdeas;
+	private List<String>    labels;
+	private List<String>    series;
+	private List<Long>      longraphData;
+	private String          type;
+	private List<String>    color;
+	private List<String>    bgcolor;
+	private String          xlabel;
+	private String          ylabel;
+	
+	public List<String> getColor() {
+		return color;
+	}
+	public void setColor(List<String> color) {
+		this.color = color;
+	}
+	public List<String> getBgcolor() {
+		return bgcolor;
+	}
+	public void setBgcolor(List<String> bgcolor) {
+		this.bgcolor = bgcolor;
+	}
+	public String getXlabel() {
+		return xlabel;
+	}
+	public void setXlabel(String xlabel) {
+		this.xlabel = xlabel;
+	}
+	public String getYlabel() {
+		return ylabel;
+	}
+	public void setYlabel(String ylabel) {
+		this.ylabel = ylabel;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
 	/**
 	 * @return the name
 	 */

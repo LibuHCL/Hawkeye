@@ -2,12 +2,17 @@ package com.hcl.hawkeye.MetricDataDO;
 
 public class MetricDataDO {
 	
+	private String metric_Name;
+	private String graph_Type;
+	private String screen_Name;
+	private int company_Id;
+	private String company_Name;
+	private int entity_Id;
 	
-
-	public MetricDataDO() {
+	
+    public MetricDataDO() {
 		// TODO Auto-generated constructor stub
 	}
-	private String metric_Name;
 	public String getMetric_Name() {
 		return metric_Name;
 	}
@@ -54,11 +59,7 @@ public class MetricDataDO {
 		this.company_Name = company_Name;
 		this.entity_Id = entity_Id;
 	}
-	private String graph_Type;
-	private String screen_Name;
-	private int company_Id;
-	private String company_Name;
-	private int entity_Id;
+	
 	
 		
 	

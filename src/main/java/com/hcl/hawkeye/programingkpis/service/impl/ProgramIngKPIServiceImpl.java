@@ -17,8 +17,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.hcl.hawkeye.Exceptions.IngKpiRetrievalException;
+import com.hcl.hawkeye.MetricDataDO.MetricDataDO;
 import com.hcl.hawkeye.escalationmanagement.service.EscalationManagementService;
 import com.hcl.hawkeye.feedbacktracker.service.impl.FeedbackTrackerServiceImpl;
+import com.hcl.hawkeye.metric.service.MetricDataService;
 import com.hcl.hawkeye.portfolio.DO.Graph;
 import com.hcl.hawkeye.programingkpis.DO.KPIType;
 import com.hcl.hawkeye.programingkpis.DO.KPIValue;
@@ -33,7 +35,7 @@ import com.hcl.hawkeye.valueaddmanagement.service.ValueAddManagementService;
 
 @Service
 @PropertySource("classpath:ingkpi.properties")
-public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
+public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ProgramIngKPIServiceImpl.class);
 
@@ -57,6 +59,10 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 	
 	@Autowired
 	FeedbackTrackerServiceImpl feedBackService;
+	
+	@Autowired
+	MetricDataService merticdataservice;
+	
 	
 	@Override
 	public Result getOperationalKpiResults(int projectId) {
@@ -313,9 +319,19 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 			if(i == 1) {
 				KPIValue kv1 = new KPIValue();
 				kv1.setName(env.getProperty("strategicalkpi.name1"));
-				Graph escDetails = emService.noOfEscAtPortfolioLevelPerQt(portfolioId);				
+				Graph escDetails = emService.noOfEscAtPortfolioLevelPerQt(portfolioId);
 				kv1.setGraphdataOfIdeas(escDetails.getGraphData());
-				kv1.setLabels(escDetails.getLabels());				
+				kv1.setLabels(escDetails.getLabels());
+				ArrayList<String> series = new ArrayList<String>();
+				ArrayList<String> color = new ArrayList<String>();
+				ecoseries(series);		
+				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("strategicalkpi.Ecoscreen"));
+				kv1.setType(graph.getGraph_Type());	
+				ecocolor(color);
+				kv1.setSeries(series);
+				kv1.setXlabel(env.getProperty("Strglxlabel"));	
+				kv1.setYlabel(env.getProperty("Strglylabel"));
+				kv1.setColor(color);
 				StrkVList.add(kv1);
 			}			
 			if(i == 2) {
@@ -324,16 +340,37 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 				KPIValue kv2 = new KPIValue();
 				kv2.setName(env.getProperty("strategicalkpi.name2"));
 				kv2.setGraphdataOfIdeas(feedDetails.getGraphData());
-				kv2.setLabels(labelsList);		
+				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("strategicalkpi.Stakeholder"));
+				ArrayList<String> series = new ArrayList<String>();
+				ArrayList<String> color = new ArrayList<String>();
+				stakeseries(series);
+				Stakecolor(color);
+				kv2.setType(graph.getGraph_Type());
+				kv2.setLabels(labelsList);
+				kv2.setSeries(series);	
+				kv2.setXlabel(env.getProperty("Stakeholder.xlabel"));	
+				kv2.setYlabel(env.getProperty("Stakeholder.ylabel"));
+				kv2.setColor(color);
 				StrkVList.add(kv2);
 			}			
 			if(i == 3) {
 				Graph feedDetails = feedBackService.getnoofFeedBacksPerQtAtPerfolioLevel(portfolioId, "VENDOR");
 				KPIValue kv2 = new KPIValue();
-
+                MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("strategicalkpi.Partner"));
+                ArrayList<String> series = new ArrayList<String>();
+                ArrayList<String> color = new ArrayList<String>();
+				ArrayList<String> bgcolor = new ArrayList<String>();
+				partnerseries(series);
+				Partnercolor(color);
+				kv2.setSeries(series);
+				kv2.setType(graph.getGraph_Type());
 				kv2.setName(env.getProperty("strategicalkpi.name3"));
 				kv2.setGraphdataOfIdeas(feedDetails.getGraphData());
 				kv2.setLabels(labelsList);
+				kv2.setXlabel(env.getProperty("Partner.xlabel"));	
+				kv2.setYlabel(env.getProperty("Partner.ylabel"));
+				kv2.setColor(color);
+				kv2.setBgcolor(bgcolor);
 				StrkVList.add(kv2);
 			}
 			
@@ -341,12 +378,65 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService{
 				ValueAddAcceptedIdeas valueForQuater = vmService.getEconomicValueAddByPortfolio(portfolioId);
 				KPIValue kv2 = new KPIValue();
 				kv2.setName(env.getProperty("strategicalkpi.name4"));
-
+                MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("strategicalkpi.Economic"));
+                ArrayList<String> series = new ArrayList<String>();
+                ArrayList<String> color = new ArrayList<String>();
+				economicseries(series);
+				Ecocolor(color);
+				kv2.setSeries(series);
+				kv2.setType(graph.getGraph_Type());
 				kv2.setGraphdataOfIdeas(valueForQuater.getGraphdata());
 				kv2.setLabels(valueForQuater.getLabels());
+				kv2.setXlabel(env.getProperty("Economic.xlabel"));	
+				kv2.setYlabel(env.getProperty("Economic.ylabel"));
+				kv2.setColor(color);
 				StrkVList.add(kv2);
 			}
 		}
 		return StrkVList;
 	}
+	private void ecoseries(ArrayList<String> series) {
+		series.add(env.getProperty("Ecosystem.series"));
+		
+	}
+	
+	private void stakeseries(ArrayList<String> series) {
+		series.add(env.getProperty("Stakeholder.series"));
+		
+	}
+	
+	private void partnerseries(ArrayList<String> series) {
+		series.add(env.getProperty("Partner.series"));
+		
+	}
+	
+	private void economicseries(ArrayList<String> series) {
+		series.add(env.getProperty("Economic.series"));
+		
+	}
+	private  void ecocolor(ArrayList<String> series) {
+		series.add(env.getProperty("StrategicalKPI.color"));
+		
+	}
+	
+		
+	private  void Stakecolor(ArrayList<String> series) {
+		series.add(env.getProperty("Stakeholder.color"));
+		
+	}
+		
+	private  void Partnercolor(ArrayList<String> series) {
+		series.add(env.getProperty("Partner.color"));
+		
+	}
+	
+	
+	private  void Ecocolor(ArrayList<String> series) {
+		series.add(env.getProperty("Economic.color"));
+		
+	}
+	
+	
+	
+	
 }

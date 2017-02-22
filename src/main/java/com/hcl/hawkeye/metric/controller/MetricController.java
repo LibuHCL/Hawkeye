@@ -29,30 +29,23 @@ public class MetricController {
 	MetricDataService merticdataservice;
 	
 	/* To Capture the MetricsConfiguration data Details */
-	  
-	
-	/* To Get the FeedBackCategoryId Details */
-	
-	//screen name 
-    @RequestMapping(value = "/getMetricName/{screenName}", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@RequestMapping(value = "/getMetricName/{screenName}", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public ResponseEntity <List<MetricDataDO>> getNumberofMetricName(@PathVariable("screenName") String screenName){
-    	logger.info("Inside getFeedBackCategoryId method in Controller:");
+    	logger.info("Inside getNumberofMetricName method in Controller:");
     	List<MetricDataDO> metricdata = merticdataservice.getNumberofMetricName(screenName);
     	return new ResponseEntity<List<MetricDataDO>> (metricdata, HttpStatus.CREATED);
     	
     }
-    
-    //companyid ,screen name and get mertic name and graph type.
-    
+        
     /* To Get the feedbackTrack Details for Project */
-    @RequestMapping(value = "/getMetricGraph/{companyid}/{screenname}", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/getMetricGraph/{screenname}", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public ResponseEntity<MetricDataDO>  getMetricType(@PathVariable("companyid") int companyid,@PathVariable("screenname") String screenname){
+    public ResponseEntity<MetricDataDO>  getMetricType(@PathVariable("screenname") String screenname){
     	
-    	logger.info("Inside getMetricType method in Controller:"+companyid+screenname);
-    	MetricDataDO metricdata = merticdataservice.getMetricGraph(companyid,screenname);
-    	logger.info("reporterType projectid Details recieved: " + metricdata);
+    	logger.info("Inside getMetricType method in Controller:"+screenname);
+    	MetricDataDO metricdata = merticdataservice.getMetricGraph(screenname);
+    	logger.info("screenname Details recieved: " + metricdata);
     	return new ResponseEntity<MetricDataDO> (metricdata, HttpStatus.CREATED);
     	
     }

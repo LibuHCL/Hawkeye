@@ -37,7 +37,6 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 		String getMetricNames_SQL = "SELECT * FROM METRIC_DATA WHERE SCREEN_NAME = ? ";
 		try{
 			List<Map<String, Object>> metricnameList = jdbcTemplate.queryForList(getMetricNames_SQL,new Object[] {screenName});
-			System.out.println("metricnameListmetricnameListmetricnameList:"+metricnameList);
 			if(metricnameList  != null && metricnameList.size() >0)  
 			{
 				for (Map<String, Object> row : metricnameList) {
@@ -59,15 +58,12 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 	}
 	
 	@Override
-	public MetricDataDO getMetricGraph(int companyid, String screenname) {
+	public MetricDataDO getMetricGraph(String screenname) {
 		// TODO Auto-generated method stub
 		MetricDataDO metricdatadetails = null;
-		//String getgrapth_SQL ="SELECT * FROM METRIC_CONFIGURATION WHERE COMPANY_ID = ? AND SCREEN_NAME = ?";
-		
-		String getgrapth_SQL = "SELECT MD . * FROM  METRIC_DATA MD, METRIC_CONFIGURATION MC WHERE MD.METRIC_NAME = MC.METRICNAME AND MC.COMPANY_ID = ? AND MD.SCREEN_NAME = ?";
+		String getgrapth_SQL = "SELECT MD . * FROM  METRIC_DATA MD, METRIC_CONFIGURATION MC WHERE MD.METRIC_NAME = MC.METRICNAME AND MD.SCREEN_NAME = ?";
 		try{
-			metricdatadetails = jdbcTemplate.queryForObject(getgrapth_SQL, new Object[] {companyid,screenname}, rowMapper);
-			System.out.println("metricdatadetails:"+metricdatadetails);
+			metricdatadetails = jdbcTemplate.queryForObject(getgrapth_SQL, new Object[] {screenname}, rowMapper);
 		   }
 		
 		catch (DataAccessException dae) {
@@ -76,7 +72,7 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 		
 	     }
 		logger.info("get the result getMetricGraph METHOD");
-		System.out.println(metricdatadetails.getGraph_Type());
+		System.out.println("metricdatadetails:"+metricdatadetails.getGraph_Type());
 		return metricdatadetails;
 	}
 	
@@ -84,12 +80,11 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 		@Override
 		public MetricDataDO mapRow(ResultSet rSet, int arg1) throws SQLException {
 			MetricDataDO metricdata = new MetricDataDO();
-			
-			metricdata.setMetric_Name(rSet.getString("METRIC_NAME"));
 			metricdata.setGraph_Type(rSet.getString("GRAPH_TYPE"));
 			return metricdata;
 		}
 		
 	};
 
+	
 }
