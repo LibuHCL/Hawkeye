@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -66,13 +67,11 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 			metricdatadetails = jdbcTemplate.queryForObject(getgrapth_SQL, new Object[] {screenname}, rowMapper);
 		   }
 		
-		catch (DataAccessException dae) {
+		catch (EmptyResultDataAccessException  dae) {
 			logger.error("Exception in getMetricGraphDetails");
-			throw new MetricDataException("Exception in Metricdata Details", dae);
-		
+			//throw new MetricDataException("Exception in Metricdata Details", dae);		
 	     }
 		logger.info("get the result getMetricGraph METHOD");
-		System.out.println("metricdatadetails:"+metricdatadetails.getGraph_Type());
 		return metricdatadetails;
 	}
 	
