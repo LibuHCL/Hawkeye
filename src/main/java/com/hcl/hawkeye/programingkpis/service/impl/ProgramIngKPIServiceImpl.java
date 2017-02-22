@@ -135,13 +135,21 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 						}
 					}
 				}
-				
+				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("operationalkpi.continuity"));
+				kv2.setType(graph.getGraph_Type());	
 				grapData.add(grapIntData1.toArray(new Integer[grapIntData1.size()]));
 				grapData.add(grapIntData2.toArray(new Integer[grapIntData2.size()]));
 				kv2.setSeries(serires);
 				kv2.setLabels(labelData);
 				kv2.setGraphdata(grapData);
-				
+				kv2.setXlabel(env.getProperty("Continuity.xlabel"));	
+				kv2.setYlabel(env.getProperty("Continuity.ylabel"));
+				ArrayList<String> series = new ArrayList<String>();
+	            ArrayList<String> color = new ArrayList<String>();
+				continuitySeries(series);
+				continuityColor(color);
+				kv2.setSeries(series);
+				kv2.setColor(color);
 				kv2.setName(env.getProperty("kpi.name2"));
 				kVList.add(kv2);
 				logger.info("Ending Date first kpi - {}",new Date());
@@ -170,9 +178,19 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 						grapIntData.add((int)string.getCompletedValue());
 					}
 				}
+				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("operationalkpi.productivity"));
+				kv2.setType(graph.getGraph_Type());	
 				kv2.setGraphdataOfVelocity(grapIntData);
 				kv2.setLabels(labelData);
 				kv2.setName(env.getProperty("kpi.name4"));
+				kv2.setXlabel(env.getProperty("Productivity.xlabel"));	
+				kv2.setYlabel(env.getProperty("Productivity.ylabel"));
+				ArrayList<String> series = new ArrayList<String>();
+	            ArrayList<String> color = new ArrayList<String>();
+				productivitySeries(series);
+				productivityColor(color);
+				kv2.setSeries(series);
+				kv2.setColor(color);
 				kVList.add(kv2);
 				logger.info("ending Date second kpi - {}",new Date());
 			}
@@ -419,7 +437,21 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 		
 	}
 	
-		
+	private void productivitySeries(ArrayList<String> series){
+		series.add(env.getProperty("Productivity.series"));
+	}
+	
+	private void productivityColor(ArrayList<String> color){
+		color.add(env.getProperty("Productivity.color"));
+	}
+	
+	private void continuitySeries(ArrayList<String> series){
+		series.add(env.getProperty("Continuity.series"));
+	}
+	
+	private void continuityColor(ArrayList<String> color){
+		color.add(env.getProperty("Continuity.color"));
+	}
 	private  void Stakecolor(ArrayList<String> series) {
 		series.add(env.getProperty("Stakeholder.color"));
 		
