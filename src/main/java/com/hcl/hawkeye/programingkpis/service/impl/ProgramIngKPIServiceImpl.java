@@ -377,7 +377,6 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
                 MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("strategicalkpi.Partner"));
                 ArrayList<String> series = new ArrayList<String>();
                 ArrayList<String> color = new ArrayList<String>();
-				ArrayList<String> bgcolor = new ArrayList<String>();
 				partnerseries(series);
 				Partnercolor(color);
 				kv2.setSeries(series);
@@ -388,7 +387,6 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				kv2.setXlabel(env.getProperty("Partner.xlabel"));	
 				kv2.setYlabel(env.getProperty("Partner.ylabel"));
 				kv2.setColor(color);
-				kv2.setBgcolor(bgcolor);
 				StrkVList.add(kv2);
 			}
 			
@@ -435,6 +433,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 	private  void ecocolor(ArrayList<String> series) {
 		series.add(env.getProperty("StrategicalKPI.color"));
 		
+		
 	}
 	
 	private void productivitySeries(ArrayList<String> series){
@@ -453,18 +452,24 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 		color.add(env.getProperty("Continuity.color"));
 	}
 	private  void Stakecolor(ArrayList<String> series) {
-		series.add(env.getProperty("Stakeholder.color"));
+		series.add(env.getProperty("Stakeholder.color1"));
+		series.add(env.getProperty("Stakeholder.color2"));
+		series.add(env.getProperty("Stakeholder.color3"));
+		series.add(env.getProperty("Stakeholder.color4"));
 		
 	}
 		
 	private  void Partnercolor(ArrayList<String> series) {
-		series.add(env.getProperty("Partner.color"));
-		
+		series.add(env.getProperty("Partner.color1"));
+		series.add(env.getProperty("Partner.color2"));
+		series.add(env.getProperty("Partner.color3"));
+		series.add(env.getProperty("Partner.color4"));
 	}
 	
 	
 	private  void Ecocolor(ArrayList<String> series) {
-		series.add(env.getProperty("Economic.color"));
+		series.add(env.getProperty("Economic.color1"));
+		series.add(env.getProperty("Economic.color2"));
 		
 	}
 	
