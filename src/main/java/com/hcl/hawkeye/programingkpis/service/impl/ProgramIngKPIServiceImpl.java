@@ -111,6 +111,8 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 			}
 			*/
 			if(i == 1) {
+				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("operationalkpi.continuity"));
+				if (null != graph){
 				logger.info("starting Date first kpi - {}",new Date());
 				Map<String, Map<String, Integer>> priorityBlockerVal = pmService.getPriorityOfIssue(projectId, env.getProperty("project.priority.blocker"), env.getProperty("project.priority.critical"));
 				KPIValue kv2 = new KPIValue();
@@ -136,10 +138,9 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 						}
 					}
 				}
-				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("operationalkpi.continuity"));
-				if (null != graph){
+				
 				kv2.setType(graph.getGraph_Type());
-				}
+				
 				grapData.add(grapIntData1.toArray(new Integer[grapIntData1.size()]));
 				grapData.add(grapIntData2.toArray(new Integer[grapIntData2.size()]));
 				kv2.setSeries(serires);
@@ -157,6 +158,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				kVList.add(kv2);
 				logger.info("Ending Date first kpi - {}",new Date());
 			}
+			}
 			/*
 			if(i == 3) {
 				ValueAddAcceptedIdeas acceptedIdeas = vmService.getValueAddByAcceptedIdeas(projectId);
@@ -170,22 +172,25 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 			}*/
 			
 			if(i == 2) {
+				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("operationalkpi.productivity"));
+				if (null != graph){
 				logger.info("starting Date second kpi - {}",new Date());
 				List<VelocityOfProject> priorityHighVal = pmService.getVelocityOfSprint(projectId);
 				KPIValue kv2 = new KPIValue();
 				List<String> labelData = new ArrayList<>();
 				List<Integer> grapIntData = new ArrayList<>();
+				List<Integer[]> graphData = new ArrayList<>();
 				for (VelocityOfProject string : priorityHighVal) {
 					if (!(0 == (int)string.getCompletedValue())) {
 						labelData.add(string.getSprintName().replace(" ", ""));
 						grapIntData.add((int)string.getCompletedValue());
 					}
 				}
-				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("operationalkpi.productivity"));
-				if (null != graph){
+				graphData.add(grapIntData.toArray(new Integer[grapIntData.size()]));
+				
 				kv2.setType(graph.getGraph_Type());
-				}
-				kv2.setGraphdataOfVelocity(grapIntData);
+				
+				kv2.setGraphdata(graphData);
 				kv2.setLabels(labelData);
 				kv2.setName(env.getProperty("kpi.name4"));
 				kv2.setXlabel(env.getProperty("Productivity.xlabel"));	
@@ -198,6 +203,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				kv2.setColor(color);
 				kVList.add(kv2);
 				logger.info("ending Date second kpi - {}",new Date());
+			}
 			}
 		}
 		return kVList;
