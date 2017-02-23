@@ -240,6 +240,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("tacticalKpi.screen1"));
 				if(null != graph){
 				KPIValue kv1 = new KPIValue();
+				List<Integer[]> grapData = new ArrayList<>();
 				ArrayList<ArrayList<Integer>> graphData = new ArrayList<ArrayList<Integer>>();
 				ArrayList<Integer> grapIntData = new ArrayList<Integer>();
 				List<String> labelData = new ArrayList<>();
@@ -264,8 +265,10 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				kv1.setType(type);
 				kv1.setSeries(series);
 				kv1.setColor(color);
-				graphData.add(grapIntData);
-				kv1.setGraphDataIdeas(graphData);
+				grapData.add(grapIntData.toArray(new Integer[grapIntData.size()]));
+				//graphData.add(grapIntData);				
+				//kv1.setGraphDataIdeas(graphData);
+				kv1.setGraphdata(grapData);
 				kv1.setLabels(labelData);
 				kv1.setName(env.getProperty("tacticalKpi.name1"));
 				kv1.setXlabel(env.getProperty("tacticalKpi.name1.xlabel"));
@@ -277,17 +280,20 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 			if(i == 2) {
 				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("tacticalKpi.screen1"));
 				if(null != graph){
-				Graph eDetails = emService.noOfEscAtProject(projectId);
+				Graph eDetails = emService.noOfEscAtProject(projectId);				
 				KPIValue kv2 = new KPIValue();
 				kv2.setLabels(eDetails.getLabels());
+				List<Integer[]> grapData = new ArrayList<>();
 				//List<Double> grahData = eDetails.getGraphData();
 				//		grahData.add(0.0);
 				//kv2.setGraphdataOfIdeas(grahData);
 						ArrayList<ArrayList<Integer>> graphData = new ArrayList<ArrayList<Integer>>();
 						ArrayList<Integer> graphDataValue = new ArrayList<Integer>();		
 						graphDataValue.add(0);
-						graphData.add(graphDataValue);
-						kv2.setGraphDataIdeas(graphData);
+						grapData.add(graphDataValue.toArray(new Integer[graphDataValue.size()]));
+						//graphData.add(graphDataValue);
+						//kv2.setGraphDataIdeas(graphData);
+						kv2.setGraphdata(grapData);
 				ArrayList<String> series = new ArrayList<String>();
 				ArrayList<String> color = updateColor("tacticalKpi.name2.color");
 				updateSeries(series, "tacticalKpi.series2");				
@@ -309,6 +315,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				
 				List<String> labelData = new ArrayList<>();
 				ArrayList<ArrayList<Integer>> graphData = new ArrayList<ArrayList<Integer>>();
+				List<Integer[]> grapData = new ArrayList<>();
 				ArrayList<Integer> graphDataValue = new ArrayList<Integer>();
 				graphDataValue.add(0);
 				KPIValue kv2 = new KPIValue();
@@ -329,8 +336,10 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 					}
 					graphDataValue.add(data);
 				}
-				graphData.add(graphDataValue);
-				kv2.setGraphDataIdeas(graphData);
+				grapData.add(graphDataValue.toArray(new Integer[graphDataValue.size()]));
+				//graphData.add(graphDataValue);
+				kv2.setGraphdata(grapData);
+				//kv2.setGraphDataIdeas(graphData);
 				//kv2.setGraphDataIdeas(graphData);
 				kv2.setLabels(labelData);
 				kv2.setName(env.getProperty("tacticalKpi.name3"));
@@ -345,11 +354,12 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				if(null != graph){
 				ValueCreationQuarterly valueForQuater = vmService.getQuarterlyValueByProgramId(projectId);
 				KPIValue kv2 = new KPIValue();
-				//List<Integer[]> grapData = new ArrayList<>();
-				/*for (ArrayList<Integer> integer : valueForQuater.getGraphdata()) {
+				List<Integer[]> grapData = new ArrayList<>();
+				for (ArrayList<Integer> integer : valueForQuater.getGraphdata()) {
 					grapData.add(integer.toArray(new Integer[integer.size()]));
-				}*/
-				kv2.setGraphDataIdeas(valueForQuater.getGraphdata());
+				}
+				kv2.setGraphdata(grapData);
+				//kv2.setGraphdata(valueForQuater.getGraphdata());
 				//kv2.setGraphdata(grapData);
 				ArrayList<String> color = updateColor("tacticalKpi.name4.color");
 				kv2.setColor(color);
