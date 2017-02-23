@@ -554,7 +554,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 	}
 	
 	private ArrayList<String> updateColor(String colorCode) {
-		ArrayList<String> color = new ArrayList<>( Arrays.asList(env.getProperty(colorCode)));	
+		ArrayList<String> color = new ArrayList<>( Arrays.asList((env.getProperty(colorCode)).split("\\s*,\\s*")));	
 		return color;
 	}
 

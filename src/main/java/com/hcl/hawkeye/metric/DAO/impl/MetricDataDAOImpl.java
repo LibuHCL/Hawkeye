@@ -1,8 +1,10 @@
 package com.hcl.hawkeye.metric.DAO.impl;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -84,6 +86,25 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 		}
 		
 	};
+
+	@Override
+	public Map<String, String> getMetricsDetail(String screenName) {
+		Map<String, String> metricDetails = new HashMap<String, String>();
+		String getgrapth_SQL = "SELECT MD . * FROM  METRIC_DATA MD, METRIC_CONFIGURATION MC WHERE MD.METRIC_NAME = MC.METRICNAME AND MD.SCREEN_NAME = ?";
+		try{
+			List<Map<String, Object>> list = jdbcTemplate.queryForList(getgrapth_SQL, new Object[] { screenName });
+			for (Map<String, Object> row : list) {
+				metricDetails.put((row.get("METRIC_NAME")).toString(), (row.get("GRAPH_TYPE")).toString());
+			}
+		   }
+		
+		catch (EmptyResultDataAccessException  dae) {
+			logger.error("Exception in getMetricGraphDetails");
+			//throw new MetricDataException("Exception in Metricdata Details", dae);		
+	     }
+		logger.info("get the result getMetricGraph METHOD");
+		return metricDetails;
+	}
 
 	
 }

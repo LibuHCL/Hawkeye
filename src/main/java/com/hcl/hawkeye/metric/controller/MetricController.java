@@ -1,6 +1,7 @@
 package com.hcl.hawkeye.metric.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +40,16 @@ public class MetricController {
     }
         
     /* To Get the feedbackTrack Details for Project */
+    @RequestMapping(value = "/getMetricsDetail/{screenname}", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public Map<String, String>  getMetricsDetail(@PathVariable("screenname") String screenname){    	
+    	logger.info("Inside getMetricType method in Controller:"+screenname);
+    	Map<String, String> metricdata = merticdataservice.getMetricsDetail(screenname);
+    	logger.info("screenname Details recieved: " + metricdata);
+    	return metricdata;
+    	
+    }
+      
     @RequestMapping(value = "/getMetricGraph/{screenname}", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public ResponseEntity<MetricDataDO>  getMetricType(@PathVariable("screenname") String screenname){
@@ -49,8 +60,6 @@ public class MetricController {
     	return new ResponseEntity<MetricDataDO> (metricdata, HttpStatus.CREATED);
     	
     }
-      
-    
   
 	 
 }

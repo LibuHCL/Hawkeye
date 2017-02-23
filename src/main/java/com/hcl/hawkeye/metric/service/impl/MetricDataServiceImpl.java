@@ -1,6 +1,7 @@
 package com.hcl.hawkeye.metric.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,11 @@ public class MetricDataServiceImpl implements MetricDataService {
 		// TODO Auto-generated method stub
 		logger.info("Inside getNumberofMetricName method in MetricDataServiceImpl");
 		return metricdao.getNumberofMetricName(screenName);
+	}
+
+	@Override
+	public Map<String, String> getMetricsDetail(String screenName) {
+		return metricdao.getMetricsDetail(screenName);
 	}
 
 }
