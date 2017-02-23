@@ -96,7 +96,8 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 	private List<KPIValue> getListOfKpi(int projectId) {
 		List<KPIValue> kVList = new ArrayList<KPIValue>();
 		int[] intVal = {1,2}; 
-		
+		Map<String,String> graph= merticdataservice.getMetricsDetail(env.getProperty("operationalkpi.screen"));
+		if (null != graph){
 		for (int i : intVal) {
 			/*if(i == 1) {
 				KPIValue kv1 = new KPIValue();
@@ -110,9 +111,8 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				kVList.add(kv1);
 			}
 			*/
-			if(i == 1) {
-				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("operationalkpi.continuity"));
-				if (null != graph){
+			if(i == 1 && graph.containsKey((env.getProperty("Continuity.metric").toUpperCase()))) {
+				
 				logger.info("starting Date first kpi - {}",new Date());
 				Map<String, Map<String, Integer>> priorityBlockerVal = pmService.getPriorityOfIssue(projectId, env.getProperty("project.priority.blocker"), env.getProperty("project.priority.critical"));
 				KPIValue kv2 = new KPIValue();
@@ -139,7 +139,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 					}
 				}
 				
-				kv2.setType(graph.getGraph_Type());
+				kv2.setType(graph.get((env.getProperty("Continuity.metric").toUpperCase())));
 				
 				grapData.add(grapIntData1.toArray(new Integer[grapIntData1.size()]));
 				grapData.add(grapIntData2.toArray(new Integer[grapIntData2.size()]));
@@ -149,16 +149,16 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				kv2.setXlabel(env.getProperty("Continuity.xlabel"));	
 				kv2.setYlabel(env.getProperty("Continuity.ylabel"));
 				ArrayList<String> series = new ArrayList<String>();
-	            ArrayList<String> color = new ArrayList<String>();
+	            ArrayList<String> color = updateColor("Continuity.color");
 				updateSeries(series,"Continuity.series");
-				updateColor("Continuity.color");
+				
 				
 				kv2.setSeries(series);
 				kv2.setColor(color);
 				kv2.setName(env.getProperty("kpi.name2"));
 				kVList.add(kv2);
 				logger.info("Ending Date first kpi - {}",new Date());
-			}
+			
 			}
 			/*
 			if(i == 3) {
@@ -172,9 +172,8 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				kVList.add(kv2);
 			}*/
 			
-			if(i == 2) {
-				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("operationalkpi.productivity"));
-				if (null != graph){
+			if(i == 2 && graph.containsKey((env.getProperty("Productivity.series").toUpperCase()))) {
+				
 				logger.info("starting Date second kpi - {}",new Date());
 				List<VelocityOfProject> priorityHighVal = pmService.getVelocityOfSprint(projectId);
 				KPIValue kv2 = new KPIValue();
@@ -189,7 +188,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				}
 				graphData.add(grapIntData.toArray(new Integer[grapIntData.size()]));
 				
-				kv2.setType(graph.getGraph_Type());
+				kv2.setType(graph.get((env.getProperty("Productivity.series").toUpperCase())));
 				
 				kv2.setGraphdata(graphData);
 				kv2.setLabels(labelData);
@@ -197,9 +196,9 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				kv2.setXlabel(env.getProperty("Productivity.xlabel"));	
 				kv2.setYlabel(env.getProperty("Productivity.ylabel"));
 				ArrayList<String> series = new ArrayList<String>();
-	            ArrayList<String> color = new ArrayList<String>();
+	            ArrayList<String> color = updateColor("Productivity.color");
 	            updateSeries(series,"Productivity.series");
-				updateColor("Productivity.color");
+				
 				kv2.setSeries(series);
 				kv2.setColor(color);
 				kVList.add(kv2);
