@@ -235,11 +235,11 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 	private List<KPIValue> getListOfTacticalKpi(int projectId) {
 		List<KPIValue> kVList = new ArrayList<KPIValue>();
 		int[] intVal = {1,2,3,4}; 
-		
+		Map<String, String> graph = merticdataservice.getMetricsDetail(env.getProperty("tacticalKpi.screen"));
+		if (null != graph)  {
 		for (int i : intVal) {
 			if(i == 1) {
-				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("tacticalKpi.screen1"));
-				if(null != graph){
+				if(graph.containsKey(env.getProperty("tacticalKpi.name1"))) {
 				KPIValue kv1 = new KPIValue();
 				List<Integer[]> grapData = new ArrayList<>();
 				ArrayList<ArrayList<Integer>> graphData = new ArrayList<ArrayList<Integer>>();
@@ -261,9 +261,8 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				ArrayList<String> series = new ArrayList<String>();
 				ArrayList<String> color = updateColor("tacticalKpi.name1.color");
 				updateSeries(series, "tacticalKpi.series1");
-
-				String type = (null != graph) ? graph.getGraph_Type() : "";	
-				kv1.setType(type);
+	
+				kv1.setType(graph.get(env.getProperty("tacticalKpi.name1")));
 				kv1.setSeries(series);
 				kv1.setColor(color);
 				grapData.add(grapIntData.toArray(new Integer[grapIntData.size()]));
@@ -279,8 +278,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 			}
 			
 			if(i == 2) {
-				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("tacticalKpi.screen1"));
-				if(null != graph){
+				if(graph.containsKey(env.getProperty("tacticalKpi.name2"))) {
 				Graph eDetails = emService.noOfEscAtProject(projectId);				
 				KPIValue kv2 = new KPIValue();
 				kv2.setLabels(eDetails.getLabels());
@@ -298,8 +296,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				ArrayList<String> series = new ArrayList<String>();
 				ArrayList<String> color = updateColor("tacticalKpi.name2.color");
 				updateSeries(series, "tacticalKpi.series2");				
-				String type = (null != graph) ? graph.getGraph_Type() : "";	
-				kv2.setType(type);
+				kv2.setType(graph.get(env.getProperty("tacticalKpi.name2")));
 				kv2.setSeries(series);
 				kv2.setColor(color);
 				kv2.setName(env.getProperty("tacticalKpi.name2"));
@@ -310,8 +307,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 			}
 			
 			if(i == 3) {
-				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("tacticalKpi.screen1"));
-				if(null != graph){
+				if(graph.containsKey(env.getProperty("tacticalKpi.name3"))) {
 				List<VelocityOfProject> sprintVelocity = pmService.getVelocityOfSprint(projectId);
 				
 				List<String> labelData = new ArrayList<>();
@@ -323,10 +319,9 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				ArrayList<String> series = new ArrayList<String>();
 				ArrayList<String> color = updateColor("tacticalKpi.name3.color");
 				updateSeries(series, "tacticalKpi.series3");
-				String type = (null != graph) ? graph.getGraph_Type() : "";	
+				String type = graph.get(env.getProperty("tacticalKpi.name3"));
 				kv2.setType(type);
 				kv2.setSeries(series);
-				kv2.setColor(color);
 				for (VelocityOfProject velocityOfProject : sprintVelocity) {
 					labelData.add(velocityOfProject.getSprintName().replace(" ", ""));
 					Double completed = velocityOfProject.getCompletedValue();
@@ -342,6 +337,13 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				kv2.setGraphdata(grapData);
 				//kv2.setGraphDataIdeas(graphData);
 				//kv2.setGraphDataIdeas(graphData);
+				if ("bar".equalsIgnoreCase(type)) {
+					String colorValue = color.get(0);
+					for(int cnt = 0; cnt < labelData.size(); cnt ++) {
+						color.add(colorValue);
+					}
+				}
+				kv2.setColor(color);
 				kv2.setLabels(labelData);
 				kv2.setName(env.getProperty("tacticalKpi.name3"));
 				kv2.setXlabel(env.getProperty("tacticalKpi.name3.xlabel"));
@@ -351,8 +353,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 			}
 			
 			if(i == 4) {
-				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("tacticalKpi.screen1"));
-				if(null != graph){
+				if(graph.containsKey(env.getProperty("tacticalKpi.name4"))) {
 				ValueCreationQuarterly valueForQuater = vmService.getQuarterlyValueByProgramId(projectId);
 				KPIValue kv2 = new KPIValue();
 				List<Integer[]> grapData = new ArrayList<>();
@@ -364,8 +365,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				//kv2.setGraphdata(grapData);
 				ArrayList<String> color = updateColor("tacticalKpi.name4.color");
 				kv2.setColor(color);
-				String type = (null != graph) ? graph.getGraph_Type() : "";	
-				kv2.setType(type);
+				kv2.setType(graph.get(env.getProperty("tacticalKpi.name4")));
 				kv2.setLabels(valueForQuater.getLabels());
 				kv2.setSeries(valueForQuater.getSeries());
 				kv2.setXlabel(env.getProperty("tacticalKpi.name4.xlabel"));
@@ -374,6 +374,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				kVList.add(kv2);
 			}
 			}
+		}
 		}
 		return kVList;
 		
