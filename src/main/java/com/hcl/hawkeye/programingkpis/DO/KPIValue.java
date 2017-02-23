@@ -1,6 +1,7 @@
 package com.hcl.hawkeye.programingkpis.DO;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class KPIValue implements Serializable {
@@ -14,6 +15,7 @@ public class KPIValue implements Serializable {
 	private List<Integer[]> graphdata;
 	private List<Integer>   graphdataOfVelocity;
 	private List<Double>    graphdataOfIdeas;
+	private ArrayList<ArrayList<Integer>> graphDataIdeas;
 	private List<String>    labels;
 	private List<String>    series;
 	private List<Long>      longraphData;
@@ -124,6 +126,14 @@ public class KPIValue implements Serializable {
 	 */
 	public void setSeries(List<String> series) {
 		this.series = series;
+	}
+	
+	
+	public ArrayList<ArrayList<Integer>> getGraphDataIdeas() {
+		return graphDataIdeas;
+	}
+	public void setGraphDataIdeas(ArrayList<ArrayList<Integer>> graphDataIdeas) {
+		this.graphDataIdeas = graphDataIdeas;
 	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
