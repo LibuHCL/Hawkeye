@@ -150,8 +150,9 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				kv2.setYlabel(env.getProperty("Continuity.ylabel"));
 				ArrayList<String> series = new ArrayList<String>();
 	            ArrayList<String> color = new ArrayList<String>();
-				continuitySeries(series);
-				continuityColor(color);
+				updateSeries(series,"Continuity.series");
+				updateColor("Continuity.color");
+				
 				kv2.setSeries(series);
 				kv2.setColor(color);
 				kv2.setName(env.getProperty("kpi.name2"));
@@ -197,8 +198,8 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				kv2.setYlabel(env.getProperty("Productivity.ylabel"));
 				ArrayList<String> series = new ArrayList<String>();
 	            ArrayList<String> color = new ArrayList<String>();
-				productivitySeries(series);
-				productivityColor(color);
+	            updateSeries(series,"Productivity.series");
+				updateColor("Productivity.color");
 				kv2.setSeries(series);
 				kv2.setColor(color);
 				kVList.add(kv2);
@@ -511,21 +512,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 		
 	}
 	
-	private void productivitySeries(ArrayList<String> series){
-		series.add(env.getProperty("Productivity.series"));
-	}
 	
-	private void productivityColor(ArrayList<String> color){
-		color.add(env.getProperty("Productivity.color"));
-	}
-	
-	private void continuitySeries(ArrayList<String> series){
-		series.add(env.getProperty("Continuity.series"));
-	}
-	
-	private void continuityColor(ArrayList<String> color){
-		color.add(env.getProperty("Continuity.color"));
-	}
 	private  void Stakecolor(ArrayList<String> series) {
 		series.add(env.getProperty("Stakeholder.color1"));
 		series.add(env.getProperty("Stakeholder.color2"));
