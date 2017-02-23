@@ -172,16 +172,16 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				List<VelocityOfProject> priorityHighVal = pmService.getVelocityOfSprint(projectId);
 				KPIValue kv2 = new KPIValue();
 				List<String> labelData = new ArrayList<>();
-				List<Integer> grapIntData = new ArrayList<>();
+				List<Double> grapIntData = new ArrayList<>();
 				for (VelocityOfProject string : priorityHighVal) {
 					if (!(0 == (int)string.getCompletedValue())) {
 						labelData.add(string.getSprintName().replace(" ", ""));
-						grapIntData.add((int)string.getCompletedValue());
+						grapIntData.add(string.getCompletedValue());
 					}
 				}
 				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("operationalkpi.productivity"));
 				kv2.setType(graph.getGraph_Type());	
-				kv2.setGraphdataOfVelocity(grapIntData);
+				kv2.setGraphdataOfIdeas(grapIntData);
 				kv2.setLabels(labelData);
 				kv2.setName(env.getProperty("kpi.name4"));
 				kv2.setXlabel(env.getProperty("Productivity.xlabel"));	
