@@ -231,6 +231,8 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 		
 		for (int i : intVal) {
 			if(i == 1) {
+				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("tacticalKpi.screen1"));
+				if(null != graph){
 				KPIValue kv1 = new KPIValue();
 				ArrayList<ArrayList<Integer>> graphData = new ArrayList<ArrayList<Integer>>();
 				ArrayList<Integer> grapIntData = new ArrayList<Integer>();
@@ -252,7 +254,6 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				ArrayList<String> color = updateColor("tacticalKpi.name1.color");
 				updateSeries(series, "tacticalKpi.series1");
 
-				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("tacticalKpi.screen1"));
 				String type = (null != graph) ? graph.getGraph_Type() : "";	
 				kv1.setType(type);
 				kv1.setSeries(series);
@@ -263,10 +264,13 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				kv1.setName(env.getProperty("tacticalKpi.name1"));
 				kv1.setXlabel(env.getProperty("tacticalKpi.name1.xlabel"));
 				kv1.setYlabel(env.getProperty("tacticalKpi.name1.ylabel"));
-				kVList.add(kv1);				
+				kVList.add(kv1);
+				}
 			}
 			
 			if(i == 2) {
+				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("tacticalKpi.screen1"));
+				if(null != graph){
 				Graph eDetails = emService.noOfEscAtProject(projectId);
 				KPIValue kv2 = new KPIValue();
 				kv2.setLabels(eDetails.getLabels());
@@ -281,7 +285,6 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				ArrayList<String> series = new ArrayList<String>();
 				ArrayList<String> color = updateColor("tacticalKpi.name2.color");
 				updateSeries(series, "tacticalKpi.series2");				
-				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("tacticalKpi.screen2"));
 				String type = (null != graph) ? graph.getGraph_Type() : "";	
 				kv2.setType(type);
 				kv2.setSeries(series);
@@ -290,9 +293,12 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				kv2.setXlabel(env.getProperty("tacticalKpi.name2.xlabel"));
 				kv2.setYlabel(env.getProperty("tacticalKpi.name2.ylabel"));
 				kVList.add(kv2);
+				}
 			}
 			
 			if(i == 3) {
+				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("tacticalKpi.screen1"));
+				if(null != graph){
 				List<VelocityOfProject> sprintVelocity = pmService.getVelocityOfSprint(projectId);
 				
 				List<String> labelData = new ArrayList<>();
@@ -303,7 +309,6 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				ArrayList<String> series = new ArrayList<String>();
 				ArrayList<String> color = updateColor("tacticalKpi.name3.color");
 				updateSeries(series, "tacticalKpi.series3");
-				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("tacticalKpi.screen3"));
 				String type = (null != graph) ? graph.getGraph_Type() : "";	
 				kv2.setType(type);
 				kv2.setSeries(series);
@@ -326,12 +331,15 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				kv2.setXlabel(env.getProperty("tacticalKpi.name3.xlabel"));
 				kv2.setYlabel(env.getProperty("tacticalKpi.name3.ylabel"));
 				kVList.add(kv2);
+				}
 			}
 			
 			if(i == 4) {
+				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("tacticalKpi.screen1"));
+				if(null != graph){
 				ValueCreationQuarterly valueForQuater = vmService.getQuarterlyValueByProgramId(projectId);
 				KPIValue kv2 = new KPIValue();
-				List<Integer[]> grapData = new ArrayList<>();
+				//List<Integer[]> grapData = new ArrayList<>();
 				/*for (ArrayList<Integer> integer : valueForQuater.getGraphdata()) {
 					grapData.add(integer.toArray(new Integer[integer.size()]));
 				}*/
@@ -339,7 +347,6 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				//kv2.setGraphdata(grapData);
 				ArrayList<String> color = updateColor("tacticalKpi.name4.color");
 				kv2.setColor(color);
-				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("tacticalKpi.screen4"));
 				String type = (null != graph) ? graph.getGraph_Type() : "";	
 				kv2.setType(type);
 				kv2.setLabels(valueForQuater.getLabels());
@@ -348,6 +355,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				kv2.setYlabel(env.getProperty("tacticalKpi.name4.ylabel"));
 				kv2.setName(env.getProperty("tacticalKpi.name4"));
 				kVList.add(kv2);
+			}
 			}
 		}
 		return kVList;
