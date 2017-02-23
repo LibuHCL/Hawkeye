@@ -395,7 +395,13 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				ArrayList<String> color = new ArrayList<String>();
 				ecoseries(series);		
 				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("strategicalkpi.Ecoscreen"));
-				kv1.setType(graph.getGraph_Type());	
+				if(null != graph ){
+					kv1.setType(graph.getGraph_Type());
+				}
+				else{
+					kv1.setType("");
+				}
+					
 				ecocolor(color);
 				kv1.setSeries(series);
 				kv1.setXlabel(env.getProperty("Strglxlabel"));	
@@ -417,6 +423,9 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				if (null != graph) {
 				kv2.setType(graph.getGraph_Type());
 				}
+				else{
+					kv2.setType("");
+				}
 				kv2.setLabels(labelsList);
 				kv2.setSeries(series);	
 				kv2.setXlabel(env.getProperty("Stakeholder.xlabel"));	
@@ -428,12 +437,17 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				Graph feedDetails = feedBackService.getnoofFeedBacksPerQtAtPerfolioLevel(portfolioId, "VENDOR");
 				KPIValue kv2 = new KPIValue();
                 MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("strategicalkpi.Partner"));
+                if (null != graph) {
+    				kv2.setType(graph.getGraph_Type());
+    				}
+    				else{
+    					kv2.setType("");
+    				}
                 ArrayList<String> series = new ArrayList<String>();
                 ArrayList<String> color = new ArrayList<String>();
 				partnerseries(series);
 				Partnercolor(color);
 				kv2.setSeries(series);
-				kv2.setType(graph.getGraph_Type());
 				kv2.setName(env.getProperty("strategicalkpi.name3"));
 				kv2.setGraphdataOfIdeas(feedDetails.getGraphData());
 				kv2.setLabels(labelsList);
@@ -448,12 +462,17 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				KPIValue kv2 = new KPIValue();
 				kv2.setName(env.getProperty("strategicalkpi.name4"));
                 MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("strategicalkpi.Economic"));
+                if (null != graph) {
+    				kv2.setType(graph.getGraph_Type());
+    				}
+    				else{
+    					kv2.setType("");
+    				}
                 ArrayList<String> series = new ArrayList<String>();
                 ArrayList<String> color = new ArrayList<String>();
 				economicseries(series);
 				Ecocolor(color);
 				kv2.setSeries(series);
-				kv2.setType(graph.getGraph_Type());
 				kv2.setGraphdataOfIdeas(valueForQuater.getGraphdata());
 				kv2.setLabels(valueForQuater.getLabels());
 				kv2.setXlabel(env.getProperty("Economic.xlabel"));	
