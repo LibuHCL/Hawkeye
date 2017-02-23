@@ -386,99 +386,96 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 			ArrayList<String> labelsList = new ArrayList<String>();
 			Collections.addAll(labelsList, labels);
 			if(i == 1) {
-				KPIValue kv1 = new KPIValue();
-				kv1.setName(env.getProperty("strategicalkpi.name1"));
-				Graph escDetails = emService.noOfEscAtPortfolioLevelPerQt(portfolioId);
-				kv1.setGraphdataOfIdeas(escDetails.getGraphData());
-				kv1.setLabels(escDetails.getLabels());
-				ArrayList<String> series = new ArrayList<String>();
-				ArrayList<String> color = new ArrayList<String>();
-				ecoseries(series);		
+					
 				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("strategicalkpi.Ecoscreen"));
 				if(null != graph ){
+					KPIValue kv1 = new KPIValue();
+					kv1.setName(env.getProperty("strategicalkpi.name1"));
+					Graph escDetails = emService.noOfEscAtPortfolioLevelPerQt(portfolioId);
+					kv1.setGraphdataOfIdeas(escDetails.getGraphData());
+					kv1.setLabels(escDetails.getLabels());
+					ArrayList<String> series = new ArrayList<String>();
+					ArrayList<String> color = new ArrayList<String>();
+					ecoseries(series);	
 					kv1.setType(graph.getGraph_Type());
+					ecocolor(color);
+					kv1.setSeries(series);
+					kv1.setXlabel(env.getProperty("Strglxlabel"));	
+					kv1.setYlabel(env.getProperty("Strglylabel"));
+					kv1.setColor(color);
+					StrkVList.add(kv1);
 				}
-				else{
-					kv1.setType("");
-				}
-					
-				ecocolor(color);
-				kv1.setSeries(series);
-				kv1.setXlabel(env.getProperty("Strglxlabel"));	
-				kv1.setYlabel(env.getProperty("Strglylabel"));
-				kv1.setColor(color);
-				StrkVList.add(kv1);
+				
+				
 			}			
 			if(i == 2) {
+							
+				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("strategicalkpi.Stakeholder"));
+				if (null != graph) {
 				Graph feedDetails = feedBackService.getnoofFeedBacksPerQtAtPerfolioLevel(portfolioId, "STAKEHOLDER");
-				
 				KPIValue kv2 = new KPIValue();
 				kv2.setName(env.getProperty("strategicalkpi.name2"));
 				kv2.setGraphdataOfIdeas(feedDetails.getGraphData());
-				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("strategicalkpi.Stakeholder"));
+				kv2.setType(graph.getGraph_Type());
 				ArrayList<String> series = new ArrayList<String>();
 				ArrayList<String> color = new ArrayList<String>();
 				stakeseries(series);
 				Stakecolor(color);
-				if (null != graph) {
-				kv2.setType(graph.getGraph_Type());
-				}
-				else{
-					kv2.setType("");
-				}
 				kv2.setLabels(labelsList);
 				kv2.setSeries(series);	
 				kv2.setXlabel(env.getProperty("Stakeholder.xlabel"));	
 				kv2.setYlabel(env.getProperty("Stakeholder.ylabel"));
 				kv2.setColor(color);
 				StrkVList.add(kv2);
+				}
+				
 			}			
 			if(i == 3) {
-				Graph feedDetails = feedBackService.getnoofFeedBacksPerQtAtPerfolioLevel(portfolioId, "VENDOR");
+				
 				KPIValue kv2 = new KPIValue();
                 MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("strategicalkpi.Partner"));
                 if (null != graph) {
+                	Graph feedDetails = feedBackService.getnoofFeedBacksPerQtAtPerfolioLevel(portfolioId, "VENDOR");
     				kv2.setType(graph.getGraph_Type());
+    				ArrayList<String> series = new ArrayList<String>();
+                    ArrayList<String> color = new ArrayList<String>();
+    				partnerseries(series);
+    				Partnercolor(color);
+    				kv2.setSeries(series);
+    				kv2.setName(env.getProperty("strategicalkpi.name3"));
+    				kv2.setGraphdataOfIdeas(feedDetails.getGraphData());
+    				kv2.setLabels(labelsList);
+    				kv2.setXlabel(env.getProperty("Partner.xlabel"));	
+    				kv2.setYlabel(env.getProperty("Partner.ylabel"));
+    				kv2.setColor(color);
+    				StrkVList.add(kv2);
     				}
-    				else{
-    					kv2.setType("");
-    				}
-                ArrayList<String> series = new ArrayList<String>();
-                ArrayList<String> color = new ArrayList<String>();
-				partnerseries(series);
-				Partnercolor(color);
-				kv2.setSeries(series);
-				kv2.setName(env.getProperty("strategicalkpi.name3"));
-				kv2.setGraphdataOfIdeas(feedDetails.getGraphData());
-				kv2.setLabels(labelsList);
-				kv2.setXlabel(env.getProperty("Partner.xlabel"));	
-				kv2.setYlabel(env.getProperty("Partner.ylabel"));
-				kv2.setColor(color);
-				StrkVList.add(kv2);
+    	               
 			}
 			
 			if(i == 4) {
-				ValueAddAcceptedIdeas valueForQuater = vmService.getEconomicValueAddByPortfolio(portfolioId);
-				KPIValue kv2 = new KPIValue();
-				kv2.setName(env.getProperty("strategicalkpi.name4"));
+				
+				
                 MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("strategicalkpi.Economic"));
                 if (null != graph) {
+                	ValueAddAcceptedIdeas valueForQuater = vmService.getEconomicValueAddByPortfolio(portfolioId);
+                	KPIValue kv2 = new KPIValue();
+    				kv2.setName(env.getProperty("strategicalkpi.name4"));
     				kv2.setType(graph.getGraph_Type());
+    				 ArrayList<String> series = new ArrayList<String>();
+    	                ArrayList<String> color = new ArrayList<String>();
+    					economicseries(series);
+    					Ecocolor(color);
+    					kv2.setSeries(series);
+    					kv2.setGraphdataOfIdeas(valueForQuater.getGraphdata());
+    					kv2.setLabels(valueForQuater.getLabels());
+    					kv2.setXlabel(env.getProperty("Economic.xlabel"));	
+    					kv2.setYlabel(env.getProperty("Economic.ylabel"));
+    					kv2.setColor(color);
+    					StrkVList.add(kv2);
     				}
-    				else{
-    					kv2.setType("");
-    				}
-                ArrayList<String> series = new ArrayList<String>();
-                ArrayList<String> color = new ArrayList<String>();
-				economicseries(series);
-				Ecocolor(color);
-				kv2.setSeries(series);
-				kv2.setGraphdataOfIdeas(valueForQuater.getGraphdata());
-				kv2.setLabels(valueForQuater.getLabels());
-				kv2.setXlabel(env.getProperty("Economic.xlabel"));	
-				kv2.setYlabel(env.getProperty("Economic.ylabel"));
-				kv2.setColor(color);
-				StrkVList.add(kv2);
+    				
+               
 			}
 		}
 		return StrkVList;
