@@ -194,7 +194,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				kv2.setName(env.getProperty("kpi.name4"));
 				kv2.setXlabel(env.getProperty("Productivity.xlabel"));	
 				kv2.setYlabel(env.getProperty("Productivity.ylabel"));
-				ArrayList<String> series = updateColor("Productivity.color");
+				ArrayList<String> series = updateColor("Productivity.series");
 	            ArrayList<String> color = updateColor("Productivity.color");
 				
 				kv2.setSeries(series);
