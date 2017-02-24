@@ -1,5 +1,7 @@
 package com.hcl.hawkeye.metric.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +45,24 @@ public class MetricDataServiceImpl implements MetricDataService {
 	@Override
 	public MetricConfiguration createMetricConfig(MetricConfiguration metricConfig) {
 		return metricdao.createMetricConfig(metricConfig);
+	}
+	@Override
+	public Map<String, String> getMetricscreenDetail() {
+		Map<String, String> metricsData =  metricdao.getMetricscreenDetail();
+		Map<String, List<String>> dataList = new HashMap<>();
+	       for (String key : metricsData.keySet()) {
+	              if (!dataList.containsKey(key)) {
+	                           List<String> sData = new ArrayList<>();
+	                           sData.add(metricsData.get(key));
+	                           dataList.put(key, sData);
+	                     } else {
+	                           List<String> sData = dataList.get(key);
+	                           sData.add(metricsData.get(key));
+	                           dataList.put(key, sData);
+	                     }
+	              }
+		System.out.println("list data:"+dataList);
+		return null;
 	}
 
 }

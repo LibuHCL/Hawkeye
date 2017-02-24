@@ -14,5 +14,7 @@ public interface MetricDataDAO {
 	
 	Map<String, String> getMetricsDetail(String screenName);
 	
-	MetricConfiguration createMetricConfig(MetricConfiguration metricConfig);	
+	MetricConfiguration createMetricConfig(MetricConfiguration metricConfig);
+	
+	Map<String, String> getMetricscreenDetail();
 }

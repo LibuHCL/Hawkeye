@@ -70,4 +70,13 @@ public class MetricController {
 		logger.info("Value Add inserted successfully: " +metricConfig);
 		return new ResponseEntity<>(createdMetric, HttpStatus.CREATED);
 	}
+	 /* To Get the Metric Details for Project */
+    @RequestMapping(value = "/getMetricscreenDetail", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public Map<String, String>  getMetricscreenDetail(){    	
+    	logger.info("Inside getMetricscreenDetail method in Controller");
+    	Map<String, String> metricdata = merticdataservice.getMetricscreenDetail();
+    	return metricdata;
+    	
+    }
 }
