@@ -11,13 +11,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hcl.hawkeye.MetricDataDO.MetricConfiguration;
 import com.hcl.hawkeye.MetricDataDO.MetricDataDO;
 import com.hcl.hawkeye.metric.service.MetricDataService;
+import com.hcl.hawkeye.valueaddmanagement.DO.Value;
 
 
 @RestController
@@ -60,6 +63,11 @@ public class MetricController {
     	return new ResponseEntity<MetricDataDO> (metricdata, HttpStatus.CREATED);
     	
     }
-  
-	 
+  	
+	@RequestMapping(value = "/createMetricData", method = RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<MetricConfiguration>  createMetricData(@RequestBody MetricConfiguration metricConfig) {
+		MetricConfiguration createdMetric= merticdataservice.createMetricConfig(metricConfig);
+		logger.info("Value Add inserted successfully: " +metricConfig);
+		return new ResponseEntity<>(createdMetric, HttpStatus.CREATED);
+	}
 }

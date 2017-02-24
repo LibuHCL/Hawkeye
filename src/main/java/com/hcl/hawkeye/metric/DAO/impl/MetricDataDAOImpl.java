@@ -6,11 +6,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,8 +20,11 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.hcl.hawkeye.Exceptions.MetricDataException;
+import com.hcl.hawkeye.Exceptions.ValueAddDataRetrievalException;
+import com.hcl.hawkeye.MetricDataDO.MetricConfiguration;
 import com.hcl.hawkeye.MetricDataDO.MetricDataDO;
 import com.hcl.hawkeye.metric.DAO.MetricDataDAO;
+import com.hcl.hawkeye.utils.HawkEyeUtils;
 
 @Repository
 public class MetricDataDAOImpl implements MetricDataDAO {
@@ -28,6 +33,9 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 	
 	@Autowired
 	JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	MessageSource messageSource;
 	
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
@@ -104,6 +112,22 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 	     }
 		logger.info("get the result getMetricGraph METHOD");
 		return metricDetails;
+	}
+
+	@Override
+	public MetricConfiguration createMetricConfig(MetricConfiguration metricConfig) {
+		String createMetricConfig = "INSERT INTO METRIC_DATA (METRIC_NAME, SCREEN_NAME, GRAPH_TYPE	) "
+				+ "VALUES (?,?, ?)";
+		try {
+		jdbcTemplate.update(createMetricConfig,
+				new Object[] { metricConfig.getMetricName(), metricConfig.getScreenName(), metricConfig.getGraphType() });
+		} catch (DataAccessException dae) {
+			Locale locale = new Locale("en", "IN");
+			String errorMsg = messageSource.getMessage("error.create.getvalueadd", new Object[] {}, locale);
+			logger.error(errorMsg, dae);
+			throw new ValueAddDataRetrievalException(errorMsg, dae);
+			}		
+		return metricConfig;
 	}
 
 	

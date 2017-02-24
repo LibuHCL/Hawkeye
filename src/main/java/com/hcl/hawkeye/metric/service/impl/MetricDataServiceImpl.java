@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hcl.hawkeye.MetricDataDO.MetricConfiguration;
 import com.hcl.hawkeye.MetricDataDO.MetricDataDO;
 import com.hcl.hawkeye.metric.DAO.MetricDataDAO;
 import com.hcl.hawkeye.metric.service.MetricDataService;
@@ -37,6 +38,11 @@ public class MetricDataServiceImpl implements MetricDataService {
 	@Override
 	public Map<String, String> getMetricsDetail(String screenName) {
 		return metricdao.getMetricsDetail(screenName);
+	}
+
+	@Override
+	public MetricConfiguration createMetricConfig(MetricConfiguration metricConfig) {
+		return metricdao.createMetricConfig(metricConfig);
 	}
 
 }
