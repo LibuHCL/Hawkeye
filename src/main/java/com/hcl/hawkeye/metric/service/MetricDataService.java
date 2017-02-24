@@ -16,6 +16,6 @@ public interface MetricDataService {
 	
 	MetricConfiguration createMetricConfig(MetricConfiguration metricConfig);
 	
-	Map<String, String> getMetricscreenDetail();
+	Map<String, List<String>> getMetricscreenDetail();
 
 }

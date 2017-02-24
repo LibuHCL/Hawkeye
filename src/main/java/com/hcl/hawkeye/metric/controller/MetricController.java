@@ -73,9 +73,9 @@ public class MetricController {
 	 /* To Get the Metric Details for Project */
     @RequestMapping(value = "/getMetricscreenDetail", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public Map<String, String>  getMetricscreenDetail(){    	
+    public Map<String, List<String>>  getMetricscreenDetail(){    	
     	logger.info("Inside getMetricscreenDetail method in Controller");
-    	Map<String, String> metricdata = merticdataservice.getMetricscreenDetail();
+    	Map<String, List<String>> metricdata = merticdataservice.getMetricscreenDetail();
     	return metricdata;
     	
     }

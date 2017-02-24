@@ -131,23 +131,22 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 	}
 
 	@Override
-	public Map<String, String> getMetricscreenDetail() {
-		// TODO Auto-generated method stub
-		Map<String, String> metricDetails = new HashMap<String, String>();
+	public List<MetricDataDO> getMetricscreenDetail() {
+		List<MetricDataDO> metricDataList = new ArrayList<>();
 		String getgrapth_SQL = "SELECT MD . * FROM  METRIC_DATA MD, METRIC_CONFIGURATION MC WHERE MD.METRIC_NAME = MC.METRICNAME";
 		try{
 			List<Map<String, Object>> categoryList = jdbcTemplate.queryForList(getgrapth_SQL);
 			for (Map<String, Object> row : categoryList) {
-				metricDetails.put((row.get("SCREEN_NAME")).toString(), (row.get("METRIC_NAME")).toString());
+				MetricDataDO dd = new MetricDataDO();
+				dd.setScreen_Name((String) row.get("SCREEN_NAME"));
+				dd.setMetric_Name((String) row.get("METRIC_NAME"));
+				metricDataList.add(dd);
 			}
 		}
-		
 		catch (EmptyResultDataAccessException  dae) {
 			logger.error("Exception in getMetricGraphDetails");
-					     }
-		logger.info("get the result getMetricGraph METHOD");
-		System.out.println();
-		return metricDetails;
+		}
+		return metricDataList;
 	}
 
 	
