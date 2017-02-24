@@ -280,11 +280,14 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				KPIValue kv2 = new KPIValue();
 				kv2.setLabels(eDetails.getLabels());
 				List<Integer[]> grapData = new ArrayList<>();
-				//List<Double> grahData = eDetails.getGraphData();
+				List<Double> grahData = eDetails.getGraphData();
 				//		grahData.add(0.0);
 				//kv2.setGraphdataOfIdeas(grahData);
 						ArrayList<ArrayList<Integer>> graphData = new ArrayList<ArrayList<Integer>>();
 						ArrayList<Integer> graphDataValue = new ArrayList<Integer>();		
+						for(Double data: grahData) {
+							graphDataValue.add(data.intValue());
+						}
 						graphDataValue.add(0);
 						grapData.add(graphDataValue.toArray(new Integer[graphDataValue.size()]));
 						//graphData.add(graphDataValue);
