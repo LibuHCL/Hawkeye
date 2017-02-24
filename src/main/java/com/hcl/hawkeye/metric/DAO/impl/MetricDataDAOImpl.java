@@ -116,11 +116,11 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 
 	@Override
 	public MetricConfiguration createMetricConfig(MetricConfiguration metricConfig) {
-		String createMetricConfig = "INSERT INTO METRIC_DATA (METRIC_NAME, SCREEN_NAME, GRAPH_TYPE	) "
-				+ "VALUES (?,?, ?)";
+		String createMetricConfig = "INSERT INTO METRIC_CONFIGURATION (METRICNAME) "
+				+ "VALUES (?)";
 		try {
 		jdbcTemplate.update(createMetricConfig,
-				new Object[] { metricConfig.getMetricName(), metricConfig.getScreenName(), metricConfig.getGraphType() });
+				new Object[] { metricConfig.getMetricName()});
 		} catch (DataAccessException dae) {
 			Locale locale = new Locale("en", "IN");
 			String errorMsg = messageSource.getMessage("error.create.getvalueadd", new Object[] {}, locale);
