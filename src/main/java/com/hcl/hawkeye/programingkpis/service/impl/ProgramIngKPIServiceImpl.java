@@ -406,43 +406,58 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 	private List<KPIValue> getListOfStrategicalKpi(int portfolioId) {
 		List<KPIValue> StrkVList = new ArrayList<KPIValue>();
 		int[] intVal = {1,2,3,4}; 
-		
+		Map<String, String> graph = merticdataservice.getMetricsDetail(env.getProperty("Portfoliokpi.screen"));
+		if (null != graph)  {
 		for (int i : intVal) {
 			String[] labels = env.getProperty("strategicalkpi.satakeholders").split(",");
 			ArrayList<String> labelsList = new ArrayList<String>();
 			Collections.addAll(labelsList, labels);
 			if(i == 1) {
-					
-				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("strategicalkpi.Ecoscreen"));
-				if(null != graph ){
-					KPIValue kv1 = new KPIValue();
-					kv1.setName(env.getProperty("strategicalkpi.name1"));
-					Graph escDetails = emService.noOfEscAtPortfolioLevelPerQt(portfolioId);
-					kv1.setGraphdataOfIdeas(escDetails.getGraphData());
-					kv1.setLabels(escDetails.getLabels());
-					ArrayList<String> series = new ArrayList<String>();
-					ArrayList<String> color = new ArrayList<String>();
-					ecoseries(series);	
-					kv1.setType(graph.getGraph_Type());
-					ecocolor(color);
-					kv1.setSeries(series);
-					kv1.setXlabel(env.getProperty("Strglxlabel"));	
-					kv1.setYlabel(env.getProperty("Strglylabel"));
-					kv1.setColor(color);
-					StrkVList.add(kv1);
+				if(graph.containsKey(env.getProperty("strategicalkpi.name1"))) {
+				KPIValue kv1 = new KPIValue();
+				kv1.setName(env.getProperty("strategicalkpi.name1"));
+				Graph escDetails = emService.noOfEscAtPortfolioLevelPerQt(portfolioId);
+				List<Integer[]> grapData = new ArrayList<>();
+				List<Double> grahData = escDetails.getGraphData();
+				ArrayList<ArrayList<Integer>> graphData = new ArrayList<ArrayList<Integer>>();
+				ArrayList<Integer> graphDataValue = new ArrayList<Integer>();
+				for(Double data: grahData) {
+					graphDataValue.add(data.intValue());
 				}
-				
-				
+				graphDataValue.add(0);
+				grapData.add(graphDataValue.toArray(new Integer[graphDataValue.size()]));
+				kv1.setGraphdata(grapData);
+				//kv1.setGraphdataOfIdeas(escDetails.getGraphData());
+				kv1.setLabels(escDetails.getLabels());
+				ArrayList<String> series = new ArrayList<String>();
+				ArrayList<String> color = new ArrayList<String>();
+				ecoseries(series);	
+				kv1.setType(graph.get(env.getProperty("strategicalkpi.name1")));
+				ecocolor(color);
+				kv1.setSeries(series);
+				kv1.setXlabel(env.getProperty("Strglxlabel"));	
+				kv1.setYlabel(env.getProperty("Strglylabel"));
+				kv1.setColor(color);
+				StrkVList.add(kv1);
+				}				
 			}			
 			if(i == 2) {
-							
-				MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("strategicalkpi.Stakeholder"));
-				if (null != graph) {
+				if(graph.containsKey(env.getProperty("strategicalkpi.name2"))) {			
 				Graph feedDetails = feedBackService.getnoofFeedBacksPerQtAtPerfolioLevel(portfolioId, "STAKEHOLDER");
 				KPIValue kv2 = new KPIValue();
 				kv2.setName(env.getProperty("strategicalkpi.name2"));
-				kv2.setGraphdataOfIdeas(feedDetails.getGraphData());
-				kv2.setType(graph.getGraph_Type());
+				List<Integer[]> grapData = new ArrayList<>();
+				List<Double> grahData = feedDetails.getGraphData();
+				ArrayList<ArrayList<Integer>> graphData = new ArrayList<ArrayList<Integer>>();
+				ArrayList<Integer> graphDataValue = new ArrayList<Integer>();
+				for(Double data: grahData) {
+					graphDataValue.add(data.intValue());
+				}
+				graphDataValue.add(0);
+				grapData.add(graphDataValue.toArray(new Integer[graphDataValue.size()]));
+				kv2.setGraphdata(grapData);
+				//kv2.setGraphdataOfIdeas(feedDetails.getGraphData());
+				kv2.setType(graph.get(env.getProperty("strategicalkpi.name2")));
 				ArrayList<String> series = new ArrayList<String>();
 				ArrayList<String> color = new ArrayList<String>();
 				stakeseries(series);
@@ -457,53 +472,69 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				
 			}			
 			if(i == 3) {
-				
+				if(graph.containsKey(env.getProperty("strategicalkpi.name3"))) {
 				KPIValue kv2 = new KPIValue();
-                MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("strategicalkpi.Partner"));
-                if (null != graph) {
-                	Graph feedDetails = feedBackService.getnoofFeedBacksPerQtAtPerfolioLevel(portfolioId, "VENDOR");
-    				kv2.setType(graph.getGraph_Type());
-    				ArrayList<String> series = new ArrayList<String>();
-                    ArrayList<String> color = new ArrayList<String>();
-    				partnerseries(series);
-    				Partnercolor(color);
-    				kv2.setSeries(series);
-    				kv2.setName(env.getProperty("strategicalkpi.name3"));
-    				kv2.setGraphdataOfIdeas(feedDetails.getGraphData());
-    				kv2.setLabels(labelsList);
-    				kv2.setXlabel(env.getProperty("Partner.xlabel"));	
-    				kv2.setYlabel(env.getProperty("Partner.ylabel"));
-    				kv2.setColor(color);
-    				StrkVList.add(kv2);
-    				}
-    	               
+               	Graph feedDetails = feedBackService.getnoofFeedBacksPerQtAtPerfolioLevel(portfolioId, "VENDOR");
+    			ArrayList<String> series = new ArrayList<String>();
+                ArrayList<String> color = new ArrayList<String>();
+    		    partnerseries(series);
+    			Partnercolor(color);
+    			kv2.setSeries(series);
+    			kv2.setName(env.getProperty("strategicalkpi.name3"));
+    			kv2.setType(graph.get(env.getProperty("strategicalkpi.name3")));
+    			List<Integer[]> grapData = new ArrayList<>();
+				List<Double> grahData = feedDetails.getGraphData();
+				ArrayList<ArrayList<Integer>> graphData = new ArrayList<ArrayList<Integer>>();
+				ArrayList<Integer> graphDataValue = new ArrayList<Integer>();
+				for(Double data: grahData) {
+					graphDataValue.add(data.intValue());
+				}
+				graphDataValue.add(0);
+				grapData.add(graphDataValue.toArray(new Integer[graphDataValue.size()]));
+				kv2.setGraphdata(grapData);
+    			//kv2.setGraphdataOfIdeas(feedDetails.getGraphData());
+    			kv2.setLabels(labelsList);
+    			kv2.setXlabel(env.getProperty("Partner.xlabel"));	
+    			kv2.setYlabel(env.getProperty("Partner.ylabel"));
+    			kv2.setColor(color);
+    			StrkVList.add(kv2);
+			 }  	               
 			}
 			
 			if(i == 4) {
-				
-				
-                MetricDataDO graph = merticdataservice.getMetricGraph(env.getProperty("strategicalkpi.Economic"));
-                if (null != graph) {
-                	ValueAddAcceptedIdeas valueForQuater = vmService.getEconomicValueAddByPortfolio(portfolioId);
+				if(graph.containsKey(env.getProperty("strategicalkpi.name4"))) {
+               	ValueAddAcceptedIdeas valueForQuater = vmService.getEconomicValueAddByPortfolio(portfolioId);
                 	KPIValue kv2 = new KPIValue();
     				kv2.setName(env.getProperty("strategicalkpi.name4"));
-    				kv2.setType(graph.getGraph_Type());
-    				 ArrayList<String> series = new ArrayList<String>();
-    	                ArrayList<String> color = new ArrayList<String>();
-    					economicseries(series);
-    					Ecocolor(color);
-    					kv2.setSeries(series);
-    					kv2.setGraphdataOfIdeas(valueForQuater.getGraphdata());
-    					kv2.setLabels(valueForQuater.getLabels());
-    					kv2.setXlabel(env.getProperty("Economic.xlabel"));	
-    					kv2.setYlabel(env.getProperty("Economic.ylabel"));
-    					kv2.setColor(color);
-    					StrkVList.add(kv2);
-    				}
+    				kv2.setType(graph.get(env.getProperty("strategicalkpi.name4")));
+    				ArrayList<String> series = new ArrayList<String>();
+    	            ArrayList<String> color = new ArrayList<String>();
+    				economicseries(series);
+    				Ecocolor(color);
+    				kv2.setSeries(series);
     				
-               
+    				List<Integer[]> grapData = new ArrayList<>();
+    				List<Double> grahData = valueForQuater.getGraphdata();
+    				ArrayList<ArrayList<Integer>> graphData = new ArrayList<ArrayList<Integer>>();
+    				ArrayList<Integer> graphDataValue = new ArrayList<Integer>();
+    				for(Double data: grahData) {
+    					graphDataValue.add(data.intValue());
+    				}
+    				graphDataValue.add(0);
+    				grapData.add(graphDataValue.toArray(new Integer[graphDataValue.size()]));
+    				kv2.setGraphdata(grapData);
+    				
+    				//kv2.setGraphdataOfIdeas(valueForQuater.getGraphdata());
+    				kv2.setLabels(valueForQuater.getLabels());
+    				kv2.setXlabel(env.getProperty("Economic.xlabel"));	
+    				kv2.setYlabel(env.getProperty("Economic.ylabel"));
+    				kv2.setColor(color);
+    				StrkVList.add(kv2);
+    		     
+			}
 			}
 		}
+	 }
 		return StrkVList;
 	}
 	private void ecoseries(ArrayList<String> series) {
