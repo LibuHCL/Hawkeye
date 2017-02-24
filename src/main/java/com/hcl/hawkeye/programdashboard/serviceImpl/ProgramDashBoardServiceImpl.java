@@ -104,7 +104,7 @@ public class ProgramDashBoardServiceImpl implements ProgramDashBoardService {
 				d.addAll(pStateMap.get(pSt));
 			}
 			pt.setProgramSubArr(d);
-			pt.setProgramName("App Development");
+			pt.setProgramName("ZKV");
 			pt.setProgramId(1001);
 			programTypeMap.put("DEV", pt);
 		} else if ("ASM".equals(string)) {
@@ -140,7 +140,7 @@ public class ProgramDashBoardServiceImpl implements ProgramDashBoardService {
 		List<ProjectSubTypes> subTypeList =new ArrayList<>();
 		List<ProjectStates> pStateList = new ArrayList<>();
 		for (String key : devMap.keySet()) {
-			if ("WEB".equals(key)) {
+			if ("JAVA".equals(key)) {
 				ProjectSubTypes subType = new ProjectSubTypes();
 				subType.setStreamName(key);
 				subType.setSteaamProjectCount(devMap.get(key).size());
@@ -152,13 +152,13 @@ public class ProgramDashBoardServiceImpl implements ProgramDashBoardService {
 				subType.setSteaamProjectCount(devMap.get(key).size());
 				subType.setProjects(devMap.get(key));
 				subTypeList.add(subType);
-			} else if ("LEGACY".equals(key)) {
+			} else if ("MAINFRAME".equals(key)) {
 				ProjectSubTypes subType = new ProjectSubTypes();
 				subType.setStreamName(key);
 				subType.setSteaamProjectCount(devMap.get(key).size());
 				subType.setProjects(devMap.get(key));
 				subTypeList.add(subType);
-			} else if ("MOBILE".equals(key)) {
+			} else if ("PEGA".equals(key)) {
 				ProjectSubTypes subType = new ProjectSubTypes();
 				subType.setStreamName(key);
 				subType.setSteaamProjectCount(devMap.get(key).size());
@@ -192,13 +192,13 @@ public class ProgramDashBoardServiceImpl implements ProgramDashBoardService {
 	}
 	private void processDevProjects(Project project, Map<String, List<ProjectDetails>> devMap) {
 		List<ProjectDetails> pDetailList = new ArrayList<>();
-		if ("WEB".equals(project.getSubType())) {
-			if (!devMap.containsKey("WEB")) {
+		if ("JAVA".equals(project.getSubType())) {
+			if (!devMap.containsKey("JAVA")) {
 				ProjectDetails pDet = processProject(project);
 				pDetailList.add(pDet);
 				devMap.put(project.getSubType(), pDetailList);
 			} else {
-				List<ProjectDetails> pDetList = devMap.get("WEB");
+				List<ProjectDetails> pDetList = devMap.get("JAVA");
 				ProjectDetails pDet = processProject(project);
 				pDetList.add(pDet);
 				devMap.put(project.getSubType(), pDetList);
@@ -216,25 +216,25 @@ public class ProgramDashBoardServiceImpl implements ProgramDashBoardService {
 				devMap.put(project.getSubType(), pDetList);
 			}
 
-		} else if ("LEGACY".equals(project.getSubType())) {
-			if (!devMap.containsKey("LEGACY")) {
+		} else if ("MAINFRAME".equals(project.getSubType())) {
+			if (!devMap.containsKey("MAINFRAME")) {
 				ProjectDetails pDet = processProject(project);
 				pDetailList.add(pDet);
 				devMap.put(project.getSubType(), pDetailList);
 			} else {
-				List<ProjectDetails> pDetList = devMap.get("LEGACY");
+				List<ProjectDetails> pDetList = devMap.get("MAINFRAME");
 				ProjectDetails pDet = processProject(project);
 				pDetList.add(pDet);
 				devMap.put(project.getSubType(), pDetList);
 			}
 
-		} else if ("MOBILE".equals(project.getSubType())) {
-			if (!devMap.containsKey("MOBILE")) {
+		} else if ("PEGA".equals(project.getSubType())) {
+			if (!devMap.containsKey("PEGA")) {
 				ProjectDetails pDet = processProject(project);
 				pDetailList.add(pDet);
 				devMap.put(project.getSubType(), pDetailList);
 			} else {
-				List<ProjectDetails> pDetList = devMap.get("MOBILE");
+				List<ProjectDetails> pDetList = devMap.get("PEGA");
 				ProjectDetails pDet = processProject(project);
 				pDetList.add(pDet);
 				devMap.put(project.getSubType(), pDetList);
