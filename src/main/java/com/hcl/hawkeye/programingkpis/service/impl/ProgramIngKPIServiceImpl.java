@@ -148,9 +148,8 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				kv2.setGraphdata(grapData);
 				kv2.setXlabel(env.getProperty("Continuity.xlabel"));	
 				kv2.setYlabel(env.getProperty("Continuity.ylabel"));
-				ArrayList<String> series = new ArrayList<String>();
+				ArrayList<String> series = updateColor("Continuity.series");
 	            ArrayList<String> color = updateColor("Continuity.color");
-				updateSeries(series,"Continuity.series");
 				
 				
 				kv2.setSeries(series);
@@ -195,9 +194,8 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				kv2.setName(env.getProperty("kpi.name4"));
 				kv2.setXlabel(env.getProperty("Productivity.xlabel"));	
 				kv2.setYlabel(env.getProperty("Productivity.ylabel"));
-				ArrayList<String> series = new ArrayList<String>();
+				ArrayList<String> series = updateColor("Productivity.color");
 	            ArrayList<String> color = updateColor("Productivity.color");
-	            updateSeries(series,"Productivity.series");
 				
 				kv2.setSeries(series);
 				kv2.setColor(color);
