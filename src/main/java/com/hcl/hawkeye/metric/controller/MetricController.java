@@ -79,4 +79,14 @@ public class MetricController {
     	return metricdata;
     	
     }
+    
+    /* To get metric data Details */
+	@RequestMapping(value = "/getMetricData", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public ResponseEntity <List<MetricDataDO>> getMetricData(){
+    	logger.info("Inside getMetricData method in Controller:");
+    	List<MetricDataDO> metricdata = merticdataservice.getMetricData();
+    	return new ResponseEntity<List<MetricDataDO>> (metricdata, HttpStatus.CREATED);
+    	
+    }
 }

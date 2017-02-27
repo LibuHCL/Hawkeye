@@ -17,4 +17,6 @@ public interface MetricDataDAO {
 	MetricConfiguration createMetricConfig(MetricConfiguration metricConfig);
 	
 	List<MetricDataDO> getMetricscreenDetail();
+
+	List<MetricDataDO> getMetricData();
 }

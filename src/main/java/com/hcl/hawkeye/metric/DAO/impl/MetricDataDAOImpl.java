@@ -61,8 +61,8 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 		   }
 		
 		catch (DataAccessException dae) {
-			logger.error("Exception in getFeedbackParameter");
-			throw new MetricDataException("Exception in Feedbacktrack Details", dae);
+			logger.error("Exception in getNumberofMetricName");
+			throw new MetricDataException("Exception in MetricDataDAOImpl Details", dae);
 		
 	     }
 		return NameList;
@@ -147,6 +147,36 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 			logger.error("Exception in getMetricGraphDetails");
 		}
 		return metricDataList;
+	}
+
+	@Override
+	public List<MetricDataDO> getMetricData() {
+		// TODO Auto-generated method stub
+		List<MetricDataDO> metricdata = new ArrayList<MetricDataDO>();
+		String getMetricNames_SQL = "SELECT * FROM METRIC_DATA WHERE METRIC_NAME NOT IN (SELECT METRICNAME FROM METRIC_CONFIGURATION)";
+		try{
+			List<Map<String, Object>> metricnameList = jdbcTemplate.queryForList(getMetricNames_SQL);
+			System.out.println("metricnameList:"+metricnameList);
+			if(metricnameList  != null && metricnameList.size() >0)  
+			{
+				for (Map<String, Object> row : metricnameList) {
+					
+					MetricDataDO metricnm = new MetricDataDO();
+					metricnm.setMetric_Name((String)row.get("METRIC_NAME"));
+					metricnm.setGraph_Type((String)row.get("GRAPH_TYPE"));
+					metricnm.setScreen_Name((String)row.get("SCREEN_NAME"));
+					metricdata.add(metricnm);
+					
+		        } 
+			}
+		   }
+		
+		catch (DataAccessException dae) {
+			logger.error("Exception in getMetricData");
+			throw new MetricDataException("Exception in MetricDataDAOImpl Details", dae);
+		
+	     }
+	 return metricdata;
 	}
 
 	

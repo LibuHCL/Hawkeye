@@ -66,4 +66,10 @@ public class MetricDataServiceImpl implements MetricDataService {
 		return dataList;
 	}
 
+	@Override
+	public List<MetricDataDO> getMetricData() {
+		// TODO Auto-generated method stub
+		return metricdao.getMetricData();
+	}
+
 }

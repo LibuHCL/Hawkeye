@@ -18,4 +18,6 @@ public interface MetricDataService {
 	
 	Map<String, List<String>> getMetricscreenDetail();
 
+	List<MetricDataDO> getMetricData();
+
 }
