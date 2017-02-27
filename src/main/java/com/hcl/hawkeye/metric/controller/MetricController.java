@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hcl.hawkeye.MetricDataDO.MetricConfiguration;
+import com.hcl.hawkeye.MetricDataDO.MetricData;
 import com.hcl.hawkeye.MetricDataDO.MetricDataDO;
 import com.hcl.hawkeye.metric.service.MetricDataService;
 import com.hcl.hawkeye.valueaddmanagement.DO.Value;
@@ -83,10 +84,10 @@ public class MetricController {
     /* To get metric data Details */
 	@RequestMapping(value = "/getMetricData", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public ResponseEntity <List<MetricDataDO>> getMetricData(){
+    public ResponseEntity <List<MetricData>> getMetricData(){
     	logger.info("Inside getMetricData method in Controller:");
-    	List<MetricDataDO> metricdata = merticdataservice.getMetricData();
-    	return new ResponseEntity<List<MetricDataDO>> (metricdata, HttpStatus.CREATED);
+    	List<MetricData> metricdata = merticdataservice.getMetricData();
+    	return new ResponseEntity<List<MetricData>> (metricdata, HttpStatus.CREATED);
     	
     }
 }

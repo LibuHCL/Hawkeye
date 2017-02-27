@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hcl.hawkeye.MetricDataDO.MetricConfiguration;
+import com.hcl.hawkeye.MetricDataDO.MetricData;
 import com.hcl.hawkeye.MetricDataDO.MetricDataDO;
 import com.hcl.hawkeye.metric.DAO.MetricDataDAO;
 import com.hcl.hawkeye.metric.service.MetricDataService;
@@ -67,7 +68,7 @@ public class MetricDataServiceImpl implements MetricDataService {
 	}
 
 	@Override
-	public List<MetricDataDO> getMetricData() {
+	public List<MetricData> getMetricData() {
 		// TODO Auto-generated method stub
 		return metricdao.getMetricData();
 	}

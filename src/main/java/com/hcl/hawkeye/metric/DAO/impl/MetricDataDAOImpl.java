@@ -22,6 +22,7 @@ import org.springframework.stereotype.Repository;
 import com.hcl.hawkeye.Exceptions.MetricDataException;
 import com.hcl.hawkeye.Exceptions.ValueAddDataRetrievalException;
 import com.hcl.hawkeye.MetricDataDO.MetricConfiguration;
+import com.hcl.hawkeye.MetricDataDO.MetricData;
 import com.hcl.hawkeye.MetricDataDO.MetricDataDO;
 import com.hcl.hawkeye.metric.DAO.MetricDataDAO;
 import com.hcl.hawkeye.utils.HawkEyeUtils;
@@ -150,9 +151,9 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 	}
 
 	@Override
-	public List<MetricDataDO> getMetricData() {
+	public List<MetricData> getMetricData() {
 		// TODO Auto-generated method stub
-		List<MetricDataDO> metricdata = new ArrayList<MetricDataDO>();
+		List<MetricData> metricdata = new ArrayList<MetricData>();
 		String getMetricNames_SQL = "SELECT * FROM METRIC_DATA WHERE METRIC_NAME NOT IN (SELECT METRICNAME FROM METRIC_CONFIGURATION)";
 		try{
 			List<Map<String, Object>> metricnameList = jdbcTemplate.queryForList(getMetricNames_SQL);
@@ -161,7 +162,7 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 			{
 				for (Map<String, Object> row : metricnameList) {
 					
-					MetricDataDO metricnm = new MetricDataDO();
+					MetricData metricnm = new MetricData();
 					metricnm.setMetric_Name((String)row.get("METRIC_NAME"));
 					metricnm.setGraph_Type((String)row.get("GRAPH_TYPE"));
 					metricnm.setScreen_Name((String)row.get("SCREEN_NAME"));

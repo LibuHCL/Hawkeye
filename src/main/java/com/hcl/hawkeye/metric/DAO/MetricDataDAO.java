@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.hcl.hawkeye.MetricDataDO.MetricConfiguration;
+import com.hcl.hawkeye.MetricDataDO.MetricData;
 import com.hcl.hawkeye.MetricDataDO.MetricDataDO;
 
 public interface MetricDataDAO {
@@ -18,5 +19,5 @@ public interface MetricDataDAO {
 	
 	List<MetricDataDO> getMetricscreenDetail();
 
-	List<MetricDataDO> getMetricData();
+	List<MetricData> getMetricData();
 }
