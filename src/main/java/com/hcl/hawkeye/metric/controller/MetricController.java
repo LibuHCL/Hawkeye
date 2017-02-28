@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hcl.hawkeye.MetricDataDO.MetricConfiguration;
 import com.hcl.hawkeye.MetricDataDO.MetricData;
 import com.hcl.hawkeye.MetricDataDO.MetricDataDO;
+import com.hcl.hawkeye.MetricDataDO.PortfolioDO;
 import com.hcl.hawkeye.metric.service.MetricDataService;
 import com.hcl.hawkeye.valueaddmanagement.DO.Value;
 
@@ -90,4 +91,36 @@ public class MetricController {
     	return new ResponseEntity<List<MetricData>> (metricdata, HttpStatus.CREATED);
     	
     }
+	
+	/* To get the list of portfolios Details */
+	@RequestMapping(value = "/getPortfolioDetails", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public ResponseEntity <List<PortfolioDO>> getPortfolioDetails(){
+    	logger.info("Inside getPortfolioDetails method in Controller:");
+    	List<PortfolioDO> metricdata = merticdataservice.getPortfolioDetails();
+    	return new ResponseEntity<List<PortfolioDO>> (metricdata, HttpStatus.CREATED);
+    	
+    }
+	
+	/* To get the list of programs Details */
+	@RequestMapping(value = "/getProgramDetails/{portfolioID}", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public ResponseEntity <List<PortfolioDO>> getProgramDetails(@PathVariable("portfolioID") int portfolioID){
+    	logger.info("Inside getPortfolioDetails method in Controller:"+portfolioID);
+    	List<PortfolioDO> metricdata = merticdataservice.getProgramDetails(portfolioID);
+    	return new ResponseEntity<List<PortfolioDO>> (metricdata, HttpStatus.CREATED);
+    	
+    }
+	
+	/* To get the list of not associate programs Details */
+	@RequestMapping(value = "/getProgramNotAssociateDetails/{portfolioID}", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public ResponseEntity <List<PortfolioDO>> getProgramNotAssociateDetails(@PathVariable("portfolioID") int portfolioID){
+    	logger.info("Inside getPortfolioDetails method in Controller:"+portfolioID);
+    	List<PortfolioDO> metricdata = merticdataservice.getProgramNotAssociateDetails(portfolioID);
+    	return new ResponseEntity<List<PortfolioDO>> (metricdata, HttpStatus.CREATED);
+    	
+    }
+	
+	
 }

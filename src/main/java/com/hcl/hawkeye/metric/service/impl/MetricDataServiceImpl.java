@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.hcl.hawkeye.MetricDataDO.MetricConfiguration;
 import com.hcl.hawkeye.MetricDataDO.MetricData;
 import com.hcl.hawkeye.MetricDataDO.MetricDataDO;
+import com.hcl.hawkeye.MetricDataDO.PortfolioDO;
 import com.hcl.hawkeye.metric.DAO.MetricDataDAO;
 import com.hcl.hawkeye.metric.service.MetricDataService;
 
@@ -73,4 +74,23 @@ public class MetricDataServiceImpl implements MetricDataService {
 		return metricdao.getMetricData();
 	}
 
+	@Override
+	public List<PortfolioDO> getPortfolioDetails() {
+		// TODO Auto-generated method stub
+		return metricdao.getPortfolioDetails();
+	}
+
+	@Override
+	public List<PortfolioDO> getProgramDetails(int portfolioID) {
+		// TODO Auto-generated method stub
+		return metricdao.getProgramDetails(portfolioID);
+	}
+
+	@Override
+	public List<PortfolioDO> getProgramNotAssociateDetails(int portfolioID) {
+		// TODO Auto-generated method stub
+		return metricdao.getProgramNotAssociateDetails(portfolioID);
+	}
+
+	
 }

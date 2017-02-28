@@ -24,6 +24,7 @@ import com.hcl.hawkeye.Exceptions.ValueAddDataRetrievalException;
 import com.hcl.hawkeye.MetricDataDO.MetricConfiguration;
 import com.hcl.hawkeye.MetricDataDO.MetricData;
 import com.hcl.hawkeye.MetricDataDO.MetricDataDO;
+import com.hcl.hawkeye.MetricDataDO.PortfolioDO;
 import com.hcl.hawkeye.metric.DAO.MetricDataDAO;
 import com.hcl.hawkeye.utils.HawkEyeUtils;
 
@@ -180,5 +181,80 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 	 return metricdata;
 	}
 
+	@Override
+	public List<PortfolioDO> getPortfolioDetails() {
+		// TODO Auto-generated method stub
+		List<PortfolioDO> portfoliolist = new ArrayList<>();
+		String getgrapth_SQL = "select PORTFOLIO_ID from PORTFOLIO";
+		try{
+			List<Map<String, Object>> portfolioList = jdbcTemplate.queryForList(getgrapth_SQL);
+			System.out.println("portfolioList:"+portfolioList);
+			for (Map<String, Object> row : portfolioList) {
+				PortfolioDO plist = new PortfolioDO();
+				plist.setPortfolio_Id(Integer.valueOf(row.get("PORTFOLIO_ID").toString()));
+				portfoliolist.add(plist);
+			}
+		}
+		catch (EmptyResultDataAccessException  dae) {
+			logger.error("Exception in getPortfolioDetails");
+		}
+		return portfoliolist;
+	
+	}
+
+	@Override
+	public List<PortfolioDO> getProgramDetails(int portfolioID) {
+		// TODO Auto-generated method stub
+		List<PortfolioDO> programList = new ArrayList<PortfolioDO>();
+		String PROGRAM_SQL = "select PROGRAMID from PROGRAM where PORTFOLIO_ID = ? ";
+		try{
+			List<Map<String, Object>> proList = jdbcTemplate.queryForList(PROGRAM_SQL,new Object[] {portfolioID});
+			System.out.println("proList:"+proList);
+			if(proList  != null && proList.size() >0)  
+			{
+				for (Map<String, Object> row : proList) {
+					
+					PortfolioDO program = new PortfolioDO();
+					program.setProgramId(Integer.valueOf(row.get("PROGRAMID").toString()));
+					programList.add(program);
+					
+		        } 
+			}
+		   }
+		
+		catch (DataAccessException dae) {
+			logger.error("Exception in getPortfolioDetails");
+			}
+		return programList;
+	}
+
+	@Override
+	public List<PortfolioDO> getProgramNotAssociateDetails(int portfolioID) {
+		// TODO Auto-generated method stub
+
+		// TODO Auto-generated method stub
+		List<PortfolioDO> programList = new ArrayList<PortfolioDO>();
+		String PROGRAM_SQL = "select PROGRAMID from PROGRAM where PORTFOLIO_ID != ? ";
+		try{
+			List<Map<String, Object>> proList = jdbcTemplate.queryForList(PROGRAM_SQL,new Object[] {portfolioID});
+			System.out.println("proList:"+proList);
+			if(proList  != null && proList.size() >0)  
+			{
+				for (Map<String, Object> row : proList) {
+					
+					PortfolioDO program = new PortfolioDO();
+					program.setProgramId(Integer.valueOf(row.get("PROGRAMID").toString()));
+					programList.add(program);
+					
+		        } 
+			}
+		   }
+		
+		catch (DataAccessException dae) {
+			logger.error("Exception in getPortfolioDetails");
+			}
+		return programList;
+	
+	}
 	
 }
