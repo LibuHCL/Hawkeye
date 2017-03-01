@@ -40,7 +40,7 @@ public class JiraBatchUpdateDAOImpl implements JiraBatchUpdateDAO{
 		logger.info("Requested to inserted the project data into DB of size: {}", pj.size());
 		boolean status = false ;
 		try {
-			String sql  = "INSERT INTO PROJECTDETAILS (PROJECTID, PROJECT_NAME, PROJECT_TYPE) VALUES(?, ?, ?)";
+			String sql  = "INSERT IGNORE INTO PROJECTDETAILS (PROJECTID, PROJECT_NAME, PROJECT_TYPE) VALUES(?, ?, ?)";
 			
 			jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 				
