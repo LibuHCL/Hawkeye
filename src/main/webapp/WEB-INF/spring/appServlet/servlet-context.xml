@@ -53,5 +53,20 @@
 		</beans:property>
 	</beans:bean>
 	
+	<!-- Batch Job configuration starts here for Jira integration -->
+	<beans:bean id="transactionManager" class="org.springframework.batch.support.transaction.ResourcelessTransactionManager"/>
+	
+	<beans:import resource="job-config.xml"/>
+	
+	<beans:bean id = "jobRepository" class = "org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean">
+		<!-- <beans:property name="dataSource" ref="dataSourceNew"/> -->
+		<beans:property name="transactionManager" ref="transactionManager"/>
+		<!-- <beans:property name="databaseType" value="mysql"></beans:property> -->
+	</beans:bean>
+	
+	<beans:bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+		<beans:property name="jobRepository" ref="jobRepository"></beans:property>
+	</beans:bean>
+	
 	
 </beans:beans>

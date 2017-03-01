@@ -112,6 +112,23 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 	}
 
 	@Override
+	public DashBoardDetails getDashBoard(int startIndex) {
+		logger.info("Request to get dashboard info");
+		Locale locale=new Locale("en", "IN");
+		DashBoardDetails dashBInfo = null;
+		try {
+			String url = messageSource.getMessage("jira.agile.rest.api.board.url", new Object[]{}, locale);
+			String dashBoardInfo = jrCall.callRestAPI(url+"?startAt="+startIndex);
+			gson = new Gson();
+			dashBInfo = gson.fromJson(dashBoardInfo, DashBoardDetails.class);
+		} catch (Exception e) {
+			String errorMsg=messageSource.getMessage("error.get.project", new Object[] {}, locale);
+			logger.error(errorMsg, e);
+			throw new NoProjectDetailsException(errorMsg, e);
+		}
+		return dashBInfo;
+	}
+	@Override
 	public Velocityinfo getVelocityOfProject(int projectId) {
 		logger.info("Request to get velocity of project info");
 		Velocityinfo velInfo;

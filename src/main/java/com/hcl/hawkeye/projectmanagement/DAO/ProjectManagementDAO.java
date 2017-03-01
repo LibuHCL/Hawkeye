@@ -65,4 +65,11 @@ public interface ProjectManagementDAO {
 	 */
 	ProjectIssues getKanbanProjectDetails(int projectId);
 
+	/**
+	 * 
+	 * @param startIndex
+	 * @return
+	 */
+	DashBoardDetails getDashBoard(int startIndex);
+
 }

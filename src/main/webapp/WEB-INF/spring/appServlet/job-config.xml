@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:batch="http://www.springframework.org/schema/batch" 
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:file="http://www.springframework.org/schema/integration/file"	
+	xmlns:p="http://www.springframework.org/schema/p" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans	
+	http://www.springframework.org/schema/beans/spring-beans.xsd 	
+	http://www.springframework.org/schema/integration/file 
+	http://www.springframework.org/schema/integration/file/spring-integration-file.xsd
+    http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/batch 
+    http://www.springframework.org/schema/batch/spring-batch.xsd
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context.xsd 	
+	http://www.springframework.org/schema/util 
+	http://www.springframework.org/schema/util/spring-util.xsd
+	http://www.springframework.org/schema/task
+    http://www.springframework.org/schema/task/spring-task.xsd
+    http://www.springframework.org/schema/jdbc 
+	http://www.springframework.org/schema/jdbc/spring-jdbc.xsd"> 
+	
+	<beans:bean id="dashBoard" class="com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails"/>
+	
+	<!-- Setting up the jira spring batch job -->
+	<batch:job id="jiraJob">
+		<batch:step id="jiraBatchStep" next="getSprintStep">
+			<batch:tasklet>
+				<batch:chunk reader="itemReader" processor="itemProcessor" writer="itemWriter" commit-interval="3"></batch:chunk>
+			</batch:tasklet>
+			<batch:listeners>
+				<batch:listener ref="jiraBatchListener"/>
+			</batch:listeners>
+		</batch:step>
+		
+		<batch:step id="getSprintStep">
+			<batch:tasklet>
+				<batch:chunk reader="sprintReader" writer="sprintWriter" commit-interval="3"></batch:chunk>
+			</batch:tasklet>
+			
+		</batch:step>
+		
+		<!-- <batch:step id="getIssuesStep">
+			<batch:tasklet>
+				<batch:chunk reader="itemReader" writer="itemWriter" commit-interval="1"></batch:chunk>
+			</batch:tasklet>
+		</batch:step> -->
+	</batch:job>
+	
+	<beans:bean id="jiraBatchListener" class="org.springframework.batch.core.listener.ExecutionContextPromotionListener">
+   	 <beans:property name="keys" value="someKey"/>
+	</beans:bean>
+
+	<beans:bean id="itemReader" class="com.hcl.hawkeye.batch.jira.core.JiraDashBoardReader"/>
+	<beans:bean id="itemWriter" class="com.hcl.hawkeye.batch.jira.core.JiraDashBoardWriter"/>
+	
+	<beans:bean id="itemProcessor" class="com.hcl.hawkeye.batch.jira.core.JiraBatchProcessor"/>
+	
+	<beans:bean id="sprintReader" class="com.hcl.hawkeye.batch.jira.core.JiraSprintReader"/>
+	<beans:bean id="sprintWriter" class="com.hcl.hawkeye.batch.jira.core.JiraSprintWriter"/>
+   
+   <!--  <jdbc:initialize-database data-source="dataSource">
+        <jdbc:script location="org/springframework/batch/core/schema-drop-mysql.sql" />
+        <jdbc:script location="org/springframework/batch/core/schema-mysql.sql" />
+    </jdbc:initialize-database> -->
+
+</beans:beans>
