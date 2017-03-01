@@ -47,7 +47,7 @@ public class JiraDashBoardWriter implements ItemWriter<List<DashBoardValues>> {
 		boolean status = jbDAO.insertProjectDetails(projList);
 		if (status) {
 			logger.info("Hooooo Yaaa Success !!!!");
-		} 
+		}
 	}
 
 	@AfterStep

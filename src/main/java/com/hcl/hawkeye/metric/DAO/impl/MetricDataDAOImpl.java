@@ -1,6 +1,7 @@
 package com.hcl.hawkeye.metric.DAO.impl;
 
-import java.math.BigDecimal;
+
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -28,7 +30,8 @@ import com.hcl.hawkeye.MetricDataDO.PortfolioDO;
 import com.hcl.hawkeye.MetricDataDO.ProgramDO;
 import com.hcl.hawkeye.MetricDataDO.ProjectDo;
 import com.hcl.hawkeye.metric.DAO.MetricDataDAO;
-import com.hcl.hawkeye.utils.HawkEyeUtils;
+import com.hcl.hawkeye.portfolio.DO.Project;
+
 
 @Repository
 public class MetricDataDAOImpl implements MetricDataDAO {
@@ -40,6 +43,8 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 	
 	@Autowired
 	MessageSource messageSource;
+	
+	private static final int INSERT_BATCH_SIZE = 5;
 	
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
@@ -314,6 +319,54 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 			}
 		return programList;
 	
+	}
+	@Override
+	public List<ProgramDO> getPorgramList() {
+		// TODO Auto-generated method stub
+		List<ProgramDO> programList = new ArrayList<>();
+		String getgrapth_SQL = "SELECT * FROM PROGRAM";
+		try{
+			List<Map<String, Object>> progList = jdbcTemplate.queryForList(getgrapth_SQL);
+			System.out.println("programList:"+progList);
+			for (Map<String, Object> row : progList) {
+				ProgramDO plist = new ProgramDO();
+				plist.setProgramId(Integer.valueOf(row.get("PROGRAMID").toString()));
+				plist.setProgramName((String)row.get("PROGRAM_NAME"));
+				programList.add(plist);
+			}
+		}
+		catch (EmptyResultDataAccessException  dae) {
+			logger.error("Exception in getPortfolioDetails");
+		}
+		return programList;
+	
+	}
+
+	@Override
+	public void addProjectsToProgram(List<Project> progList) {
+		// TODO Auto-generated method stub
+		logger.info("Inside addProjectsToProgram method");
+		String sql_update = "UPDATE PROJECT SET PROGRAM_ID= ? WHERE PROJECTID = ?";	
+		for (int i = 0; i < progList.size(); i += INSERT_BATCH_SIZE) {
+			 
+			final List<Project> batchList = progList.subList(i, i+ INSERT_BATCH_SIZE > progList.size() ? progList.size() : i+ INSERT_BATCH_SIZE);
+			logger.info(" batchList size =="+ batchList.size());
+			jdbcTemplate.batchUpdate(sql_update,new BatchPreparedStatementSetter() {
+						public void setValues(PreparedStatement pStmt, int j)throws SQLException {
+							Project proj = batchList.get(j);
+							logger.info("Project details=="+proj.getProgId()+"====="+ proj.getProjectId());
+							pStmt.setInt(1, proj.getProgId());
+							pStmt.setLong(2, proj.getProjectId());							
+						}
+ 
+						@Override
+						public int getBatchSize() {
+							return batchList.size();
+						}
+				});
+		}
+	
+		
 	}
 
 	
