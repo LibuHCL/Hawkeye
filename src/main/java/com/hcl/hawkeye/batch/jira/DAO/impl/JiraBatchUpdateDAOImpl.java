@@ -22,16 +22,16 @@ import com.hcl.hawkeye.batch.jira.DO.SprintIssues;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectValues;
 
 @Repository
-public class JiraBatchUpdateDAOImpl implements JiraBatchUpdateDAO{
-	
+public class JiraBatchUpdateDAOImpl implements JiraBatchUpdateDAO {
+
 	private static final Logger logger = LoggerFactory.getLogger(JiraBatchUpdateDAOImpl.class);
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
-	
+
 	@Autowired
 	MessageSource messageSource;
-	
+
 	@Override
 	public boolean insertProjectDetails(Project pj) {
 		return false;
@@ -40,12 +40,12 @@ public class JiraBatchUpdateDAOImpl implements JiraBatchUpdateDAO{
 	@Override
 	public boolean insertProjectDetails(final List<Project> pj) {
 		logger.info("Requested to inserted the project data into DB of size: {}", pj.size());
-		boolean status = false ;
+		boolean status = false;
 		try {
-			String sql  = "INSERT IGNORE INTO PROJECTDETAILS (PROJECTID, PROJECT_NAME, PROJECT_TYPE) VALUES(?, ?, ?)";
-			
+			String sql = "INSERT IGNORE INTO PROJECTDETAILS (PROJECTID, PROJECT_NAME, PROJECT_TYPE) VALUES(?, ?, ?)";
+
 			jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-				
+
 				@Override
 				public void setValues(PreparedStatement ps, int arg1) throws SQLException {
 					Project pro = pj.get(arg1);
@@ -53,7 +53,7 @@ public class JiraBatchUpdateDAOImpl implements JiraBatchUpdateDAO{
 					ps.setString(2, pro.getName());
 					ps.setString(3, pro.getType());
 				}
-				
+
 				@Override
 				public int getBatchSize() {
 					return pj.size();
@@ -65,17 +65,17 @@ public class JiraBatchUpdateDAOImpl implements JiraBatchUpdateDAO{
 		}
 		return status;
 	}
-	
+
 	@Override
 	public boolean insertSprinttDetails(final List<ProjectValues> sprintsList) {
 		logger.info("Requested to inserted the project data into DB of size: {}", sprintsList.size());
-		boolean status = false ;
+		boolean status = false;
 		try {
-			String sql  = "INSERT IGNORE INTO SPRINTDETAILS (PDID,SPRINTID,SPRINT_BOARD_ID,SPRINT_STATUS,SPRINT_NAME,START_DATE,END_DATE,COMPLETED_DATE) "
+			String sql = "INSERT IGNORE INTO SPRINTDETAILS (PDID,SPRINTID,SPRINT_BOARD_ID,SPRINT_STATUS,SPRINT_NAME,START_DATE,END_DATE,COMPLETED_DATE) "
 					+ "VALUES((SELECT PDID FROM PROJECTDETAILS WHERE PROJECTID=?),?,?,?,?,?,?,?)";
-			
+
 			jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-				
+
 				@Override
 				public void setValues(PreparedStatement ps, int arg1) throws SQLException {
 					ProjectValues sprint = sprintsList.get(arg1);
@@ -88,7 +88,7 @@ public class JiraBatchUpdateDAOImpl implements JiraBatchUpdateDAO{
 					ps.setString(7, sprint.getEndDate());
 					ps.setString(8, sprint.getCompleteDate());
 				}
-				
+
 				@Override
 				public int getBatchSize() {
 					return sprintsList.size();
@@ -102,34 +102,36 @@ public class JiraBatchUpdateDAOImpl implements JiraBatchUpdateDAO{
 	}
 
 	@Override
-	public  List<String> getProjects() {
-			
-			String url = null;
-			Locale locale=new Locale("en", "IN");
-			
-			String sql_getProjects="SELECT PROJECTID,PROJECT_HOST,PROJECT_URL,PROJECT_TOOL,USERNAME,PASSWORD FROM PROJECTMANAGEMENT";
-			List<String> projectURLList = new ArrayList<String>();
-			List<Map<String, Object>> list = jdbcTemplate.queryForList(sql_getProjects);
-			for (Map<String, Object> row : list) {
-				if(((String)row.get("PROJECT_TOOL")).equals("JIRA")){
-					url = (String)row.get("PROJECT_URL")+messageSource.getMessage("jira.agile.rest.api.board", new Object[]{}, locale)+row.get("PROJECTID").toString();
-				}
-				projectURLList.add(url);
+	public List<String> getProjects() {
+
+		String url = null;
+		Locale locale = new Locale("en", "IN");
+
+		String sql_getProjects = "SELECT PROJECTID,PROJECT_HOST,PROJECT_URL,PROJECT_TOOL,USERNAME,PASSWORD FROM PROJECTMANAGEMENT";
+		List<String> projectURLList = new ArrayList<String>();
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql_getProjects);
+		for (Map<String, Object> row : list) {
+			if (((String) row.get("PROJECT_TOOL")).equals("JIRA")) {
+				url = (String) row.get("PROJECT_URL")
+						+ messageSource.getMessage("jira.agile.rest.api.board", new Object[] {}, locale)
+						+ row.get("PROJECTID").toString();
 			}
-			
-			return projectURLList;
+			projectURLList.add(url);
 		}
+
+		return projectURLList;
+	}
 
 	@Override
 	public boolean insertIssueDetails(final List<SprintIssues> pj) {
 
 		logger.info("Requested to inserted the project data into DB of size: {}", pj.size());
-		boolean status = false ;
+		boolean status = false;
 		try {
-			String sql  = "INSERT IGNORE INTO SPRINTISSUEDETAILS (SDID, SPRINTID, ISSUE_ID, ISSUE_TYPE_ID, ISSUE_NAME, ISSUE_TYPE, PRIORITY_ID, PRIORITY_NAME) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
-			
+			String sql = "INSERT IGNORE INTO SPRINTISSUEDETAILS (SDID, SPRINTID, ISSUE_ID, ISSUE_TYPE_ID, ISSUE_TYPE, PRIORITY_ID, PRIORITY_NAME) VALUES((SELECT SDID FROM SPRINTDETAILS WHERE SPRINTID=?), ?, ?, ?, ?, ?, ?)";
+
 			jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-				
+
 				@Override
 				public void setValues(PreparedStatement ps, int arg1) throws SQLException {
 					SprintIssues pro = pj.get(arg1);
@@ -138,11 +140,10 @@ public class JiraBatchUpdateDAOImpl implements JiraBatchUpdateDAO{
 					ps.setString(3, pro.getIssueId());
 					ps.setString(4, pro.getIssueTypeId());
 					ps.setString(5, pro.getIssueType());
-					ps.setString(6, pro.getIssueType());
-					ps.setString(7, pro.getPriorityId());
-					ps.setString(8, pro.getPriorityName());
+					ps.setString(6, pro.getPriorityId());
+					ps.setString(7, pro.getPriorityName());
 				}
-				
+
 				@Override
 				public int getBatchSize() {
 					return pj.size();
@@ -153,6 +154,6 @@ public class JiraBatchUpdateDAOImpl implements JiraBatchUpdateDAO{
 			logger.error("Exception: {}", e);
 		}
 		return status;
-	
+
 	}
 }
