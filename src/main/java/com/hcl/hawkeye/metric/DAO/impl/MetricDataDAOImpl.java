@@ -25,6 +25,8 @@ import com.hcl.hawkeye.MetricDataDO.MetricConfiguration;
 import com.hcl.hawkeye.MetricDataDO.MetricData;
 import com.hcl.hawkeye.MetricDataDO.MetricDataDO;
 import com.hcl.hawkeye.MetricDataDO.PortfolioDO;
+import com.hcl.hawkeye.MetricDataDO.ProgramDO;
+import com.hcl.hawkeye.MetricDataDO.ProjectDo;
 import com.hcl.hawkeye.metric.DAO.MetricDataDAO;
 import com.hcl.hawkeye.utils.HawkEyeUtils;
 
@@ -185,13 +187,14 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 	public List<PortfolioDO> getPortfolioDetails() {
 		// TODO Auto-generated method stub
 		List<PortfolioDO> portfoliolist = new ArrayList<>();
-		String getgrapth_SQL = "select PORTFOLIO_ID from PORTFOLIO";
+		String getgrapth_SQL = "select * from PORTFOLIO";
 		try{
 			List<Map<String, Object>> portfolioList = jdbcTemplate.queryForList(getgrapth_SQL);
 			System.out.println("portfolioList:"+portfolioList);
 			for (Map<String, Object> row : portfolioList) {
 				PortfolioDO plist = new PortfolioDO();
 				plist.setPortfolio_Id(Integer.valueOf(row.get("PORTFOLIO_ID").toString()));
+				plist.setPortfolio_name((String)row.get("PORTFOLIO_NAME"));
 				portfoliolist.add(plist);
 			}
 		}
@@ -203,10 +206,10 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 	}
 
 	@Override
-	public List<PortfolioDO> getProgramDetails(int portfolioID) {
+	public List<ProgramDO> getProgramDetails(int portfolioID) {
 		// TODO Auto-generated method stub
-		List<PortfolioDO> programList = new ArrayList<PortfolioDO>();
-		String PROGRAM_SQL = "select PROGRAMID from PROGRAM where PORTFOLIO_ID = ? ";
+		List<ProgramDO> programList = new ArrayList<ProgramDO>();
+		String PROGRAM_SQL = "select * from PROGRAM where PORTFOLIO_ID = ? ";
 		try{
 			List<Map<String, Object>> proList = jdbcTemplate.queryForList(PROGRAM_SQL,new Object[] {portfolioID});
 			System.out.println("proList:"+proList);
@@ -214,8 +217,10 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 			{
 				for (Map<String, Object> row : proList) {
 					
-					PortfolioDO program = new PortfolioDO();
+					ProgramDO program = new ProgramDO();
 					program.setProgramId(Integer.valueOf(row.get("PROGRAMID").toString()));
+					program.setProgramName((String)row.get("PROGRAM_NAME"));
+							
 					programList.add(program);
 					
 		        } 
@@ -225,16 +230,13 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 		catch (DataAccessException dae) {
 			logger.error("Exception in getPortfolioDetails");
 			}
-		return programList;
-	}
+		return programList;}
 
 	@Override
-	public List<PortfolioDO> getProgramNotAssociateDetails(int portfolioID) {
+	public List<ProgramDO> getProgramNotAssociateDetails(int portfolioID) {
 		// TODO Auto-generated method stub
-
-		// TODO Auto-generated method stub
-		List<PortfolioDO> programList = new ArrayList<PortfolioDO>();
-		String PROGRAM_SQL = "select PROGRAMID from PROGRAM where PORTFOLIO_ID != ? ";
+		List<ProgramDO> programList = new ArrayList<ProgramDO>();
+		String PROGRAM_SQL = "select * from PROGRAM where PORTFOLIO_ID != ? ";
 		try{
 			List<Map<String, Object>> proList = jdbcTemplate.queryForList(PROGRAM_SQL,new Object[] {portfolioID});
 			System.out.println("proList:"+proList);
@@ -242,8 +244,9 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 			{
 				for (Map<String, Object> row : proList) {
 					
-					PortfolioDO program = new PortfolioDO();
+					ProgramDO program = new ProgramDO();
 					program.setProgramId(Integer.valueOf(row.get("PROGRAMID").toString()));
+					program.setProgramName((String)row.get("PROGRAM_NAME"));
 					programList.add(program);
 					
 		        } 
@@ -256,5 +259,62 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 		return programList;
 	
 	}
+	@Override
+	public List<ProjectDo> getProjectDetails(int programID) {
+		// TODO Auto-generated method stub
+		List<ProjectDo> programList = new ArrayList<ProjectDo>();
+		String PROGRAM_SQL = "select * from PROJECT where PROGRAM_ID = ? ";
+		try{
+			List<Map<String, Object>> proList = jdbcTemplate.queryForList(PROGRAM_SQL,new Object[] {programID});
+			System.out.println("proList:"+proList);
+			if(proList  != null && proList.size() >0)  
+			{
+				for (Map<String, Object> row : proList) {
+					
+					ProjectDo program = new ProjectDo();
+					program.setProjectID(Integer.valueOf(row.get("PROJECTID").toString()));
+					program.setProjectName((String)row.get("PROJECT_NAME"));
+					programList.add(program);
+					
+		        } 
+			}
+		   }
+		
+		catch (DataAccessException dae) {
+			logger.error("Exception in getPortfolioDetails");
+			}
+		return programList;
+	}
+	
+	@Override
+	public List<ProjectDo> getProjectNotAssociateDetails(int programID) {
+		// TODO Auto-generated method stub
+
+		// TODO Auto-generated method stub
+		List<ProjectDo> programList = new ArrayList<ProjectDo>();
+		String PROGRAM_SQL = "select * from PROJECT where PROGRAM_ID != ? ";
+		try{
+			List<Map<String, Object>> proList = jdbcTemplate.queryForList(PROGRAM_SQL,new Object[] {programID});
+			System.out.println("proList:"+proList);
+			if(proList  != null && proList.size() >0)  
+			{
+				for (Map<String, Object> row : proList) {
+					
+					ProjectDo program = new ProjectDo();
+					program.setProjectID(Integer.valueOf(row.get("PROJECTID").toString()));
+					program.setProjectName((String)row.get("PROJECT_NAME"));
+					programList.add(program);
+					
+		        } 
+			}
+		   }
+		
+		catch (DataAccessException dae) {
+			logger.error("Exception in getPortfolioDetails");
+			}
+		return programList;
+	
+	}
+
 	
 }

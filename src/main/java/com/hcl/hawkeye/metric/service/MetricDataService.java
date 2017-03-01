@@ -7,6 +7,8 @@ import com.hcl.hawkeye.MetricDataDO.MetricConfiguration;
 import com.hcl.hawkeye.MetricDataDO.MetricData;
 import com.hcl.hawkeye.MetricDataDO.MetricDataDO;
 import com.hcl.hawkeye.MetricDataDO.PortfolioDO;
+import com.hcl.hawkeye.MetricDataDO.ProgramDO;
+import com.hcl.hawkeye.MetricDataDO.ProjectDo;
 
 public interface MetricDataService {
 
@@ -24,9 +26,11 @@ public interface MetricDataService {
 
 	List<PortfolioDO> getPortfolioDetails();
 
-	List<PortfolioDO> getProgramDetails(int portfolioID);
+	Map<String, List<ProgramDO>> getProgramDetails(int portfolioID);
 
-	List<PortfolioDO> getProgramNotAssociateDetails(int portfolioID);
+	List<ProgramDO> getProgramNotAssociateDetails(int portfolioID);
+		
+	Map<String, List<ProjectDo>> getProjectDetails(int progrmaID);
 
 	
 }

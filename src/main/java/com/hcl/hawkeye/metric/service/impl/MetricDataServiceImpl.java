@@ -15,6 +15,8 @@ import com.hcl.hawkeye.MetricDataDO.MetricConfiguration;
 import com.hcl.hawkeye.MetricDataDO.MetricData;
 import com.hcl.hawkeye.MetricDataDO.MetricDataDO;
 import com.hcl.hawkeye.MetricDataDO.PortfolioDO;
+import com.hcl.hawkeye.MetricDataDO.ProgramDO;
+import com.hcl.hawkeye.MetricDataDO.ProjectDo;
 import com.hcl.hawkeye.metric.DAO.MetricDataDAO;
 import com.hcl.hawkeye.metric.service.MetricDataService;
 
@@ -81,15 +83,32 @@ public class MetricDataServiceImpl implements MetricDataService {
 	}
 
 	@Override
-	public List<PortfolioDO> getProgramDetails(int portfolioID) {
+	public Map<String, List<ProgramDO>> getProgramDetails(int portfolioID) {
 		// TODO Auto-generated method stub
-		return metricdao.getProgramDetails(portfolioID);
+		List<ProgramDO> associate    = metricdao.getProgramDetails(portfolioID);
+		List<ProgramDO> notassociate = metricdao.getProgramNotAssociateDetails(portfolioID);
+		Map<String, List<ProgramDO>> programlist = new HashMap<>();
+		programlist.put("AssociatedData", associate);
+		programlist.put("NotAssociatedData", notassociate);
+		return programlist;
 	}
 
 	@Override
-	public List<PortfolioDO> getProgramNotAssociateDetails(int portfolioID) {
+	public List<ProgramDO> getProgramNotAssociateDetails(int portfolioID) {
 		// TODO Auto-generated method stub
 		return metricdao.getProgramNotAssociateDetails(portfolioID);
+	}
+	
+	@Override
+	public Map<String,List<ProjectDo>> getProjectDetails(int progrmaID) {
+		
+		List<ProjectDo> projectAssociate  =  metricdao.getProjectDetails(progrmaID);
+		List<ProjectDo> projectNotAssociat = metricdao.getProjectNotAssociateDetails(progrmaID);
+		Map<String,List<ProjectDo>>  projectList = new HashMap<>();
+		projectList.put("projectAssociate", projectAssociate);
+		projectList.put("projectNotAssociat", projectNotAssociat);
+		// TODO Auto-generated method stub
+		return projectList;
 	}
 
 	

@@ -7,6 +7,8 @@ import com.hcl.hawkeye.MetricDataDO.MetricConfiguration;
 import com.hcl.hawkeye.MetricDataDO.MetricData;
 import com.hcl.hawkeye.MetricDataDO.MetricDataDO;
 import com.hcl.hawkeye.MetricDataDO.PortfolioDO;
+import com.hcl.hawkeye.MetricDataDO.ProgramDO;
+import com.hcl.hawkeye.MetricDataDO.ProjectDo;
 
 public interface MetricDataDAO {
 
@@ -24,8 +26,12 @@ public interface MetricDataDAO {
 
 	List<PortfolioDO> getPortfolioDetails();
 
-	List<PortfolioDO> getProgramDetails(int portfolioID);
+	List<ProgramDO> getProgramDetails(int portfolioID);
 
-	List<PortfolioDO> getProgramNotAssociateDetails(int portfolioID);
+	List<ProgramDO> getProgramNotAssociateDetails(int portfolioID);
+	
+	List<ProjectDo> getProjectDetails(int programID);
+
+	List<ProjectDo> getProjectNotAssociateDetails(int programID);
 
 	}

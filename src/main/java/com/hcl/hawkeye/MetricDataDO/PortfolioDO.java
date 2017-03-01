@@ -6,7 +6,16 @@ public class PortfolioDO implements Serializable {
 	
 	private int  portfolio_Id;
 	private int  programId;
+	private String Portfolio_name;
 	
+	public String getPortfolio_name() {
+		return Portfolio_name;
+	}
+
+	public void setPortfolio_name(String portfolio_name) {
+		Portfolio_name = portfolio_name;
+	}
+
 	public int getPortfolio_Id() {
 		return portfolio_Id;
 	}
