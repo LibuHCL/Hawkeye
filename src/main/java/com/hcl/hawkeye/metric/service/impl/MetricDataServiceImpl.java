@@ -3,12 +3,14 @@ package com.hcl.hawkeye.metric.service.impl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.hcl.hawkeye.MetricDataDO.MetricConfiguration;
@@ -19,6 +21,7 @@ import com.hcl.hawkeye.MetricDataDO.ProgramDO;
 import com.hcl.hawkeye.MetricDataDO.ProjectDo;
 import com.hcl.hawkeye.metric.DAO.MetricDataDAO;
 import com.hcl.hawkeye.metric.service.MetricDataService;
+import com.hcl.hawkeye.portfolio.DO.Project;
 
 @Service
 public class MetricDataServiceImpl implements MetricDataService {
@@ -115,6 +118,13 @@ public class MetricDataServiceImpl implements MetricDataService {
 	public List<ProgramDO> getPorgramList() {
 		// TODO Auto-generated method stub
 		return metricdao.getPorgramList();
+	}
+
+	@Override
+	public void addProjectsToProgram(List<Project> projectList) {
+		// TODO Auto-generated method stub
+		logger.info("Inside addProjectsToProgram method"+ projectList.get(0).getProgId());
+		metricdao.addProjectsToProgram(projectList);
 	}
 	
 

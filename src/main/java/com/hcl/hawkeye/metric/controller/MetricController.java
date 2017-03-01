@@ -24,6 +24,8 @@ import com.hcl.hawkeye.MetricDataDO.PortfolioDO;
 import com.hcl.hawkeye.MetricDataDO.ProgramDO;
 import com.hcl.hawkeye.MetricDataDO.ProjectDo;
 import com.hcl.hawkeye.metric.service.MetricDataService;
+import com.hcl.hawkeye.portfolio.DO.Program;
+import com.hcl.hawkeye.portfolio.DO.Project;
 import com.hcl.hawkeye.valueaddmanagement.DO.Value;
 
 
@@ -131,6 +133,14 @@ public class MetricController {
     	List<ProgramDO> metricdata = merticdataservice.getPorgramList();
     	return new ResponseEntity<List<ProgramDO>> (metricdata, HttpStatus.CREATED);
     	
-    }
+    } 
+	
+	// To add projects to programs 
+		@RequestMapping(value = "/projects2programs", method = RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+		public String addProjectsToProgram(@RequestBody List<Project> projectList) {
+			logger.info("Inside addProjectsToProgram method in Controller.");
+			merticdataservice.addProjectsToProgram(projectList);
+			return "prog2portfolio";
+		}
 	
 }
