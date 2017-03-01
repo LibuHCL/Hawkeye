@@ -6,7 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.core.annotation.BeforeStep;
+import org.springframework.batch.core.annotation.AfterStep;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +26,12 @@ public class JiraDashBoardWriter implements ItemWriter<List<DashBoardValues>> {
 
 	private StepExecution stepExecution;
 	
+	List<Project> projList = new ArrayList<>();
+	
 	
 	@Override
 	public void write(List<? extends List<DashBoardValues>> details) throws Exception {
 		logger.info("Requested to write the data coming from the Reader");
-		List<Project> projList = new ArrayList<>();
 		if (null != details) {
 			for (List<DashBoardValues> list : details) {
 				for (DashBoardValues dashBoardValues : list) {
@@ -40,22 +41,19 @@ public class JiraDashBoardWriter implements ItemWriter<List<DashBoardValues>> {
 					pj.setType(dashBoardValues.getType());
 					pj.setJiraUrl(dashBoardValues.getSelf());
 					projList.add(pj);
-					
 				}
 			}
 		}
 		boolean status = jbDAO.insertProjectDetails(projList);
 		if (status) {
 			logger.info("Hooooo Yaaa Success !!!!");
-			ExecutionContext stepContext = this.stepExecution.getExecutionContext();
-			stepContext.put("someKey", projList);
-		} else {
-			logger.error("You kicked out -- check your back");
-		}
+		} 
 	}
 
-	@BeforeStep
+	@AfterStep
     public void saveStepExecution(StepExecution stepExecution) {
         this.stepExecution = stepExecution;
+        ExecutionContext stepContext = this.stepExecution.getExecutionContext();
+		stepContext.put("projectDetails", projList);
     }
 }

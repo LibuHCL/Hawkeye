@@ -333,6 +333,26 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 		}
 		return sprintValuesList;
 	}
-
+	
+	@Override
+	public List<Issues> getIssueDetails(String url) {
+		logger.info("Request to get sprint details with project id: {}", url);
+		List<Issues> sprintValuesList = null;
+		Locale locale=new Locale("en", "IN");
+		ProjectIssues pDetails = null;
+		try {			
+			String projectInfo = jrCall.callRestAPI(url);
+			gson = new Gson();
+			pDetails = gson.fromJson(projectInfo, ProjectIssues.class);
+			if(null != pDetails){
+				sprintValuesList= pDetails.getIssues();
+			}
+		} catch (Exception e) {
+			String errorMsg=messageSource.getMessage("error.get.project", new Object[] {}, locale);
+			logger.error(errorMsg, e);
+			throw new NoProjectDetailsException(errorMsg, e);
+		}
+		return sprintValuesList;
+	}
 	
 }

@@ -1,10 +1,7 @@
 package com.hcl.hawkeye.batch.jira.core;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,13 +10,10 @@ import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.hcl.hawkeye.batch.jira.DAO.JiraBatchUpdateDAO;
-import com.hcl.hawkeye.portfolio.DO.ProgramInfo;
 import com.hcl.hawkeye.projectmanagement.DAO.ProjectManagementDAO;
-import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardValues;
 
 
@@ -49,7 +43,7 @@ public class JiraDashBoardReader implements ItemReader<List<DashBoardValues>>{
 		
 		DashBoardValues dBoardDetails = new DashBoardValues();
 		if (val) {
-			for(String url:projUrlList){
+			for(String url:projUrlList) {
 				dBoardDetails = pmDao.getDashBoard(url);
 				dVals.add(dBoardDetails);				
 			}

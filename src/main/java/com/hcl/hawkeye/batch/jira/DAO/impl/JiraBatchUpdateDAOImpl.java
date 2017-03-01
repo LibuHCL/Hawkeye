@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 
 import com.hcl.hawkeye.batch.jira.DAO.JiraBatchUpdateDAO;
 import com.hcl.hawkeye.batch.jira.DO.Project;
+import com.hcl.hawkeye.batch.jira.DO.SprintIssues;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectValues;
 
 @Repository
@@ -118,4 +119,40 @@ public class JiraBatchUpdateDAOImpl implements JiraBatchUpdateDAO{
 			
 			return projectURLList;
 		}
+
+	@Override
+	public boolean insertIssueDetails(final List<SprintIssues> pj) {
+
+		logger.info("Requested to inserted the project data into DB of size: {}", pj.size());
+		boolean status = false ;
+		try {
+			String sql  = "INSERT IGNORE INTO SPRINTISSUEDETAILS (SDID, SPRINTID, ISSUE_ID, ISSUE_TYPE_ID, ISSUE_NAME, ISSUE_TYPE, PRIORITY_ID, PRIORITY_NAME) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+			
+			jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+				
+				@Override
+				public void setValues(PreparedStatement ps, int arg1) throws SQLException {
+					SprintIssues pro = pj.get(arg1);
+					ps.setInt(1, pro.getSprintId());
+					ps.setInt(2, pro.getSprintId());
+					ps.setString(3, pro.getIssueId());
+					ps.setString(4, pro.getIssueTypeId());
+					ps.setString(5, pro.getIssueType());
+					ps.setString(6, pro.getIssueType());
+					ps.setString(7, pro.getPriorityId());
+					ps.setString(8, pro.getPriorityName());
+				}
+				
+				@Override
+				public int getBatchSize() {
+					return pj.size();
+				}
+			});
+			status = true;
+		} catch (DataAccessException e) {
+			logger.error("Exception: {}", e);
+		}
+		return status;
+	
+	}
 }

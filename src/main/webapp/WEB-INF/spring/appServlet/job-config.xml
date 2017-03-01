@@ -32,7 +32,7 @@
 	<batch:job id="jiraJob">
 		<batch:step id="jiraBatchStep" next="getSprintStep">
 			<batch:tasklet>
-				<batch:chunk reader="itemReader" writer="itemWriter" commit-interval="3"></batch:chunk>
+				<batch:chunk reader="itemReader" writer="itemWriter" commit-interval="3"/>
 			</batch:tasklet>
 			<batch:listeners>
 				<batch:listener ref="jiraBatchListener"/>
@@ -41,7 +41,7 @@
 		
 		<batch:step id="getSprintStep" next="getIssuesStep">
 			<batch:tasklet>
-				<batch:chunk reader="sprintReader" writer="sprintWriter" commit-interval="3"></batch:chunk>
+				<batch:chunk reader="sprintReader" writer="sprintWriter" commit-interval="1"/>
 			</batch:tasklet>
 			<batch:listeners>
 				<batch:listener ref="jiraSprintListener"/>
@@ -50,7 +50,7 @@
 		
 		<batch:step id="getIssuesStep">
 			<batch:tasklet>
-				<batch:chunk reader="issueReader" writer="issueWriter" commit-interval="3"></batch:chunk>
+				<batch:chunk reader="issueReader" writer="issueWriter" commit-interval="3"/>
 			</batch:tasklet>
 		</batch:step>
 	</batch:job>
@@ -69,8 +69,8 @@
 	<beans:bean id="sprintReader" class="com.hcl.hawkeye.batch.jira.core.JiraSprintReader"/>
 	<beans:bean id="sprintWriter" class="com.hcl.hawkeye.batch.jira.core.JiraSprintWriter"/>
 	
-	<beans:bean id="issueReader" class="com.hcl.hawkeye.batch.jira.core.JiraSprintReader"/>
-	<beans:bean id="issueWriter" class="com.hcl.hawkeye.batch.jira.core.JiraSprintWriter"/>
+	<beans:bean id="issueReader" class="com.hcl.hawkeye.batch.jira.core.JiraIssueReader"/>
+	<beans:bean id="issueWriter" class="com.hcl.hawkeye.batch.jira.core.JiraIssueWriter"/>
    
    <!--  <jdbc:initialize-database data-source="dataSource">
         <jdbc:script location="org/springframework/batch/core/schema-drop-mysql.sql" />

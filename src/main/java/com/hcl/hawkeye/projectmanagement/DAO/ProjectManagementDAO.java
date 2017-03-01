@@ -6,6 +6,7 @@ import java.util.Map;
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardValues;
 import com.hcl.hawkeye.projectmanagement.DO.DefectTypes;
+import com.hcl.hawkeye.projectmanagement.DO.Issues;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectDetails;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectIssues;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectValues;
@@ -90,6 +91,18 @@ public interface ProjectManagementDAO {
 	 */
 	ProjectDetails getProjectDetailsOfSprints(int projectId);
 
+	/**
+	 * 
+	 * @param url
+	 * @return
+	 */
 	List<ProjectValues> getSprintDetails(String url);
+
+	/**
+	 * 
+	 * @param url
+	 * @return
+	 */
+	List<Issues> getIssueDetails(String url);
 
 }

@@ -29,27 +29,29 @@ public class JiraSprintReader implements ItemReader<List<ProjectValues>>{
 	ProjectManagementDAO pmDao;
 
 	private static final Logger logger = LoggerFactory.getLogger(JiraSprintReader.class);
+	
 	private List<Project> projectList ;
+	
+	List<ProjectValues> sprintValuesList = new ArrayList<ProjectValues>();
 	boolean val = true;
 	@Override
 	public List<ProjectValues> read()
 			throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-		Locale locale=new Locale("en", "IN");
-		List<ProjectValues> sprintValuesList = new ArrayList<ProjectValues>();
-		
 		if(val ){
+			Locale locale=new Locale("en", "IN");
+			List<ProjectValues> sprintsList = new ArrayList<>();
 			for (Project proj : projectList) {
-					String sprintUrl = proj.getJiraUrl()+messageSource.getMessage("jira.agile.rest.api.sprint", new Object[]{}, locale);
-					List<ProjectValues> sprintsList =pmDao.getSprintDetails(sprintUrl);
-					if(null != sprintsList){
+				String sprintUrl = proj.getJiraUrl()+messageSource.getMessage("jira.agile.rest.api.sprint", new Object[]{}, locale);
+				sprintsList =pmDao.getSprintDetails(sprintUrl);
+				if(null != sprintsList){
 					sprintValuesList.addAll(sprintsList);	
-					}
-				
+				}
 			}
 			val= false;
 			return sprintValuesList;
+		} else {
+			return null;
 		}
-		return null;
 	}
 
 
@@ -57,6 +59,6 @@ public class JiraSprintReader implements ItemReader<List<ProjectValues>>{
     public void retrieveInterstepData(StepExecution stepExecution) {
         JobExecution jobExecution = stepExecution.getJobExecution();
         ExecutionContext jobContext = jobExecution.getExecutionContext();
-        this.projectList = (List<Project>) jobContext.get("someKey");
+        this.projectList = (List<Project>) jobContext.get("projectDetails");
     }
 }
