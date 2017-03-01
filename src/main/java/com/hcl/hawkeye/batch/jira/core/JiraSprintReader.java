@@ -57,6 +57,6 @@ public class JiraSprintReader implements ItemReader<List<ProjectValues>>{
     public void retrieveInterstepData(StepExecution stepExecution) {
         JobExecution jobExecution = stepExecution.getJobExecution();
         ExecutionContext jobContext = jobExecution.getExecutionContext();
-        this.projectList = (List<Project>) jobContext.get("someKey");
+        this.projectList = (List<Project>) jobContext.get("projectDetails");
     }
 }

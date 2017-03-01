@@ -38,7 +38,7 @@ public class JiraSprintWriter implements ItemWriter<List<ProjectValues>>{
 		if (status) {
 			logger.info("Hooooo Yaaa Success !!!!");
 			ExecutionContext stepContext = this.stepExecution.getExecutionContext();
-			stepContext.put("someKey", sprintsList);
+			stepContext.put("sprintDetails", sprintsList);
 		} else {
 			logger.error("You kicked out -- check your back");
 		}

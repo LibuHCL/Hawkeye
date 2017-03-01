@@ -48,7 +48,7 @@ public class JiraDashBoardWriter implements ItemWriter<List<DashBoardValues>> {
 		if (status) {
 			logger.info("Hooooo Yaaa Success !!!!");
 			ExecutionContext stepContext = this.stepExecution.getExecutionContext();
-			stepContext.put("someKey", projList);
+			stepContext.put("projectDetails", projList);
 		} else {
 			logger.error("You kicked out -- check your back");
 		}
