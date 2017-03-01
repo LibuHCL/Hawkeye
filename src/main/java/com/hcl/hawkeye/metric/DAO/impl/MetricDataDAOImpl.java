@@ -315,6 +315,27 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 		return programList;
 	
 	}
+	@Override
+	public List<ProgramDO> getPorgramList() {
+		// TODO Auto-generated method stub
+		List<ProgramDO> programList = new ArrayList<>();
+		String getgrapth_SQL = "SELECT * FROM PROGRAM";
+		try{
+			List<Map<String, Object>> progList = jdbcTemplate.queryForList(getgrapth_SQL);
+			System.out.println("programList:"+progList);
+			for (Map<String, Object> row : progList) {
+				ProgramDO plist = new ProgramDO();
+				plist.setProgramId(Integer.valueOf(row.get("PROGRAMID").toString()));
+				plist.setProgramName((String)row.get("PROGRAM_NAME"));
+				programList.add(plist);
+			}
+		}
+		catch (EmptyResultDataAccessException  dae) {
+			logger.error("Exception in getPortfolioDetails");
+		}
+		return programList;
+	
+	}
 
 	
 }

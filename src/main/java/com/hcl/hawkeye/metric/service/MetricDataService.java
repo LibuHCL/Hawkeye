@@ -31,6 +31,8 @@ public interface MetricDataService {
 	List<ProgramDO> getProgramNotAssociateDetails(int portfolioID);
 		
 	Map<String, List<ProjectDo>> getProjectDetails(int progrmaID);
+	
+	List<ProgramDO> getPorgramList();
 
 	
 }

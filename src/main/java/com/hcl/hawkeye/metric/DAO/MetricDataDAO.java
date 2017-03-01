@@ -33,5 +33,6 @@ public interface MetricDataDAO {
 	List<ProjectDo> getProjectDetails(int programID);
 
 	List<ProjectDo> getProjectNotAssociateDetails(int programID);
+	List<ProgramDO> getPorgramList();
 
 	}

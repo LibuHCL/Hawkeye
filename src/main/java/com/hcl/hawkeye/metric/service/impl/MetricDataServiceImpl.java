@@ -111,5 +111,12 @@ public class MetricDataServiceImpl implements MetricDataService {
 		return projectList;
 	}
 
+	@Override
+	public List<ProgramDO> getPorgramList() {
+		// TODO Auto-generated method stub
+		return metricdao.getPorgramList();
+	}
+	
+
 	
 }

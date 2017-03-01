@@ -123,8 +123,14 @@ public class MetricController {
     	return projectdata;
     	
     }
-	
-	
-	
+	/* To get the list of progarms Details */
+	@RequestMapping(value = "/getPorgramList", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public ResponseEntity <List<ProgramDO>> getPorgramList(){
+    	logger.info("Inside getPorgramList method in Controller:");
+    	List<ProgramDO> metricdata = merticdataservice.getPorgramList();
+    	return new ResponseEntity<List<ProgramDO>> (metricdata, HttpStatus.CREATED);
+    	
+    }
 	
 }
