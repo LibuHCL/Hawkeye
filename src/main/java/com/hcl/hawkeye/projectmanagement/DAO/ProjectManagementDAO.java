@@ -3,6 +3,7 @@ package com.hcl.hawkeye.projectmanagement.DAO;
 import java.util.Map;
 
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
+import com.hcl.hawkeye.projectmanagement.DO.DashBoardValues;
 import com.hcl.hawkeye.projectmanagement.DO.DefectTypes;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectIssues;
 import com.hcl.hawkeye.projectmanagement.DO.SprintDetailsOfProject;
@@ -71,5 +72,7 @@ public interface ProjectManagementDAO {
 	 * @return
 	 */
 	DashBoardDetails getDashBoard(int startIndex);
+
+	DashBoardValues getDashBoard(String url);
 
 }

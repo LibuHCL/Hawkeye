@@ -1,7 +1,10 @@
 package com.hcl.hawkeye.batch.jira.core;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,47 +13,51 @@ import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.jdbc.core.JdbcTemplate;
 
+import com.hcl.hawkeye.batch.jira.DAO.JiraBatchUpdateDAO;
+import com.hcl.hawkeye.portfolio.DO.ProgramInfo;
 import com.hcl.hawkeye.projectmanagement.DAO.ProjectManagementDAO;
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardValues;
 
 
-public class JiraDashBoardReader implements ItemReader<DashBoardDetails>{
+public class JiraDashBoardReader implements ItemReader<List<DashBoardValues>>{
 	
 	private static final Logger logger = LoggerFactory.getLogger(JiraDashBoardReader.class);
 
 	@Autowired
 	ProjectManagementDAO pmDao;
 	
-	DashBoardDetails dbDetails = null;
+	@Autowired
+	JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	JiraBatchUpdateDAO jbDAO;
+	
 	boolean val = true;
-	int value = 0;
 	List<DashBoardValues> dVals = new ArrayList<>();
 	
 	@Override
-	public DashBoardDetails read()
+	public List<DashBoardValues> read()
 			throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
 		logger.info("Started gettign the JIra details using Spring ItemReader");
-		DashBoardDetails dBoardDetails = new DashBoardDetails();
+	
+		// Get projects from PROJECT table.
+		List<String> projUrlList =jbDAO.getProjects();		
+		
+		DashBoardValues dBoardDetails = new DashBoardValues();
 		if (val) {
-			dBoardDetails = pmDao.getDashBoard(value);
-			if (!dBoardDetails.isLast()) {
-				dVals.addAll(dBoardDetails.getValues());
-				value = dBoardDetails.getMaxResults()+1;
-				this.read();
-			} else {
-				val = false;
+			for(String url:projUrlList){
+				dBoardDetails = pmDao.getDashBoard(url);
+				dVals.add(dBoardDetails);				
 			}
-			if (null == dbDetails) {
-				dVals.addAll(dBoardDetails.getValues());
-				dbDetails = new DashBoardDetails();
-				dbDetails.setValues(dVals);
-			} 
-			return dbDetails;
+			val=false;
+			return dVals;
 		} else {
 			return null; 
 		}
-	}
+	}	
 	
 }

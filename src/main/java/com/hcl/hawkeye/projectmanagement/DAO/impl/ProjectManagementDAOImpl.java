@@ -1,10 +1,6 @@
 package com.hcl.hawkeye.projectmanagement.DAO.impl;
 
 import java.lang.reflect.Type;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -22,9 +18,9 @@ import com.hcl.hawkeye.Exceptions.NoProjectDetailsException;
 import com.hcl.hawkeye.common.JiraRestCallAPI;
 import com.hcl.hawkeye.projectmanagement.DAO.ProjectManagementDAO;
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
+import com.hcl.hawkeye.projectmanagement.DO.DashBoardValues;
 import com.hcl.hawkeye.projectmanagement.DO.DefectTypes;
 import com.hcl.hawkeye.projectmanagement.DO.Issues;
-import com.hcl.hawkeye.projectmanagement.DO.KanbanProDetails;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectDetails;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectIssues;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectValues;
@@ -296,6 +292,23 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 			throw new NoProjectDetailsException(errorMsg, e);
 		}
 		return pIssues;
+	}
+
+	@Override
+	public DashBoardValues getDashBoard(String url) {
+		logger.info("Request to get dashboard info");
+		Locale locale=new Locale("en", "IN");
+		DashBoardValues dashBInfo = null;
+		try {
+			String dashBoardInfo = jrCall.callRestAPI(url);
+			gson = new Gson();
+			dashBInfo = gson.fromJson(dashBoardInfo, DashBoardValues.class);
+		} catch (Exception e) {
+			String errorMsg=messageSource.getMessage("error.get.project", new Object[] {}, locale);
+			logger.error(errorMsg, e);
+			throw new NoProjectDetailsException(errorMsg, e);
+		}
+		return dashBInfo;
 	}
 	
 }

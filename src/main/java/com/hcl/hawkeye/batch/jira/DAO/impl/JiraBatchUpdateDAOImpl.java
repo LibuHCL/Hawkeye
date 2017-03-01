@@ -2,11 +2,15 @@ package com.hcl.hawkeye.batch.jira.DAO.impl;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,6 +26,9 @@ public class JiraBatchUpdateDAOImpl implements JiraBatchUpdateDAO{
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	MessageSource messageSource;
 	
 	@Override
 	public boolean insertProjectDetails(Project pj) {
@@ -57,4 +64,22 @@ public class JiraBatchUpdateDAOImpl implements JiraBatchUpdateDAO{
 		return status;
 	}
 
+	@Override
+	public  List<String> getProjects() {
+			
+			String url = null;
+			Locale locale=new Locale("en", "IN");
+			
+			String sql_getProjects="SELECT PROJECTID,PROJECT_HOST,PROJECT_URL,PROJECT_TOOL,USERNAME,PASSWORD FROM PROJECTMANAGEMENT";
+			List<String> projectURLList = new ArrayList<String>();
+			List<Map<String, Object>> list = jdbcTemplate.queryForList(sql_getProjects);
+			for (Map<String, Object> row : list) {
+				if(((String)row.get("PROJECT_TOOL")).equals("JIRA")){
+					url = (String)row.get("PROJECT_URL")+messageSource.getMessage("jira.agile.rest.api.board", new Object[]{}, locale)+row.get("PROJECTID").toString();
+				}
+				projectURLList.add(url);
+			}
+			
+			return projectURLList;
+		}
 }
