@@ -72,7 +72,8 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 		return sProject;
 	}
 	
-	private ProjectDetails getProjectDetailsOfSprints(int projectId) {
+	@Override
+	public ProjectDetails getProjectDetailsOfSprints(int projectId) {
 		logger.info("Request to get project details with project id: {}", projectId);
 		Locale locale=new Locale("en", "IN");
 		ProjectDetails pDetails = null;
