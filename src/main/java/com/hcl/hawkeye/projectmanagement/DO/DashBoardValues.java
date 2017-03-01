@@ -11,7 +11,8 @@ public class DashBoardValues implements Serializable {
 	private int id;
 	private String self;
 	private String name;
-	private String type;
+	private String type;	
+	private String jiraUrl;
 
 	/**
 	 * @return the id
@@ -71,6 +72,15 @@ public class DashBoardValues implements Serializable {
 	 */
 	public void setType(String type) {
 		this.type = type;
+	}
+	
+
+	public String getJiraUrl() {
+		return jiraUrl;
+	}
+
+	public void setJiraUrl(String jiraUrl) {
+		this.jiraUrl = jiraUrl;
 	}
 
 	/* (non-Javadoc)

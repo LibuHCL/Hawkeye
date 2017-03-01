@@ -11,6 +11,7 @@ public class Project implements Serializable{
 	private int id;
 	private String name;
 	private String type;
+	private String jiraUrl;
 	/**
 	 * @return the id
 	 */
@@ -47,12 +48,19 @@ public class Project implements Serializable{
 	public void setType(String type) {
 		this.type = type;
 	}
+	
+	public String getJiraUrl() {
+		return jiraUrl;
+	}
+	public void setJiraUrl(String jiraUrl) {
+		this.jiraUrl = jiraUrl;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Project [id=" + id + ", name=" + name + ", type=" + type + "]";
+		return "Project [id=" + id + ", name=" + name + ", type=" + type + ", jiraUrl=" + jiraUrl + "]";
 	}
 	
 	

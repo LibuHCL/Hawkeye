@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 
 import com.hcl.hawkeye.batch.jira.DAO.JiraBatchUpdateDAO;
 import com.hcl.hawkeye.batch.jira.DO.Project;
+import com.hcl.hawkeye.projectmanagement.DO.ProjectValues;
 
 @Repository
 public class JiraBatchUpdateDAOImpl implements JiraBatchUpdateDAO{
@@ -55,6 +56,41 @@ public class JiraBatchUpdateDAOImpl implements JiraBatchUpdateDAO{
 				@Override
 				public int getBatchSize() {
 					return pj.size();
+				}
+			});
+			status = true;
+		} catch (DataAccessException e) {
+			logger.error("Exception: {}", e);
+		}
+		return status;
+	}
+	
+	@Override
+	public boolean insertSprinttDetails(final List<ProjectValues> sprintsList) {
+		logger.info("Requested to inserted the project data into DB of size: {}", sprintsList.size());
+		boolean status = false ;
+		try {
+			String sql  = "INSERT IGNORE INTO SPRINTDETAILS (PDID,SPRINTID,SPRINT_BOARD_ID,SPRINT_STATUS,SPRINT_NAME,START_DATE,END_DATE,COMPLETED_DATE) "
+					+ "VALUES((SELECT PDID FROM PROJECTDETAILS WHERE PROJECTID=?),?,?,?,?,?,?,?)";
+			
+			jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+				
+				@Override
+				public void setValues(PreparedStatement ps, int arg1) throws SQLException {
+					ProjectValues sprint = sprintsList.get(arg1);
+					ps.setInt(1, sprint.getOriginBoardId());
+					ps.setInt(2, sprint.getId());
+					ps.setInt(3, sprint.getOriginBoardId());
+					ps.setString(4, sprint.getState());
+					ps.setString(5, sprint.getName());
+					ps.setString(6, sprint.getStartDate());
+					ps.setString(7, sprint.getEndDate());
+					ps.setString(8, sprint.getCompleteDate());
+				}
+				
+				@Override
+				public int getBatchSize() {
+					return sprintsList.size();
 				}
 			});
 			status = true;
