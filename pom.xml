@@ -14,6 +14,7 @@
 		<org.slf4j-version>1.6.6</org.slf4j-version>
 		<spring.batch.version>2.2.0.RELEASE</spring.batch.version>
 		<spring.oxm.version>4.0.5.RELEASE</spring.oxm.version>
+		 <org.quartz.version>2.1.6</org.quartz.version>
 	</properties>
 	 
 	<dependencies>
@@ -35,6 +36,12 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
+		
+		 <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>${org.quartz.version}</version>
+        </dependency>
 
 		<!-- AspectJ -->
 		<dependency>

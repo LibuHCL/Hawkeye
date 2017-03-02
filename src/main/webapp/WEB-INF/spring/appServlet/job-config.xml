@@ -53,14 +53,31 @@
 		</batch:step> -->
 	</batch:job>
 	
+	<batch:job id="codeQualityJob">
+		<batch:step id="codeQualityBatchStep">
+			<batch:tasklet>
+				<batch:chunk reader="codeQualityReader" processor="codeQualityProcessor" writer="codeQualityWriter" commit-interval="3"></batch:chunk>
+			</batch:tasklet>
+			</batch:step>		
+	</batch:job>
+	
 	<beans:bean id="jiraBatchListener" class="org.springframework.batch.core.listener.ExecutionContextPromotionListener">
    	 <beans:property name="keys" value="someKey"/>
+	</beans:bean>
+	
+	<beans:bean id="codeQualityBatchListener" class="org.springframework.batch.core.listener.ExecutionContextPromotionListener">
+   	 <beans:property name="keys" value="codeQualityKey"/>
 	</beans:bean>
 
 	<beans:bean id="itemReader" class="com.hcl.hawkeye.batch.jira.core.JiraDashBoardReader"/>
 	<beans:bean id="itemWriter" class="com.hcl.hawkeye.batch.jira.core.JiraDashBoardWriter"/>
 	
 	<beans:bean id="itemProcessor" class="com.hcl.hawkeye.batch.jira.core.JiraBatchProcessor"/>
+	
+	<beans:bean id="codeQualityReader" class="com.hcl.hawkeye.batch.codequality.core.CodeQualityReader"/>
+	<beans:bean id="codeQualityWriter" class="com.hcl.hawkeye.batch.codequality.core.CodeQualityWriter"/>
+	
+	<beans:bean id="codeQualityProcessor" class="com.hcl.hawkeye.batch.codequality.core.CodeQualityProcessor"/>
 	
 	<beans:bean id="sprintReader" class="com.hcl.hawkeye.batch.jira.core.JiraSprintReader"/>
 	<beans:bean id="sprintWriter" class="com.hcl.hawkeye.batch.jira.core.JiraSprintWriter"/>
