@@ -193,7 +193,7 @@ public class ProjectValues implements Serializable{
 	public String toString() {
 		return "ProjectValues [id=" + id + ", self=" + self + ", state=" + state + ", name=" + name + ", startDate="
 				+ startDate + ", endDate=" + endDate + ", completeDate=" + completeDate + ", originBoardId="
-				+ originBoardId + "]";
+				+ originBoardId + ", toolProjectId=" + toolProjectId + "]";
 	}
 	
 	

@@ -119,7 +119,7 @@ public class SprintIssues implements Serializable{
 	public String toString() {
 		return "SprintIssues [sprintId=" + sprintId + ", issueId=" + issueId + ", issueTypeId=" + issueTypeId
 				+ ", issueType=" + issueType + ", priorityId=" + priorityId
-				+ ", priorityName=" + priorityName + "]";
+				+ ", priorityName=" + priorityName + ", toolProjectId=" + toolProjectId+"]";
 	}
 	
 	
