@@ -65,17 +65,10 @@ public class PortfolioManagementServiceImpl implements PortfolioManagementServic
 	}
 
 	@Override
-	public void addProgramsToPortfolio(List<Program> progList) {
+	public boolean addProgramsToPortfolio(List<Program> progList) {
 		logger.info("Inside addProgramsToPortfolio method in PortFolioMangementServiceImpl=="
 				+ progList.get(0).getPortfolioId());
-
-		try {
-			portfolioDAO.addProgramsToPortfolio(progList);
-		} catch (DataAccessException e) {
-			Locale locale = new Locale("en", "IN");
-			String errorMsg = messageSource.getMessage("error.addprog.porfolio", new Object[] {}, locale);
-			logger.error(errorMsg, e);
-		}
+		return portfolioDAO.addProgramsToPortfolio(progList);
 
 	}
 

@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -49,31 +50,39 @@ public class PortfolioManagementDAOImpl implements PortfolioManagementDAO {
 	
 	
 	@Override
-	public void addProgramsToPortfolio(List<Program> progList) {
+	public boolean addProgramsToPortfolio(List<Program> progList) {
 		
 		logger.info("Inside addProgramsToPortfolio method in PortfolioManagementDAOImpl");
+		boolean status = false;
 		String sql_update ="UPDATE PROGRAM SET PORTFOLIO_ID=? where PROGRAMID=?";	
 		for (int i = 0; i < progList.size(); i += INSERT_BATCH_SIZE) {
 			 
 			final List<Program> batchList 
 			= progList.subList(i, i+ INSERT_BATCH_SIZE > progList.size() ? progList.size() : i+ INSERT_BATCH_SIZE);
 			logger.info(" batchList size =="+ batchList.size());
-			jdbcTemplate.batchUpdate(sql_update,
-					new BatchPreparedStatementSetter() {
-						public void setValues(PreparedStatement pStmt, int j)throws SQLException {
-							Program proj = batchList.get(j);
-							logger.info("Program details=="+proj.getPortfolioId()+"====="+ proj.getProgramId());
-							pStmt.setInt(1, proj.getPortfolioId());
-							pStmt.setLong(2, proj.getProgramId());							
-						}
- 
-						@Override
-						public int getBatchSize() {
-							return batchList.size();
-						}
-						
-					});
-		}
+			try {
+				jdbcTemplate.batchUpdate(sql_update,
+						new BatchPreparedStatementSetter() {
+							public void setValues(PreparedStatement pStmt, int j)throws SQLException {
+								Program proj = batchList.get(j);
+								logger.info("Program details=="+proj.getPortfolioId()+"====="+ proj.getProgramId());
+								pStmt.setInt(1, proj.getPortfolioId());
+								pStmt.setLong(2, proj.getProgramId());							
+							}
+	 
+							@Override
+							public int getBatchSize() {
+								return batchList.size();
+							}
+							
+						});
+				status = true;  
+			} catch (DataAccessException e) {
+				// TODO: handle exception
+				logger.error("Exception in addProjectsToProgram");
+			}
+					}
+		return status;
 	}
 
 	@Override

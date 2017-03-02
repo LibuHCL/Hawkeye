@@ -13,7 +13,7 @@ public interface PortfolioManagementService {
 
 	Integer noOfPrgmsPerPortFolio(Integer portFoId);
 
-	void addProgramsToPortfolio(List<Program> progList);
+	boolean addProgramsToPortfolio(List<Program> progList);
 	
 	PortfolioDashboard getAllPortfolioDashboardInfo();
 	

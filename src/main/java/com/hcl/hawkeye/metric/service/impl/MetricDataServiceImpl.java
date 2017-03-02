@@ -121,10 +121,11 @@ public class MetricDataServiceImpl implements MetricDataService {
 	}
 
 	@Override
-	public void addProjectsToProgram(List<Project> projectList) {
+	public boolean addProjectsToProgram(List<Project> projectList) {
 		// TODO Auto-generated method stub
 		logger.info("Inside addProjectsToProgram method"+ projectList.get(0).getProgId());
-		metricdao.addProjectsToProgram(projectList);
+		
+		return metricdao.addProjectsToProgram(projectList);
 	}
 	
 
