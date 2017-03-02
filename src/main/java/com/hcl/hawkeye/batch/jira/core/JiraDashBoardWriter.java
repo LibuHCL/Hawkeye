@@ -28,7 +28,7 @@ public class JiraDashBoardWriter implements ItemWriter<List<DashBoardValues>> {
 	
 	@Override
 	public void write(List<? extends List<DashBoardValues>> details) throws Exception {
-		logger.info("Requested to write the data coming from the Reader");
+		logger.info("Requested to write the data coming from the Reader ");
 		if (null != details) {
 			for (List<DashBoardValues> list : details) {
 				for (DashBoardValues dashBoardValues : list) {

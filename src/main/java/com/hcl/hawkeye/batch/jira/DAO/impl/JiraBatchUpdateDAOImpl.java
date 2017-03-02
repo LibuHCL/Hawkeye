@@ -162,6 +162,7 @@ public class JiraBatchUpdateDAOImpl implements JiraBatchUpdateDAO {
 			});
 			status = true;
 		} catch (DataAccessException e) {
+			
 			logger.error("Exception: {}", e);
 		}
 		return status;

@@ -30,7 +30,6 @@ public class JiraSprintWriter implements ItemWriter<List<ProjectValues>>{
 					sprintsList.add(sprint);
 				}
 			}
-
 			boolean status = jbDAO.insertSprinttDetails(sprintsList);
 			if (status) {
 				logger.info("Successfully Inserted!!!!");

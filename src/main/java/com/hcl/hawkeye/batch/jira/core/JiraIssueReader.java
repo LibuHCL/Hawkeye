@@ -62,7 +62,6 @@ public class JiraIssueReader implements ItemReader<List<SprintIssues>>{
 			return null;
 		}
 	}
-
 	@BeforeStep
     public void retrieveInterstepData(StepExecution stepExecution) {
         JobExecution jobExecution = stepExecution.getJobExecution();

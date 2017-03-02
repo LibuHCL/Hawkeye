@@ -3,7 +3,6 @@ package com.hcl.hawkeye.batch.jira.core;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.JobExecution;

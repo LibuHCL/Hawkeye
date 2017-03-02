@@ -57,8 +57,7 @@ public class JiraDashBoardReader implements ItemReader<List<DashBoardValues>>{
 			stepThrough=true;
 			dVals = new ArrayList<>();			
 		}
-		return null; 
-		
+		return null; 	
 	}
 	
 }

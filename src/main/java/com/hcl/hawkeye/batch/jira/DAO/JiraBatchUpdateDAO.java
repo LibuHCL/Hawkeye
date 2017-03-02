@@ -8,7 +8,6 @@ import com.hcl.hawkeye.batch.jira.DO.SprintIssues;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectValues;
 
 public interface JiraBatchUpdateDAO {
-
 	boolean insertProjectDetails(Project pj);
 	
 	boolean insertProjectDetails(List<Project> pj);

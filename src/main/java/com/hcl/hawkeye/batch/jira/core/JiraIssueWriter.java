@@ -25,8 +25,7 @@ public class JiraIssueWriter implements ItemWriter<List<SprintIssues>>{
 		for (List<SprintIssues> list1 : sprintIssues) {
 			list.addAll(list1);
 		}
-		boolean status = jbDAO.insertIssueDetails(list);
-		
+		boolean status = jbDAO.insertIssueDetails(list);		
 		if (status) {
 			list = new ArrayList<>();
 			logger.info("Successfully Inserted");
