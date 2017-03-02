@@ -10,7 +10,7 @@ public interface PortfolioManagementDAO {
 
 	Portfolio addPortfolio(Portfolio portfolio);
 
-	void addProgramsToPortfolio(List<Program> progList);
+	boolean addProgramsToPortfolio(List<Program> progList);
 
 	Integer noOfPrgmsPerPortFolio(Integer portFoId);
 	

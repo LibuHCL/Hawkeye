@@ -38,6 +38,6 @@ public interface MetricDataDAO {
 	
 	List<ProgramDO> getPorgramList();
 	
-	void addProjectsToProgram(List<Project> progList);
+	boolean addProjectsToProgram(List<Project> progList);
 
 	}

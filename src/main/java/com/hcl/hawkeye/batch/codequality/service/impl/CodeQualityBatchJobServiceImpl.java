@@ -1,4 +1,4 @@
-package com.hcl.hawkeye.batch.jira.service.impl;
+package com.hcl.hawkeye.batch.codequality.service.impl;
 
 import java.util.Date;
 
@@ -17,26 +17,28 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hcl.hawkeye.batch.jira.service.JiraBatchJobService;
+import com.hcl.hawkeye.batch.codequality.service.CodeQualityBatchJobService;
+
 
 @Service
-public class JiraBatchJobServiceImpl implements JiraBatchJobService{
+public class CodeQualityBatchJobServiceImpl implements  CodeQualityBatchJobService{
 
-	private static final Logger logger = LoggerFactory.getLogger(JiraBatchJobServiceImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(CodeQualityBatchJobServiceImpl.class);
 	@Autowired
 	JobLauncher jobLauncher;
 	
 	@Autowired
-	Job jiraJob;
+	Job codeQualityJob;
 	
-	@Override
+
 	//@Scheduled(cron="${jira.spring.job.cron.expression}")
+	@Override
 	public void runJobScheduler() {
-		logger.info("Requested for batch process to get Jira data with Project Id ");
+		logger.info("Requested for batch process to get code quality ");
 		JobParameters jobParameters = new JobParametersBuilder().addString("date", new Date().toString()).toJobParameters();
 		JobExecution jobExecution = null;
 		try {
-			jobExecution = jobLauncher.run(jiraJob, jobParameters);
+			jobExecution = jobLauncher.run(codeQualityJob, jobParameters);
 		} catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException
 				| JobParametersInvalidException e) {
 			logger.error("Exception : {}", e);

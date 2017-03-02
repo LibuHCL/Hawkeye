@@ -137,10 +137,11 @@ public class MetricController {
 	
 	// To add projects to programs 
 		@RequestMapping(value = "/projects2programs", method = RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-		public String addProjectsToProgram(@RequestBody List<Project> projectList) {
+		@ResponseBody
+		public boolean addProjectsToProgram(@RequestBody List<Project> projectList) {
 			logger.info("Inside addProjectsToProgram method in Controller.");
-			merticdataservice.addProjectsToProgram(projectList);
-			return "prog2portfolio";
+			boolean status = merticdataservice.addProjectsToProgram(projectList);
+			return status;
 		}
 	
 }

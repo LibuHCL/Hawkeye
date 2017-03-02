@@ -22,13 +22,13 @@ public class JiraIssueWriter implements ItemWriter<List<SprintIssues>>{
 	
 	@Override
 	public void write(List<? extends List<SprintIssues>> sprintIssues) throws Exception {
-		logger.info("Requested to insert the details : {}", sprintIssues.get(0).size());
 		for (List<SprintIssues> list1 : sprintIssues) {
 			list.addAll(list1);
 		}
 		boolean status = jbDAO.insertIssueDetails(list);
 		
 		if (status) {
+			list = new ArrayList<>();
 			logger.info("Successfully Inserted");
 		}
 	}

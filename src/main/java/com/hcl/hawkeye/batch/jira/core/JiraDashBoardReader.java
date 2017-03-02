@@ -32,7 +32,7 @@ public class JiraDashBoardReader implements ItemReader<List<DashBoardValues>>{
 	@Autowired
 	JiraBatchUpdateDAO jbDAO;
 	
-	boolean val = true;
+	boolean stepThrough = true;
 	List<DashBoardValues> dVals = new ArrayList<>();
 	
 	@Override
@@ -44,22 +44,21 @@ public class JiraDashBoardReader implements ItemReader<List<DashBoardValues>>{
 		Map<Integer,String> projToolMap =jbDAO.getProjects();
 		
 		DashBoardValues dBoardDetails = new DashBoardValues();
-		if (val) {
+		if (stepThrough) {
 			for (Entry<Integer, String> entry : projToolMap.entrySet()){
 			    System.out.println(entry.getKey() + "/" + entry.getValue());
 			    dBoardDetails = pmDao.getDashBoard(entry.getValue());
 			    dBoardDetails.setToolProjectId(entry.getKey());
 			    dVals.add(dBoardDetails);	
 			}
-			/*for(String url:projUrlList) {
-				dBoardDetails = pmDao.getDashBoard(url);
-				dVals.add(dBoardDetails);				
-			}*/
-			val=false;
-			return dVals;
-		} else {
-			return null; 
+			
+			stepThrough=false;
+			} else {
+			stepThrough=true;
+			dVals = new ArrayList<>();			
 		}
-	}	
+		return null; 
+		
+	}
 	
 }

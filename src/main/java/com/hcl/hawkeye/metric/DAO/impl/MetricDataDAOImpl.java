@@ -343,28 +343,37 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 	}
 
 	@Override
-	public void addProjectsToProgram(List<Project> progList) {
+	public boolean addProjectsToProgram(List<Project> progList) {
 		// TODO Auto-generated method stub
 		logger.info("Inside addProjectsToProgram method");
+		boolean status = false;
 		String sql_update = "UPDATE PROJECT SET PROGRAM_ID= ? WHERE PROJECTID = ?";	
 		for (int i = 0; i < progList.size(); i += INSERT_BATCH_SIZE) {
 			 
 			final List<Project> batchList = progList.subList(i, i+ INSERT_BATCH_SIZE > progList.size() ? progList.size() : i+ INSERT_BATCH_SIZE);
 			logger.info(" batchList size =="+ batchList.size());
-			jdbcTemplate.batchUpdate(sql_update,new BatchPreparedStatementSetter() {
-						public void setValues(PreparedStatement pStmt, int j)throws SQLException {
-							Project proj = batchList.get(j);
-							logger.info("Project details=="+proj.getProgId()+"====="+ proj.getProjectId());
-							pStmt.setInt(1, proj.getProgId());
-							pStmt.setLong(2, proj.getProjectId());							
-						}
- 
-						@Override
-						public int getBatchSize() {
-							return batchList.size();
-						}
-				});
-		}
+			try {
+				jdbcTemplate.batchUpdate(sql_update,new BatchPreparedStatementSetter() {
+					public void setValues(PreparedStatement pStmt, int j)throws SQLException {
+						Project proj = batchList.get(j);
+						logger.info("Project details=="+proj.getProgId()+"====="+ proj.getProjectId());
+						pStmt.setInt(1, proj.getProgId());
+						pStmt.setLong(2, proj.getProjectId());							
+					}
+
+					@Override
+					public int getBatchSize() {
+						return batchList.size();
+					}
+			});
+				status = true; 
+				
+			} catch (DataAccessException e) {
+				// TODO: handle exception
+				logger.error("Exception in addProjectsToProgram");
+			}
+					}
+		return status;
 	
 		
 	}

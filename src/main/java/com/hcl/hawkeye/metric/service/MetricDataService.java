@@ -36,6 +36,6 @@ public interface MetricDataService {
 	
 	List<ProgramDO> getPorgramList();
 	
-	void addProjectsToProgram(List<Project> projectList);
+	boolean addProjectsToProgram(List<Project> projectList);
 	
 }
