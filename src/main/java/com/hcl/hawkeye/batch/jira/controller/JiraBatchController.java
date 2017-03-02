@@ -16,13 +16,13 @@ public class JiraBatchController {
 	private static final Logger logger = LoggerFactory.getLogger(JiraBatchController.class);
 	
 	@Autowired
-	JiraBatchJobService jJobService;
+	JiraBatchJobService runScheduler;
 	
 	@RequestMapping(value="/runBatch", method = RequestMethod.GET)
 	@ResponseBody
 	public void getBatch() throws Exception{
 		logger.info("Jira Batch Request Intiated");
-		jJobService.runJobScheduler();
+		runScheduler.runJobScheduler();
 	}
 
 }
