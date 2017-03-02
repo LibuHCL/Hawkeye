@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hcl.hawkeye.portfolio.DO.Portfolio;
@@ -41,6 +42,7 @@ public class PortfolioController {
 	
 	// To add programs to Portfolio
 	@RequestMapping(value = "/prog2portfolio", method = RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
 	public String addProgramToPortfolio(@RequestBody List<Program> progList) {
 		logger.info("Inside addProjsToProgram method in Controller.");
 		portfolioService.addProgramsToPortfolio(progList);
