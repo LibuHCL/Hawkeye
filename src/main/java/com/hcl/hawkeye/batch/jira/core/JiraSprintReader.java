@@ -23,21 +23,24 @@ import com.hcl.hawkeye.projectmanagement.DO.ProjectValues;
 
 public class JiraSprintReader implements ItemReader<List<ProjectValues>>{
 	
-	@Autowired
-	MessageSource messageSource;
-	@Autowired
-	ProjectManagementDAO pmDao;
-
 	private static final Logger logger = LoggerFactory.getLogger(JiraSprintReader.class);
 	
-	private List<Project> projectList ;
+	@Autowired
+	MessageSource messageSource;
+	
+	@Autowired
+	ProjectManagementDAO pmDao;
+	
+	private List<Project> projectList =new ArrayList<>();
 	
 	List<ProjectValues> sprintValuesList = new ArrayList<ProjectValues>();
-	boolean val = true;
+	
+	boolean stepThrough = true;
+	
 	@Override
 	public List<ProjectValues> read()
 			throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-		if(val ){
+		if( stepThrough ){
 			Locale locale=new Locale("en", "IN");
 			List<ProjectValues> sprintsList = new ArrayList<>();
 			for (Project proj : projectList) {
@@ -47,13 +50,15 @@ public class JiraSprintReader implements ItemReader<List<ProjectValues>>{
 					sprintValuesList.addAll(sprintsList);	
 				}
 			}
-			val= false;
+			stepThrough= false;
 			return sprintValuesList;
 		} else {
+			stepThrough= true;
+			sprintValuesList = new ArrayList<>();
+			projectList =new ArrayList<>();
 			return null;
 		}
 	}
-
 
 	@BeforeStep
     public void retrieveInterstepData(StepExecution stepExecution) {

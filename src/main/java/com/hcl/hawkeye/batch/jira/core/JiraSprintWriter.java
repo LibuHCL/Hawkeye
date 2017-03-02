@@ -20,7 +20,6 @@ public class JiraSprintWriter implements ItemWriter<List<ProjectValues>>{
 	@Autowired
 	JiraBatchUpdateDAO jbDAO;
 	
-	private StepExecution stepExecution;
 	List<ProjectValues> sprintsList = new ArrayList<ProjectValues>();
 	
 	@Override
@@ -34,16 +33,16 @@ public class JiraSprintWriter implements ItemWriter<List<ProjectValues>>{
 
 			boolean status = jbDAO.insertSprinttDetails(sprintsList);
 			if (status) {
-				logger.info("Hooooo Yaaa Success in JiraSprintWriter!!!!");
+				logger.info("Successfully Inserted!!!!");
 			} 
 		}
 	}
 	
 	@AfterStep
     public void saveStepExecution(StepExecution stepExecution) {
-        this.stepExecution = stepExecution;
-        ExecutionContext stepContext = this.stepExecution.getExecutionContext();
+        ExecutionContext stepContext = stepExecution.getExecutionContext();
 		stepContext.put("sprintDetails", sprintsList);
+		sprintsList = new ArrayList<>();
     }
 
 }

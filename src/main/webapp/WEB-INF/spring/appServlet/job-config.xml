@@ -2,7 +2,6 @@
 <beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:aop="http://www.springframework.org/schema/aop" 
 	xmlns:batch="http://www.springframework.org/schema/batch" 
-	xmlns:task="http://www.springframework.org/schema/task"
 	xmlns:file="http://www.springframework.org/schema/integration/file"	
 	xmlns:p="http://www.springframework.org/schema/p" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -21,8 +20,6 @@
     http://www.springframework.org/schema/context/spring-context.xsd 	
 	http://www.springframework.org/schema/util 
 	http://www.springframework.org/schema/util/spring-util.xsd
-	http://www.springframework.org/schema/task
-    http://www.springframework.org/schema/task/spring-task.xsd
     http://www.springframework.org/schema/jdbc 
 	http://www.springframework.org/schema/jdbc/spring-jdbc.xsd"> 
 	
@@ -64,7 +61,7 @@
 				<batch:listener ref="codeQualityBatchListener"/>
 			</batch:listeners>
 			</batch:step>		
-	</batch:job>	
+	</batch:job>
 	
 	<beans:bean id="jiraBatchListener" class="org.springframework.batch.core.listener.ExecutionContextPromotionListener">
    	 <beans:property name="keys" value="projectDetails"/>
@@ -74,18 +71,14 @@
    	 <beans:property name="keys" value="sprintDetails"/>
 	</beans:bean>
 	
-	<beans:bean id="codeQualityBatchListener" class="org.springframework.batch.core.listener.ExecutionContextPromotionListener">
-   	 <beans:property name="keys" value="codeQualityKey"/>
-	</beans:bean>
+	<beans:bean id="itemReader" class="com.hcl.hawkeye.batch.jira.core.JiraDashBoardReader" />
+	<beans:bean id="itemWriter" class="com.hcl.hawkeye.batch.jira.core.JiraDashBoardWriter" />
 	
-	<beans:bean id="itemReader" class="com.hcl.hawkeye.batch.jira.core.JiraDashBoardReader"/>
-	<beans:bean id="itemWriter" class="com.hcl.hawkeye.batch.jira.core.JiraDashBoardWriter"/>
+	<beans:bean id="sprintReader" class="com.hcl.hawkeye.batch.jira.core.JiraSprintReader" />
+	<beans:bean id="sprintWriter" class="com.hcl.hawkeye.batch.jira.core.JiraSprintWriter" />
 	
-	<beans:bean id="sprintReader" class="com.hcl.hawkeye.batch.jira.core.JiraSprintReader"/>
-	<beans:bean id="sprintWriter" class="com.hcl.hawkeye.batch.jira.core.JiraSprintWriter"/>
-	
-	<beans:bean id="issueReader" class="com.hcl.hawkeye.batch.jira.core.JiraIssueReader"/>
-	<beans:bean id="issueWriter" class="com.hcl.hawkeye.batch.jira.core.JiraIssueWriter"/>
+	<beans:bean id="issueReader" class="com.hcl.hawkeye.batch.jira.core.JiraIssueReader" />
+	<beans:bean id="issueWriter" class="com.hcl.hawkeye.batch.jira.core.JiraIssueWriter" />
 	
 	<beans:bean id="codeQualityReader" class="com.hcl.hawkeye.batch.codequality.core.CodeQualityReader"/>
 	<beans:bean id="codeQualityWriter" class="com.hcl.hawkeye.batch.codequality.core.CodeQualityWriter"/>	
@@ -94,5 +87,6 @@
         <jdbc:script location="org/springframework/batch/core/schema-drop-mysql.sql" />
         <jdbc:script location="org/springframework/batch/core/schema-mysql.sql" />
     </jdbc:initialize-database> -->
-
+    
+   
 </beans:beans>

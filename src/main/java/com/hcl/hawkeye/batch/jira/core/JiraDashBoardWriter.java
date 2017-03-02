@@ -19,13 +19,10 @@ public class JiraDashBoardWriter implements ItemWriter<List<DashBoardValues>> {
 
 	private static final Logger logger = LoggerFactory.getLogger(JiraDashBoardWriter.class);
 
-	//private StepExecution stepExecution;
 	
 	@Autowired
 	JiraBatchUpdateDAO jbDAO;
 
-	private StepExecution stepExecution;
-	
 	List<Project> projList = new ArrayList<>();
 	
 	
@@ -46,14 +43,14 @@ public class JiraDashBoardWriter implements ItemWriter<List<DashBoardValues>> {
 		}
 		boolean status = jbDAO.insertProjectDetails(projList);
 		if (status) {
-			logger.info("Hooooo Yaaa Success !!!!");
+			logger.info("Success!!!!");
 		}
 	}
 
 	@AfterStep
     public void saveStepExecution(StepExecution stepExecution) {
-        this.stepExecution = stepExecution;
-        ExecutionContext stepContext = this.stepExecution.getExecutionContext();
+        ExecutionContext stepContext = stepExecution.getExecutionContext();
 		stepContext.put("projectDetails", projList);
+		projList = new ArrayList<Project>();
     }
 }
