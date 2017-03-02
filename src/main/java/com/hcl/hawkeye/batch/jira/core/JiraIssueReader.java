@@ -25,7 +25,7 @@ import com.hcl.hawkeye.projectmanagement.DO.ProjectValues;
 public class JiraIssueReader implements ItemReader<List<SprintIssues>>{
 
 	private static final Logger logger = LoggerFactory.getLogger(JiraIssueReader.class);
-	private List<ProjectValues> dashBoardVals;
+	private List<ProjectValues> dashBoardVals = new ArrayList<>();
 
 	@Autowired
 	MessageSource messageSource;
@@ -54,8 +54,12 @@ public class JiraIssueReader implements ItemReader<List<SprintIssues>>{
 			}
 			stepThrough = false;
 			return sIssueList;
+		} else {
+			stepThrough = true;
+			sIssueList = new ArrayList<>();
+			dashBoardVals = new ArrayList<>();
+			return null;
 		}
-		return null;
 	}
 
 	@BeforeStep
