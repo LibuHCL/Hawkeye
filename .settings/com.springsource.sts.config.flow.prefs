@@ -1,0 +1,2 @@
+//com.springsource.sts.config.flow.coordinates\:http\://www.springframework.org/schema/batch\:/hawkeye/src/main/webapp/WEB-INF/spring/appServlet/job-config.xml=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<graph>\r\n<element clazz\="JobModelElement" type\="job">\r\n<structure end\="2554" endstart\="2542" start\="1755" startend\="1779"/>\r\n<bounds height\="218" width\="125" x\="15" y\="17"/>\r\n</element>\r\n</graph>
+eclipse.preferences.version=1

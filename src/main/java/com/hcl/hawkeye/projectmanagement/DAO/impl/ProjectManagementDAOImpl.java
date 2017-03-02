@@ -1,10 +1,6 @@
 package com.hcl.hawkeye.projectmanagement.DAO.impl;
 
 import java.lang.reflect.Type;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -22,9 +18,9 @@ import com.hcl.hawkeye.Exceptions.NoProjectDetailsException;
 import com.hcl.hawkeye.common.JiraRestCallAPI;
 import com.hcl.hawkeye.projectmanagement.DAO.ProjectManagementDAO;
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
+import com.hcl.hawkeye.projectmanagement.DO.DashBoardValues;
 import com.hcl.hawkeye.projectmanagement.DO.DefectTypes;
 import com.hcl.hawkeye.projectmanagement.DO.Issues;
-import com.hcl.hawkeye.projectmanagement.DO.KanbanProDetails;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectDetails;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectIssues;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectValues;
@@ -76,7 +72,8 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 		return sProject;
 	}
 	
-	private ProjectDetails getProjectDetailsOfSprints(int projectId) {
+	@Override
+	public ProjectDetails getProjectDetailsOfSprints(int projectId) {
 		logger.info("Request to get project details with project id: {}", projectId);
 		Locale locale=new Locale("en", "IN");
 		ProjectDetails pDetails = null;
@@ -296,6 +293,66 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 			throw new NoProjectDetailsException(errorMsg, e);
 		}
 		return pIssues;
+	}
+
+	@Override
+	public DashBoardValues getDashBoard(String url) {
+		logger.info("Request to get dashboard info");
+		Locale locale=new Locale("en", "IN");
+		DashBoardValues dashBInfo = null;
+		try {
+			String dashBoardInfo = jrCall.callRestAPI(url);
+			gson = new Gson();
+			dashBInfo = gson.fromJson(dashBoardInfo, DashBoardValues.class);
+		} catch (Exception e) {
+			String errorMsg=messageSource.getMessage("error.get.project", new Object[] {}, locale);
+			logger.error(errorMsg, e);
+			throw new NoProjectDetailsException(errorMsg, e);
+		}
+		return dashBInfo;
+	}
+	
+	@Override
+	public List<ProjectValues> getSprintDetails(String url) {
+		logger.info("Request to get sprint details with project id: {}", url);
+		List<ProjectValues> sprintValuesList = null;
+		Locale locale=new Locale("en", "IN");
+		ProjectDetails pDetails = null;
+		try {			
+			String projectInfo = jrCall.callRestAPI(url);
+			gson = new Gson();
+			pDetails = gson.fromJson(projectInfo, ProjectDetails.class);
+			if(null != pDetails){
+				sprintValuesList= pDetails.getValues();
+			}
+			
+		} catch (Exception e) {
+			String errorMsg=messageSource.getMessage("error.get.project", new Object[] {}, locale);
+			logger.error(errorMsg, e);
+			throw new NoProjectDetailsException(errorMsg, e);
+		}
+		return sprintValuesList;
+	}
+	
+	@Override
+	public List<Issues> getIssueDetails(String url) {
+		logger.info("Request to get sprint details with project id: {}", url);
+		List<Issues> sprintValuesList = null;
+		Locale locale=new Locale("en", "IN");
+		ProjectIssues pDetails = null;
+		try {			
+			String projectInfo = jrCall.callRestAPI(url);
+			gson = new Gson();
+			pDetails = gson.fromJson(projectInfo, ProjectIssues.class);
+			if(null != pDetails){
+				sprintValuesList= pDetails.getIssues();
+			}
+		} catch (Exception e) {
+			String errorMsg=messageSource.getMessage("error.get.project", new Object[] {}, locale);
+			logger.error(errorMsg, e);
+			throw new NoProjectDetailsException(errorMsg, e);
+		}
+		return sprintValuesList;
 	}
 	
 }

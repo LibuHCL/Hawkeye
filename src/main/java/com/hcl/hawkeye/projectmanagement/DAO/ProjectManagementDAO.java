@@ -1,10 +1,15 @@
 package com.hcl.hawkeye.projectmanagement.DAO;
 
+import java.util.List;
 import java.util.Map;
 
 import com.hcl.hawkeye.projectmanagement.DO.DashBoardDetails;
+import com.hcl.hawkeye.projectmanagement.DO.DashBoardValues;
 import com.hcl.hawkeye.projectmanagement.DO.DefectTypes;
+import com.hcl.hawkeye.projectmanagement.DO.Issues;
+import com.hcl.hawkeye.projectmanagement.DO.ProjectDetails;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectIssues;
+import com.hcl.hawkeye.projectmanagement.DO.ProjectValues;
 import com.hcl.hawkeye.projectmanagement.DO.SprintDetailsOfProject;
 import com.hcl.hawkeye.projectmanagement.DO.Velocityinfo;
 
@@ -71,5 +76,33 @@ public interface ProjectManagementDAO {
 	 * @return
 	 */
 	DashBoardDetails getDashBoard(int startIndex);
+
+	/**
+	 * 
+	 * @param url
+	 * @return
+	 */
+	DashBoardValues getDashBoard(String url);
+	
+	/**
+	 * 
+	 * @param projectId
+	 * @return
+	 */
+	ProjectDetails getProjectDetailsOfSprints(int projectId);
+
+	/**
+	 * 
+	 * @param url
+	 * @return
+	 */
+	List<ProjectValues> getSprintDetails(String url);
+
+	/**
+	 * 
+	 * @param url
+	 * @return
+	 */
+	List<Issues> getIssueDetails(String url);
 
 }
