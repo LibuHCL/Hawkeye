@@ -2,6 +2,8 @@ package com.hcl.hawkeye.batch.jira.core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,14 +41,20 @@ public class JiraDashBoardReader implements ItemReader<List<DashBoardValues>>{
 		logger.info("Started gettign the JIra details using Spring ItemReader");
 	
 		// Get projects from PROJECT table.
-		List<String> projUrlList =jbDAO.getProjects();		
+		Map<Integer,String> projToolMap =jbDAO.getProjects();
 		
 		DashBoardValues dBoardDetails = new DashBoardValues();
 		if (val) {
-			for(String url:projUrlList) {
+			for (Entry<Integer, String> entry : projToolMap.entrySet()){
+			    System.out.println(entry.getKey() + "/" + entry.getValue());
+			    dBoardDetails = pmDao.getDashBoard(entry.getValue());
+			    dBoardDetails.setToolProjectId(entry.getKey());
+			    dVals.add(dBoardDetails);	
+			}
+			/*for(String url:projUrlList) {
 				dBoardDetails = pmDao.getDashBoard(url);
 				dVals.add(dBoardDetails);				
-			}
+			}*/
 			val=false;
 			return dVals;
 		} else {

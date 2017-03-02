@@ -42,7 +42,11 @@ public class JiraSprintReader implements ItemReader<List<ProjectValues>>{
 			List<ProjectValues> sprintsList = new ArrayList<>();
 			for (Project proj : projectList) {
 				String sprintUrl = proj.getJiraUrl()+messageSource.getMessage("jira.agile.rest.api.sprint", new Object[]{}, locale);
-				sprintsList =pmDao.getSprintDetails(sprintUrl);
+				//sprintsList =pmDao.getSprintDetails(sprintUrl);
+				for(ProjectValues pvalue :pmDao.getSprintDetails(sprintUrl)){
+					pvalue.setToolProjectId(proj.getToolProjectId());					
+					sprintsList.add(pvalue);
+				}
 				if(null != sprintsList){
 					sprintValuesList.addAll(sprintsList);	
 				}

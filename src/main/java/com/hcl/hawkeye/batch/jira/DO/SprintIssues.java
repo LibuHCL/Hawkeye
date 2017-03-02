@@ -12,9 +12,12 @@ public class SprintIssues implements Serializable{
 	private int sprintId;
 	private String issueId;
 	private String issueTypeId;
+	private String issueName;
 	private String issueType;
 	private String priorityId;
 	private String priorityName;
+	private int projectId;
+	private int toolProjectId;
 	/**
 	 * @return the sprintId
 	 */
@@ -87,6 +90,27 @@ public class SprintIssues implements Serializable{
 	 */
 	public void setPriorityName(String priorityName) {
 		this.priorityName = priorityName;
+	}
+	
+	public int getProjectId() {
+		return projectId;
+	}
+	public void setProjectId(int projectId) {
+		this.projectId = projectId;
+	}
+	public int getToolProjectId() {
+		return toolProjectId;
+	}
+	public void setToolProjectId(int toolProjectId) {
+		this.toolProjectId = toolProjectId;
+	}
+	
+	
+	public String getIssueName() {
+		return issueName;
+	}
+	public void setIssueName(String issueName) {
+		this.issueName = issueName;
 	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()

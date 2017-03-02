@@ -1,6 +1,7 @@
 package com.hcl.hawkeye.batch.jira.DAO;
 
 import java.util.List;
+import java.util.Map;
 
 import com.hcl.hawkeye.batch.jira.DO.Project;
 import com.hcl.hawkeye.batch.jira.DO.SprintIssues;
@@ -12,7 +13,7 @@ public interface JiraBatchUpdateDAO {
 	
 	boolean insertProjectDetails(List<Project> pj);
 	
-	List<String> getProjects();
+	Map<Integer,String> getProjects();
 
 	boolean insertSprinttDetails(List<ProjectValues> sprintsList);
 	

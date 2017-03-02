@@ -13,6 +13,7 @@ public class DashBoardValues implements Serializable {
 	private String name;
 	private String type;	
 	private String jiraUrl;
+	private int toolProjectId;
 
 	/**
 	 * @return the id
@@ -82,6 +83,16 @@ public class DashBoardValues implements Serializable {
 	public void setJiraUrl(String jiraUrl) {
 		this.jiraUrl = jiraUrl;
 	}
+	
+	
+
+	public int getToolProjectId() {
+		return toolProjectId;
+	}
+
+	public void setToolProjectId(int toolProjectId) {
+		this.toolProjectId = toolProjectId;
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
@@ -134,7 +145,7 @@ public class DashBoardValues implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "DashBoardValues [id=" + id + ", self=" + self + ", name=" + name + ", type=" + type + "]";
+		return "DashBoardValues [id=" + id + ", self=" + self + ", name=" + name + ", type=" + type + ", toolProjectId=" + toolProjectId + "]";
 	}
 	
 	

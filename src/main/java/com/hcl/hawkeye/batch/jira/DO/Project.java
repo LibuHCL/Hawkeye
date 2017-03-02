@@ -9,6 +9,7 @@ public class Project implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	private int id;
+	private int toolProjectId;
 	private String name;
 	private String type;
 	private String jiraUrl;
@@ -55,12 +56,20 @@ public class Project implements Serializable{
 	public void setJiraUrl(String jiraUrl) {
 		this.jiraUrl = jiraUrl;
 	}
+	
+	
+	public int getToolProjectId() {
+		return toolProjectId;
+	}
+	public void setToolProjectId(int toolProjectId) {
+		this.toolProjectId = toolProjectId;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Project [id=" + id + ", name=" + name + ", type=" + type + ", jiraUrl=" + jiraUrl + "]";
+		return "Project [id=" + id + ", name=" + name + ", type=" + type + ", jiraUrl=" + jiraUrl + ", toolProjectId=" + toolProjectId + "]";
 	}
 	
 	

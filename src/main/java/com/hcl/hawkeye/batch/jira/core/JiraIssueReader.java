@@ -25,7 +25,7 @@ import com.hcl.hawkeye.projectmanagement.DO.ProjectValues;
 public class JiraIssueReader implements ItemReader<List<SprintIssues>>{
 
 	private static final Logger logger = LoggerFactory.getLogger(JiraIssueReader.class);
-	private List<ProjectValues> dashBoardVals;
+	private List<ProjectValues> sprintVals;
 
 	@Autowired
 	MessageSource messageSource;
@@ -40,14 +40,14 @@ public class JiraIssueReader implements ItemReader<List<SprintIssues>>{
 			throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
 		Locale locale=new Locale("en", "IN");
 		if (stepThrough) {
-			for (ProjectValues projectValues : dashBoardVals) {
+			for (ProjectValues projectValues : sprintVals) {
 				String sprintUrl = projectValues.getSelf()+messageSource.getMessage("jira.agile.rest.api.issue", new Object[]{}, locale);
 				List<Issues> sprintsList =pmDao.getIssueDetails(sprintUrl);
 				logger.info("Issues Details: {}", sprintsList);
 				SprintIssues sIssue = new SprintIssues();
 				if(null != sprintsList && !sprintsList.isEmpty()){
 					for (Issues issues : sprintsList) {
-						sIssue = setUpIssues(issues, projectValues.getId());
+						sIssue = setUpIssues(issues, projectValues);
 					}
 					sIssueList.add(sIssue);
 				}
@@ -62,20 +62,24 @@ public class JiraIssueReader implements ItemReader<List<SprintIssues>>{
     public void retrieveInterstepData(StepExecution stepExecution) {
         JobExecution jobExecution = stepExecution.getJobExecution();
         ExecutionContext jobContext = jobExecution.getExecutionContext();
-        this.dashBoardVals = (List<ProjectValues>) jobContext.get("sprintDetails");
+        this.sprintVals = (List<ProjectValues>) jobContext.get("sprintDetails");
     }
 	
-	private SprintIssues setUpIssues(Issues issues, int id) {
+	private SprintIssues setUpIssues(Issues issues, ProjectValues sprintValue) {
 		SprintIssues sIssue = new SprintIssues();
 		if (null != issues && null != issues.getFields() && null != issues.getFields().getIssuetype()) {
-			sIssue.setSprintId(id);
+			sIssue.setSprintId(sprintValue.getId());
 			sIssue.setIssueId(issues.getId());
 			sIssue.setIssueType(issues.getFields().getIssuetype().getName());
 			sIssue.setIssueTypeId(issues.getFields().getIssuetype().getId());
+			sIssue.setProjectId(sprintValue.getToolProjectId());
+			sIssue.setToolProjectId(sprintValue.getOriginBoardId());
 		}
 		if (null != issues && null != issues.getFields() && null != issues.getFields().getPriorityIssues()) { 
 			sIssue.setPriorityId(issues.getFields().getPriorityIssues().getId());
 			sIssue.setPriorityName(issues.getFields().getPriorityIssues().getName());
+			sIssue.setProjectId(sprintValue.getToolProjectId());
+			sIssue.setToolProjectId(sprintValue.getOriginBoardId());
 		}
 		
 		return sIssue;

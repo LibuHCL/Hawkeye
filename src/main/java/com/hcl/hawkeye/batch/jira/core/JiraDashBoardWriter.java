@@ -37,6 +37,7 @@ public class JiraDashBoardWriter implements ItemWriter<List<DashBoardValues>> {
 				for (DashBoardValues dashBoardValues : list) {
 					Project pj = new Project();
 					pj.setId(dashBoardValues.getId());
+					pj.setToolProjectId(dashBoardValues.getToolProjectId());
 					pj.setName(dashBoardValues.getName());
 					pj.setType(dashBoardValues.getType());
 					pj.setJiraUrl(dashBoardValues.getSelf());

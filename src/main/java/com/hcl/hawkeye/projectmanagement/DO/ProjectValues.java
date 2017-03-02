@@ -9,6 +9,7 @@ public class ProjectValues implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	private int id;
+	private int toolProjectId;
 	private String self;
 	private String state;
 	private String name;
@@ -115,6 +116,13 @@ public class ProjectValues implements Serializable{
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
+	
+	public int getToolProjectId() {
+		return toolProjectId;
+	}
+	public void setToolProjectId(int toolProjectId) {
+		this.toolProjectId = toolProjectId;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -129,6 +137,7 @@ public class ProjectValues implements Serializable{
 		result = prime * result + ((state == null) ? 0 : state.hashCode());
 		return result;
 	}
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
