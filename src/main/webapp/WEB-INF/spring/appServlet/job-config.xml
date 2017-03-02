@@ -57,9 +57,6 @@
 			<batch:tasklet>
 				<batch:chunk reader="codeQualityReader" writer="codeQualityWriter" commit-interval="3"></batch:chunk>
 			</batch:tasklet>
-			<batch:listeners>
-				<batch:listener ref="codeQualityBatchListener"/>
-			</batch:listeners>
 			</batch:step>		
 	</batch:job>
 	
