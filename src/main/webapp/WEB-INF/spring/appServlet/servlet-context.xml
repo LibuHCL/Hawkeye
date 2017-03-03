@@ -72,9 +72,9 @@
 	
 	 <beans:bean id="runScheduler" class="com.hcl.hawkeye.batch.jira.service.impl.JiraBatchJobServiceImpl" />
 
-	<task:scheduled-tasks>
+	<!-- <task:scheduled-tasks>
 		<task:scheduled ref="runScheduler" method="runJobScheduler" cron="0 0 12 1/1 * ?"/>
    </task:scheduled-tasks>
-   
+    -->
 	
 </beans:beans>
