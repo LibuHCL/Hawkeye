@@ -46,7 +46,6 @@ public class JiraIssueReader implements ItemReader<List<SprintIssues>>{
 		Locale locale=new Locale("en", "IN");
 		if (stepThrough) {
 			for (ProjectValues projectValues : sprintVals) {
-				//double stPoint = 0.0;
 				String sprintUrl = projectValues.getSelf()+messageSource.getMessage("jira.agile.rest.api.issue", new Object[]{}, locale);
 				List<Issues> sprintsList =pmDao.getIssueDetails(sprintUrl);
 				logger.info("Number of Issues: {} per Sprint ID: {}", sprintsList.size(), projectValues.getId());
@@ -54,10 +53,8 @@ public class JiraIssueReader implements ItemReader<List<SprintIssues>>{
 					for (Issues issues : sprintsList) {
 						SprintIssues sIssue = new SprintIssues();
 						sIssue = setUpIssues(issues, projectValues);
-						//stPoint = stPoint+sIssue.getStoryPoint();
 						sIssueList.add(sIssue);
 					}
-					//sIssue.setStoryPoint(stPoint);
 				}
 			}
 			stepThrough = false;
