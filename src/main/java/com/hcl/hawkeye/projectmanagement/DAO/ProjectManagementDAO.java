@@ -11,6 +11,7 @@ import com.hcl.hawkeye.projectmanagement.DO.ProjectDetails;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectIssues;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectValues;
 import com.hcl.hawkeye.projectmanagement.DO.SprintDetailsOfProject;
+import com.hcl.hawkeye.projectmanagement.DO.VelocityOfProject;
 import com.hcl.hawkeye.projectmanagement.DO.Velocityinfo;
 
 /**
@@ -104,8 +105,11 @@ public interface ProjectManagementDAO {
 	 * @return
 	 */
 	List<Issues> getIssueDetails(String url);
+	
 
 	Map<String, Map<String, Integer>> getBusinessContinuity(int projectId,
 			String blockerType, String criticalType);
+
+	List<VelocityOfProject> getProductivityOfProject(int projectId);
 
 }

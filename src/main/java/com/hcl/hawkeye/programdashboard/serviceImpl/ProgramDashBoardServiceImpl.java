@@ -104,7 +104,7 @@ public class ProgramDashBoardServiceImpl implements ProgramDashBoardService {
 				d.addAll(pStateMap.get(pSt));
 			}
 			pt.setProgramSubArr(d);
-			pt.setProgramName("ZKV");
+			pt.setProgramName("Hypotheken7");
 			pt.setProgramId(1001);
 			programTypeMap.put("DEV", pt);
 		} else if ("ASM".equals(string)) {

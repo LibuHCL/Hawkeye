@@ -2,7 +2,9 @@ package com.hcl.hawkeye.batch.jira.DAO.impl;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -135,10 +137,11 @@ public class JiraBatchUpdateDAOImpl implements JiraBatchUpdateDAO {
 		logger.info("Requested to inserted the project data into DB of size: {}", pj.size());
 		boolean status = false;
 		try {
-			String sql = "INSERT INTO SPRINT_ISSUEMETRICS_MANAGEMENT (TOOL_PROJECT_ID,PROJECTID, SPRINTID, ISSUE_ID, ISSUE_TYPE_ID, ISSUE_TYPE, PRIORITY_ID, PRIORITY_NAME)"
-					+ " VALUES(?, ?, ?, ?, ?, ?, ?,?) ON DUPLICATE KEY UPDATE "
-					+ "ISSUE_ID =VALUES(ISSUE_ID), ISSUE_TYPE_ID=VALUES(ISSUE_TYPE_ID), ISSUE_TYPE=VALUES(ISSUE_TYPE), PRIORITY_ID=VALUES(PRIORITY_ID),"
-					+ " PRIORITY_NAME=VALUES(PRIORITY_NAME)";
+
+			String sql = "INSERT INTO SPRINT_ISSUEMETRICS_MANAGEMENT (TOOL_PROJECT_ID,PROJECTID, SPRINTID, ISSUE_ID, ISSUE_TYPE_ID, ISSUE_TYPE, ISSUE_START_DATE, ISSUE_END_DATE, PRIORITY_ID, PRIORITY_NAME, STORY_POINT, ISSUE_STATUS)"
+					+ " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE "
+					+ "ISSUE_TYPE_ID=VALUES(ISSUE_TYPE_ID), ISSUE_TYPE=VALUES(ISSUE_TYPE), ISSUE_START_DATE=VALUES(ISSUE_START_DATE), ISSUE_END_DATE=VALUES(ISSUE_END_DATE), PRIORITY_ID=VALUES(PRIORITY_ID),"
+					+ " PRIORITY_NAME=VALUES(PRIORITY_NAME), STORY_POINT=VALUES(STORY_POINT), ISSUE_STATUS=VALUES(ISSUE_STATUS)";
 
 			jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 
@@ -151,8 +154,12 @@ public class JiraBatchUpdateDAOImpl implements JiraBatchUpdateDAO {
 					ps.setString(4, pro.getIssueId());
 					ps.setString(5, pro.getIssueTypeId());
 					ps.setString(6, pro.getIssueType());
-					ps.setString(7, pro.getPriorityId());
-					ps.setString(8, pro.getPriorityName());
+					ps.setString(7, pro.getIssueStartDate());
+					ps.setString(8, pro.getIssueEndDate());
+					ps.setString(9, pro.getPriorityId());
+					ps.setString(10, pro.getPriorityName());
+					ps.setDouble(11, pro.getStoryPoint());
+					ps.setString(12, pro.getIssueStatus());
 				}
 
 				@Override
@@ -168,4 +175,24 @@ public class JiraBatchUpdateDAOImpl implements JiraBatchUpdateDAO {
 		return status;
 
 	}
+	
+	@Override
+	public String getFormattedDate(String time) throws ParseException {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+		String date;
+		Date d = simpleDateFormat.parse(time);
+		date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(d);
+		return date;
+	}
+	
+	@Override
+	public String getFormatDate(String time) throws ParseException {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+		String date;
+		Date d = simpleDateFormat.parse(time);
+		date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(d);
+		return date;
+	}
+	
+	
 }

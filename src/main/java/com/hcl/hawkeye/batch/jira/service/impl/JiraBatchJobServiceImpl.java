@@ -15,11 +15,10 @@ import org.springframework.batch.core.repository.JobExecutionAlreadyRunningExcep
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.hcl.hawkeye.batch.jira.service.JiraBatchJobService;
 
-@Service
+//@Service
 public class JiraBatchJobServiceImpl implements JiraBatchJobService{
 
 	private static final Logger logger = LoggerFactory.getLogger(JiraBatchJobServiceImpl.class);
