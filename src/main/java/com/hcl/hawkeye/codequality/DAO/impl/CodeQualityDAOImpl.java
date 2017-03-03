@@ -87,8 +87,6 @@ public class CodeQualityDAOImpl implements CodeQualityDAO {
 
 	@Override
 	public void insertCodeQuality(Resource resource) {
-		List<String> metricsList = new ArrayList<>(
-				Arrays.asList((env.getProperty("sonar.metrics")).split("\\s*,\\s*")));
 		String createValueAddQuery = "INSERT INTO CODE_QUALITY"
 				+ " (PROJECTID,PROJECTKEY,SPRINT,TECHNICAL_DEBT,BLOCKER_ISSUES,"
 				+ "CRITICAL_ISSUES,COMPLEXITY,COMMENTED_LINES,DUPLICATED_LINES_DENSITY,TOOL_ID ) "
@@ -97,7 +95,7 @@ public class CodeQualityDAOImpl implements CodeQualityDAO {
 				new Object[] { resource.getId(), resource.getKey(), "", getValueForMetric("sqale_debt_ratio", resource), 
 						getValueForMetric("blocker_violations", resource), getValueForMetric("critical_violations", resource), 
 						getValueForMetric("complexity", resource), getValueForMetric("comment_lines", resource), 
-						getValueForMetric("duplicated_lines", resource), "" 
+						getValueForMetric("duplicated_lines", resource), 0 
 						});
 	}
 
