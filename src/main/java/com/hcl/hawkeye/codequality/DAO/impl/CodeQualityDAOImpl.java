@@ -3,6 +3,7 @@ package com.hcl.hawkeye.codequality.DAO.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +64,7 @@ public class CodeQualityDAOImpl implements CodeQualityDAO {
 
 	@Override
 	public List<Resource> getAllSonarProjectDetails(String toolURL) {
-
+		//TO-DO This should be done using a service
 		String sonarRestUrl = env.getProperty("sonar.restUrl");
 		String sonarMetricsList = env.getProperty("sonar.metricList");
 		String sonarResultFormat = env.getProperty("sonar.resultFormat");
@@ -87,15 +88,60 @@ public class CodeQualityDAOImpl implements CodeQualityDAO {
 
 	@Override
 	public void insertCodeQuality(Resource resource) {
-		String createValueAddQuery = "INSERT INTO CODE_QUALITY"
+		
+		String fetchSprintNameQuery = " SELECT SPRINT_NAME FROM SPRINT_METRCIS_MANAGEMENT SPRINTMETRICS WHERE PROJECTID IN" +
+										" (SELECT " +
+										" PROJECT_ID " +
+										" FROM " +
+										" PROJECT_TOOL_MAPPING PROJTABMAP,  " +
+										"  DEVOPS_SERVER_CONFIG DEVOPSCONFIG " +
+										" WHERE " +
+										" PROJTABMAP.TOOL_PROJECT_ID = ? " +
+										"   AND PROJTABMAP.TOOL_ID = DEVOPSCONFIG.TOOLID " +
+										" AND DEVOPSCONFIG.TOOL_NAME = 'JIRA') " +
+										" AND (? BETWEEN SPRINTMETRICS.START_DATE AND SPRINTMETRICS.END_DATE); " ;
+		
+		List<Map<String, Object>> sprintNameList = jdbcTemplate.queryForList(fetchSprintNameQuery,
+				new Object[] {resource.getId(), resource.getDate().substring(0, resource.getDate().indexOf("T")-1)  });
+		String sprintName = null;
+		for (Map<String, Object> row : sprintNameList) {
+			sprintName = (String) row.get("SPRINT_NAME");
+			break;
+		}
+		
+		Integer toolId = 0;
+		
+		String fetchToolIdQuery =  "  SELECT  " +
+				" PROJTABMAP.PROJECT_ID, DEVOPSCONFIG.TOOLID  " +
+				"  FROM  " +
+				"    PROJECT_TOOL_MAPPING PROJTABMAP,  " +
+				"     DEVOPS_SERVER_CONFIG DEVOPSCONFIG  " +
+				"  WHERE  " +
+				"    PROJTABMAP.TOOL_PROJECT_ID = ?  " +
+				"         AND PROJTABMAP.TOOL_ID = DEVOPSCONFIG.TOOLID  " +
+				"        AND DEVOPSCONFIG.TOOL_NAME = 'SONAR';  " ;
+		
+		List<Map<String, Object>> toolIdList = jdbcTemplate.queryForList(fetchToolIdQuery,
+				new Object[] {resource.getId()});
+		
+		for (Map<String, Object> row : sprintNameList) {
+			toolId = (Integer) row.get("TOOLID");
+			break;
+		}
+		
+		String deleteCodeQualityQuery = "Delete from CODE_QUALITY where PROJECTID = ? and SPRINT = ?";
+		
+		int rows = jdbcTemplate.update(deleteCodeQualityQuery, new Object[] {resource.getId(), sprintName});
+		
+		String insertCodeQuality = "INSERT INTO CODE_QUALITY"
 				+ " (PROJECTID,PROJECTKEY,SPRINT,TECHNICAL_DEBT,BLOCKER_ISSUES,"
 				+ "CRITICAL_ISSUES,COMPLEXITY,COMMENTED_LINES,DUPLICATED_LINES_DENSITY,TOOL_ID ) "
 				+ "VALUES (?,?,?,?,?,?,?,?,?,?)";
-		jdbcTemplate.update(createValueAddQuery,
-				new Object[] { resource.getId(), resource.getKey(), "", getValueForMetric("sqale_debt_ratio", resource), 
+		jdbcTemplate.update(insertCodeQuality,
+				new Object[] { resource.getId(), resource.getKey(), sprintName, getValueForMetric("sqale_debt_ratio", resource), 
 						getValueForMetric("blocker_violations", resource), getValueForMetric("critical_violations", resource), 
 						getValueForMetric("complexity", resource), getValueForMetric("comment_lines", resource), 
-						getValueForMetric("duplicated_lines", resource), 0 
+						getValueForMetric("duplicated_lines", resource), toolId 
 						});
 	}
 
