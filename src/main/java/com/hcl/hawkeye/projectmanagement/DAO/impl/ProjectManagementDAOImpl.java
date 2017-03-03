@@ -1,6 +1,7 @@
 package com.hcl.hawkeye.projectmanagement.DAO.impl;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -26,6 +27,7 @@ import com.hcl.hawkeye.projectmanagement.DO.ProjectDetails;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectIssues;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectValues;
 import com.hcl.hawkeye.projectmanagement.DO.SprintDetailsOfProject;
+import com.hcl.hawkeye.projectmanagement.DO.VelocityOfProject;
 import com.hcl.hawkeye.projectmanagement.DO.Velocityinfo;
 
 /**
@@ -371,8 +373,9 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 		Locale locale=new Locale("en", "IN");
 		try {			
 				String sql_getIssues ="SELECT SMM.SPRINTID,SMM.SPRINT_NAME,SIM.PRIORITY_NAME, COUNT(SIM.PRIORITY_ID) as COUNT "
-						+ " FROM SPRINT_METRCIS_MANAGEMENT SMM, SPRINT_ISSUEMETRICS_MANAGEMENT SIM WHERE SMM.TOOL_PROJECT_ID=SIM.TOOL_PROJECT_ID"
-						+ " AND SMM.PROJECTID=SIM.PROJECTID AND SMM.SPRINTID =SIM.SPRINTID AND SMM.PROJECTID=? AND SMM.SPRINT_NAME != 'UAT' "
+						+ " FROM PROJECT_METRICS_MANAGEMENT PMM,SPRINT_METRCIS_MANAGEMENT SMM, SPRINT_ISSUEMETRICS_MANAGEMENT SIM "
+						+ "WHERE PMM.PROJECTID=SMM.PROJECTID AND PMM.TOOL_PROJECT_ID =SMM.TOOL_PROJECT_ID AND SMM.TOOL_PROJECT_ID=SIM.TOOL_PROJECT_ID"
+						+ " AND SMM.PROJECTID=SIM.PROJECTID AND SMM.SPRINTID =SIM.SPRINTID AND PMM.PROJECTID=? AND SMM.SPRINT_NAME != 'UAT' "
 						+ "AND SIM.ISSUE_TYPE ='Defect' GROUP BY SIM.PRIORITY_NAME,SMM.SPRINT_NAME; ";
 				List<Map<String, Object>> issueList = jdbctemplate.queryForList(sql_getIssues,new Object[] {projectId});
 				
@@ -396,6 +399,47 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 		return priorityMap;
 
 		
+	}
+
+	@Override
+	public List<VelocityOfProject> getProductivityOfProject(int projectId) {
+		logger.info("Request to get velocity of project info");
+		Locale locale=new Locale("en", "IN");
+		List<VelocityOfProject> velocityList = new ArrayList<VelocityOfProject>();
+			String sql_getStoryPoints = "SELECT SMM.SPRINTID,SMM.SPRINT_STATUS,SMM.SPRINT_NAME,SIM.ISSUE_STATUS,SUM(SIM.STORY_POINT) AS COUNT "
+					+ "FROM PROJECT_METRICS_MANAGEMENT PMM,SPRINT_METRCIS_MANAGEMENT SMM,SPRINT_ISSUEMETRICS_MANAGEMENT SIM "
+					+ "WHERE PMM.PROJECTID=SMM.PROJECTID AND PMM.TOOL_PROJECT_ID =SMM.TOOL_PROJECT_ID AND SMM.TOOL_PROJECT_ID=SIM.TOOL_PROJECT_ID "
+					+ "AND SMM.PROJECTID=SIM.PROJECTID AND SMM.SPRINTID =SIM.SPRINTID AND PMM.PROJECTID=?  GROUP BY SIM.ISSUE_STATUS,SMM.SPRINT_NAME "
+					+ "ORDER BY SMM.SPRINT_NAME,SIM.ISSUE_STATUS"; 
+			
+			try{
+			List<Map<String, Object>> issueList = jdbctemplate.queryForList(sql_getStoryPoints,new Object[] {projectId});
+			Double completedValue = null ;
+			for (Map<String, Object> row : issueList) {
+				
+				VelocityOfProject velocityOfProject = new VelocityOfProject();
+				velocityOfProject.setSprintId(Integer.parseInt(row.get("SPRINTID").toString()));
+				velocityOfProject.setSprintName(row.get("SPRINT_NAME").toString());
+				velocityOfProject.setSprintState(row.get("SPRINT_STATUS").toString());
+				if("Closed".equals(row.get("ISSUE_STATUS").toString())){
+					completedValue = Double.valueOf(row.get("COUNT").toString());
+					velocityOfProject.setCompletedValue(completedValue);
+				}
+				if("Open".equals(row.get("ISSUE_STATUS").toString())){
+					velocityOfProject.setEstimatedValue(completedValue+Double.valueOf(row.get("COUNT").toString()));
+					completedValue=0.0;
+				}
+				velocityList.add(velocityOfProject);
+							
+			}				
+					
+		} catch (Exception e) {
+			String errorMsg=messageSource.getMessage("error.get.velocity", new Object[] {}, locale);
+			logger.error(errorMsg, e);
+			throw new NoProjectDetailsException(errorMsg, e);
+		}
+		
+		return velocityList;
 	}
 	
 }

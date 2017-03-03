@@ -101,8 +101,9 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 
 	@Override
 	public List<VelocityOfProject> getVelocityOfSprint(int projectId) {
-		Velocityinfo vInfo = pmDAO.getVelocityOfProject(projectId);
-		List<VelocityOfProject> velocityList = getVelocityList(vInfo);
+		//Velocityinfo vInfo = pmDAO.getVelocityOfProject(projectId);
+		List<VelocityOfProject> velocityList = pmDAO.getProductivityOfProject(projectId);
+		//List<VelocityOfProject> velocityList = getVelocityList(vInfo);
 		Collections.sort(velocityList,new Comparator<VelocityOfProject>() {
 	         @Override
 	        public int compare(VelocityOfProject s1, VelocityOfProject s2) {
@@ -218,6 +219,7 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 		int val = new SimpleDateFormat("yyyy-MMM-dd").parse(date).getMonth();
 		return getMonthName(val);
 	}
+	
 	
 	private String getMonthName(int val) {
 		switch (val) {
