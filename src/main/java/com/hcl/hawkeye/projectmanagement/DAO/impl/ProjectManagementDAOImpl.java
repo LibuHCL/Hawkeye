@@ -205,38 +205,39 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 		Locale locale=new Locale("en", "IN");
 		try {
 			ProjectDetails pDetails = getProjectDetailsOfSprints(projectId);
-			List<ProjectValues> pValues = pDetails.getValues();
-			String url = messageSource.getMessage("jira.agile.rest.api.board.url", new Object[]{}, locale);
-			int blockerIssues = 0;
-			int criticalIssues = 0;
-			gson = new Gson();
-			for (ProjectValues projectValues : pValues) {
-				String issuesInfo = jrCall.callRestAPI(url+projectId+"/sprint/"+projectValues.getId()+"/issue?fields=issuetype,priority");
-				ProjectIssues pIssues = gson.fromJson(issuesInfo, ProjectIssues.class);
-				
-				for (Issues issue : pIssues.getIssues()) {
-					if (null != issue && null != issue.getFields() && !"UAT".equals(projectValues.getName()) && "Defect".equals(issue.getFields().getIssuetype().getName())) {
-						if (null != issue.getFields().getPriorityIssues() && !"UAT".equals(projectValues.getName()) && blockerType.equals(issue.getFields().getPriorityIssues().getName())) {
-							blockerIssues++;
+			if (null != pDetails && null != pDetails.getValues()) {
+				List<ProjectValues> pValues = pDetails.getValues();
+				String url = messageSource.getMessage("jira.agile.rest.api.board.url", new Object[]{}, locale);
+				int blockerIssues = 0;
+				int criticalIssues = 0;
+				gson = new Gson();
+				for (ProjectValues projectValues : pValues) {
+					String issuesInfo = jrCall.callRestAPI(url+projectId+"/sprint/"+projectValues.getId()+"/issue?fields=issuetype,priority");
+					ProjectIssues pIssues = gson.fromJson(issuesInfo, ProjectIssues.class);
+					
+					for (Issues issue : pIssues.getIssues()) {
+						if (null != issue && null != issue.getFields() && !"UAT".equals(projectValues.getName()) && "Defect".equals(issue.getFields().getIssuetype().getName())) {
+							if (null != issue.getFields().getPriorityIssues() && !"UAT".equals(projectValues.getName()) && blockerType.equals(issue.getFields().getPriorityIssues().getName())) {
+								blockerIssues++;
+							}
 						}
+						
+						if (null != issue && null != issue.getFields() && !"UAT".equals(projectValues.getName()) && "Defect".equals(issue.getFields().getIssuetype().getName())) {
+							if (null != issue.getFields().getPriorityIssues() && !"UAT".equals(projectValues.getName()) && criticalType.equals(issue.getFields().getPriorityIssues().getName())) {
+								criticalIssues++;
+							}
+						}
+					}
+				
+					if (!"UAT".equals(projectValues.getName())) {
+						blockerTypeIssues.put(projectValues.getName(), blockerIssues);
+						criticalTypeIssues.put(projectValues.getName(), criticalIssues);
 					}
 					
-					if (null != issue && null != issue.getFields() && !"UAT".equals(projectValues.getName()) && "Defect".equals(issue.getFields().getIssuetype().getName())) {
-						if (null != issue.getFields().getPriorityIssues() && !"UAT".equals(projectValues.getName()) && criticalType.equals(issue.getFields().getPriorityIssues().getName())) {
-							criticalIssues++;
-						}
-					}
-				}
+				}	
+				priorityMap.put(blockerType, blockerTypeIssues);priorityMap.put(criticalType, criticalTypeIssues);
+			}
 			
-				if (!"UAT".equals(projectValues.getName())) {
-					blockerTypeIssues.put(projectValues.getName(), blockerIssues);
-					criticalTypeIssues.put(projectValues.getName(), criticalIssues);
-				}
-				
-			}	
-			
-			
-			priorityMap.put(blockerType, blockerTypeIssues);priorityMap.put(criticalType, criticalTypeIssues);
 		} catch (Exception e) {
 			String errorMsg=messageSource.getMessage("error.get.defects", new Object[] {}, locale);
 			logger.error(errorMsg, e);
@@ -255,28 +256,30 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 		Locale locale=new Locale("en", "IN");
 		try {
 			ProjectDetails pDetails = getProjectDetailsOfSprints(projectId);
-			List<ProjectValues> pValues = pDetails.getValues();
-			String url = messageSource.getMessage("jira.agile.rest.api.board.url", new Object[]{}, locale);
-			gson = new Gson();
-			for (ProjectValues projectValues : pValues) {
-				String issuesInfo = jrCall.callRestAPI(url+projectId+"/sprint/"+projectValues.getId()+"/issue?fields=issuetype");
-				ProjectIssues pIssues = gson.fromJson(issuesInfo, ProjectIssues.class);
-				
-				for (Issues issue : pIssues.getIssues()) {
-					if (null != issue.getFields().getIssuetype() && issueType.equals(issue.getFields().getIssuetype().getName()) && !"UAT".equals(projectValues.getName())) {
-						invalidDefects++;
-					}
+			if (null != pDetails && null != pDetails.getValues()) {
+				List<ProjectValues> pValues = pDetails.getValues();
+				String url = messageSource.getMessage("jira.agile.rest.api.board.url", new Object[]{}, locale);
+				gson = new Gson();
+				for (ProjectValues projectValues : pValues) {
+					String issuesInfo = jrCall.callRestAPI(url+projectId+"/sprint/"+projectValues.getId()+"/issue?fields=issuetype");
+					ProjectIssues pIssues = gson.fromJson(issuesInfo, ProjectIssues.class);
 					
-					if (null != issue.getFields().getIssuetype() && issueType.equals(issue.getFields().getIssuetype().getName()) && "UAT".equals(projectValues.getName())) {
-						uatDefects++;
+					for (Issues issue : pIssues.getIssues()) {
+						if (null != issue.getFields().getIssuetype() && issueType.equals(issue.getFields().getIssuetype().getName()) && !"UAT".equals(projectValues.getName())) {
+							invalidDefects++;
+						}
+						
+						if (null != issue.getFields().getIssuetype() && issueType.equals(issue.getFields().getIssuetype().getName()) && "UAT".equals(projectValues.getName())) {
+							uatDefects++;
+						}
 					}
 				}
+				dTypes = new DefectTypes();
+				dTypes.setInternalDefects(invalidDefects);
+				dTypes.setValidInternalDefects(invalidDefects);
+				dTypes.setUatDefects(uatDefects);
+				dTypes.setDefectLekage(uatDefects);
 			}
-			dTypes = new DefectTypes();
-			dTypes.setInternalDefects(invalidDefects);
-			dTypes.setValidInternalDefects(invalidDefects);
-			dTypes.setUatDefects(uatDefects);
-			dTypes.setDefectLekage(uatDefects);
 		} catch (Exception e) {
 			String errorMsg=messageSource.getMessage("error.get.defects", new Object[] {}, locale);
 			logger.error(errorMsg, e);
@@ -386,8 +389,6 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 						criticalTypeIssues.put(row.get("SPRINT_NAME").toString(),  Integer.parseInt(row.get("COUNT").toString()));	
 					}
 				}
-						
-						
 			
 			priorityMap.put(blockerType, blockerTypeIssues);
 			priorityMap.put(criticalType, criticalTypeIssues);
