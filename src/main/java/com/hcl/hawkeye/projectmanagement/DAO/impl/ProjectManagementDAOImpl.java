@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.google.gson.Gson;
@@ -42,6 +43,9 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 	
 	@Autowired
 	JiraRestCallAPI jrCall;
+	
+	@Autowired
+	JdbcTemplate jdbctemplate;
 	
 	Gson gson = null;
 
@@ -221,13 +225,15 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 						}
 					}
 				}
-				
+			
 				if (!"UAT".equals(projectValues.getName())) {
 					blockerTypeIssues.put(projectValues.getName(), blockerIssues);
 					criticalTypeIssues.put(projectValues.getName(), criticalIssues);
 				}
 				
-			}
+			}	
+			
+			
 			priorityMap.put(blockerType, blockerTypeIssues);priorityMap.put(criticalType, criticalTypeIssues);
 		} catch (Exception e) {
 			String errorMsg=messageSource.getMessage("error.get.defects", new Object[] {}, locale);
@@ -353,6 +359,43 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 			throw new NoProjectDetailsException(errorMsg, e);
 		}
 		return sprintValuesList;
+	}
+	
+	
+	@Override
+	public Map<String, Map<String, Integer>> getBusinessContinuity(int projectId, String blockerType, String criticalType) {
+		logger.info("to get issues from DB");
+		Map<String, Map<String, Integer>> priorityMap = new TreeMap<>();
+		Map<String, Integer> blockerTypeIssues = new TreeMap<>();
+		Map<String, Integer> criticalTypeIssues = new TreeMap<>();
+		Locale locale=new Locale("en", "IN");
+		try {			
+				String sql_getIssues ="SELECT SMM.SPRINTID,SMM.SPRINT_NAME,SIM.PRIORITY_NAME, COUNT(SIM.PRIORITY_ID) as COUNT "
+						+ " FROM SPRINT_METRCIS_MANAGEMENT SMM, SPRINT_ISSUEMETRICS_MANAGEMENT SIM WHERE SMM.TOOL_PROJECT_ID=SIM.TOOL_PROJECT_ID"
+						+ " AND SMM.PROJECTID=SIM.PROJECTID AND SMM.SPRINTID =SIM.SPRINTID AND SMM.PROJECTID=? AND SMM.SPRINT_NAME != 'UAT' "
+						+ "AND SIM.ISSUE_TYPE ='Defect' GROUP BY SIM.PRIORITY_NAME,SMM.SPRINT_NAME; ";
+				List<Map<String, Object>> issueList = jdbctemplate.queryForList(sql_getIssues,new Object[] {projectId});
+				
+				for (Map<String, Object> row : issueList) {
+					if((row.get("PRIORITY_NAME").toString()).equals("High")){
+						blockerTypeIssues.put(row.get("SPRINT_NAME").toString(), Integer.parseInt(row.get("COUNT").toString()));
+					}else if((row.get("PRIORITY_NAME").toString()).equals("Medium")){
+						criticalTypeIssues.put(row.get("SPRINT_NAME").toString(),  Integer.parseInt(row.get("COUNT").toString()));	
+					}
+				}
+						
+						
+			
+			priorityMap.put(blockerType, blockerTypeIssues);
+			priorityMap.put(criticalType, criticalTypeIssues);
+		} catch (Exception e) {
+			String errorMsg=messageSource.getMessage("error.get.defects", new Object[] {}, locale);
+			logger.error(errorMsg, e);
+			throw new NoProjectDetailsException(errorMsg, e);
+		}
+		return priorityMap;
+
+		
 	}
 	
 }
