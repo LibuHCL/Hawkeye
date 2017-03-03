@@ -1,5 +1,6 @@
 package com.hcl.hawkeye.batch.jira.DAO;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -17,4 +18,8 @@ public interface JiraBatchUpdateDAO {
 	boolean insertSprinttDetails(List<ProjectValues> sprintsList);
 	
 	boolean insertIssueDetails(List<SprintIssues> pj);
+	
+	public String getFormattedDate(String time) throws ParseException;
+	
+	public String getFormatDate(String time) throws ParseException;
 }

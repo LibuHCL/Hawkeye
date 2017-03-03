@@ -17,6 +17,7 @@ import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 
+import com.hcl.hawkeye.batch.jira.DAO.JiraBatchUpdateDAO;
 import com.hcl.hawkeye.batch.jira.DO.SprintIssues;
 import com.hcl.hawkeye.projectmanagement.DAO.ProjectManagementDAO;
 import com.hcl.hawkeye.projectmanagement.DO.Issues;
@@ -26,12 +27,15 @@ public class JiraIssueReader implements ItemReader<List<SprintIssues>>{
 
 	private static final Logger logger = LoggerFactory.getLogger(JiraIssueReader.class);
 	private List<ProjectValues> sprintVals;
-	private List<ProjectValues> dashBoardVals = new ArrayList<>();
 
 	@Autowired
 	MessageSource messageSource;
+	
 	@Autowired
 	ProjectManagementDAO pmDao;
+	
+	@Autowired
+	JiraBatchUpdateDAO jbDAO;
 	
 	List<SprintIssues> sIssueList = new ArrayList<>();
 	boolean stepThrough = true;
@@ -42,15 +46,18 @@ public class JiraIssueReader implements ItemReader<List<SprintIssues>>{
 		Locale locale=new Locale("en", "IN");
 		if (stepThrough) {
 			for (ProjectValues projectValues : sprintVals) {
+				//double stPoint = 0.0;
 				String sprintUrl = projectValues.getSelf()+messageSource.getMessage("jira.agile.rest.api.issue", new Object[]{}, locale);
 				List<Issues> sprintsList =pmDao.getIssueDetails(sprintUrl);
-				logger.info("Issues Details: {}", sprintsList);
-				SprintIssues sIssue = new SprintIssues();
+				logger.info("Number of Issues: {} per Sprint ID: {}", sprintsList.size(), projectValues.getId());
 				if(null != sprintsList && !sprintsList.isEmpty()){
 					for (Issues issues : sprintsList) {
+						SprintIssues sIssue = new SprintIssues();
 						sIssue = setUpIssues(issues, projectValues);
+						//stPoint = stPoint+sIssue.getStoryPoint();
+						sIssueList.add(sIssue);
 					}
-					sIssueList.add(sIssue);
+					//sIssue.setStoryPoint(stPoint);
 				}
 			}
 			stepThrough = false;
@@ -58,7 +65,6 @@ public class JiraIssueReader implements ItemReader<List<SprintIssues>>{
 		} else {
 			stepThrough = true;
 			sIssueList = new ArrayList<>();
-			dashBoardVals = new ArrayList<>();
 			return null;
 		}
 	}
@@ -69,7 +75,7 @@ public class JiraIssueReader implements ItemReader<List<SprintIssues>>{
         this.sprintVals = (List<ProjectValues>) jobContext.get("sprintDetails");
     }
 	
-	private SprintIssues setUpIssues(Issues issues, ProjectValues sprintValue) {
+	private SprintIssues setUpIssues(Issues issues, ProjectValues sprintValue) throws java.text.ParseException {
 		SprintIssues sIssue = new SprintIssues();
 		if (null != issues && null != issues.getFields() && null != issues.getFields().getIssuetype()) {
 			sIssue.setSprintId(sprintValue.getId());
@@ -82,8 +88,22 @@ public class JiraIssueReader implements ItemReader<List<SprintIssues>>{
 		if (null != issues && null != issues.getFields() && null != issues.getFields().getPriorityIssues()) { 
 			sIssue.setPriorityId(issues.getFields().getPriorityIssues().getId());
 			sIssue.setPriorityName(issues.getFields().getPriorityIssues().getName());
-			sIssue.setProjectId(sprintValue.getToolProjectId());
-			sIssue.setToolProjectId(sprintValue.getOriginBoardId());
+		}
+		
+		if (null != issues && null != issues.getFields() && null != issues.getFields().getCustomfield_10002()) {
+			sIssue.setStoryPoint(Double.parseDouble((issues.getFields().getCustomfield_10002())));
+		}
+		
+		if (null != issues && null != issues.getFields() && null != issues.getFields().getCreated()) {
+			sIssue.setIssueStartDate(jbDAO.getFormatDate(issues.getFields().getCreated()));
+		}
+		
+		if (null != issues && null != issues.getFields() && null != issues.getFields().getResolutiondate()) {
+			sIssue.setIssueEndDate(jbDAO.getFormatDate(issues.getFields().getResolutiondate()));
+		}
+		
+		if (null != issues && null != issues.getFields() && null != issues.getFields().getStatus() && null != issues.getFields().getStatus().getStatusCategory() && null != issues.getFields().getStatus().getStatusCategory().getKey()) {
+			sIssue.setIssueStatus(issues.getFields().getStatus().getStatusCategory().getKey());
 		}
 		
 		return sIssue;

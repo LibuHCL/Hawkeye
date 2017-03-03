@@ -27,6 +27,18 @@ public class JiraSprintWriter implements ItemWriter<List<ProjectValues>>{
 		if(null != sprintValuesList && ! sprintValuesList.isEmpty()) {
 			for(List<ProjectValues> sprintValue : sprintValuesList){
 				for (ProjectValues sprint : sprintValue) {
+					if (null != sprint.getStartDate()) {
+						sprint.setStartDate(jbDAO.getFormattedDate(sprint.getStartDate()));
+					}
+					
+					if (null != sprint.getEndDate()) {
+						sprint.setEndDate(jbDAO.getFormattedDate(sprint.getEndDate()));
+					}
+					
+					if (null != sprint.getCompleteDate()) {
+						sprint.setCompleteDate(jbDAO.getFormattedDate(sprint.getCompleteDate()));
+					}
+					
 					sprintsList.add(sprint);
 				}
 			}

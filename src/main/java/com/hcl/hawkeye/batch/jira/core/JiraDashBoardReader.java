@@ -46,7 +46,6 @@ public class JiraDashBoardReader implements ItemReader<List<DashBoardValues>>{
 		DashBoardValues dBoardDetails = new DashBoardValues();
 		if (stepThrough) {
 			for (Entry<Integer, String> entry : projToolMap.entrySet()){
-			    System.out.println(entry.getKey() + "/" + entry.getValue());
 			    dBoardDetails = pmDao.getDashBoard(entry.getValue());
 			    dBoardDetails.setToolProjectId(entry.getKey());
 			    dVals.add(dBoardDetails);	
@@ -54,9 +53,9 @@ public class JiraDashBoardReader implements ItemReader<List<DashBoardValues>>{
 			stepThrough=false;
 			return dVals;
 		} else {
-		stepThrough=true;
-		dVals = new ArrayList<>();			
-	}
+			stepThrough=true;
+			dVals = new ArrayList<>();			
+		}
 	return null; 	
 	}
 	

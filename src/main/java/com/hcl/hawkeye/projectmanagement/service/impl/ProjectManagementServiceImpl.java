@@ -166,7 +166,7 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 				for (Issues issue : pIssues.getIssues()) {
 					totalTickets++;
 					if (null != issue.getFields().getResolutiondate()) {
-						String monthName = getMonthOfDate(getFormattedDate(issue.getFields().getResolutiondate().replace("T", " ")));
+						String monthName = getMonthOfDate(getFormattedDate(issue.getFields().getResolutiondate()));
 						if (!completedInMonth.containsKey(monthName)) {
 							ticketsPerMonth++;
 							completedInMonth.put(monthName, ticketsPerMonth);
@@ -177,7 +177,7 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 					}
 					
 					if (null != issue.getFields().getCreated()) {
-						String monthName = getMonthOfDate(getFormattedDate(issue.getFields().getCreated().replace("T", " ")));
+						String monthName = getMonthOfDate(getFormattedDate(issue.getFields().getCreated()));
 						if (!createdInMonth.containsKey(monthName)) {
 							ticPerMonth++;
 							createdInMonth.put(monthName, ticPerMonth);
@@ -207,7 +207,7 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 	}
 
 	private String getFormattedDate(String time) throws ParseException {
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 		String date;
 		Date d = simpleDateFormat.parse(time);
 		date = new SimpleDateFormat("yyyy-MMM-dd").format(d);
