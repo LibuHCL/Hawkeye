@@ -105,4 +105,7 @@ public interface ProjectManagementDAO {
 	 */
 	List<Issues> getIssueDetails(String url);
 
+	Map<String, Map<String, Integer>> getBusinessContinuity(int projectId,
+			String blockerType, String criticalType);
+
 }
