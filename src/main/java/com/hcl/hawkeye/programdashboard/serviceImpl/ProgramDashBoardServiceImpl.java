@@ -140,25 +140,25 @@ public class ProgramDashBoardServiceImpl implements ProgramDashBoardService {
 		List<ProjectSubTypes> subTypeList =new ArrayList<>();
 		List<ProjectStates> pStateList = new ArrayList<>();
 		for (String key : devMap.keySet()) {
-			if ("JAVA".equals(key)) {
+			if ("CLT Specials en Operations".equals(key)) {
 				ProjectSubTypes subType = new ProjectSubTypes();
 				subType.setStreamName(key);
 				subType.setSteaamProjectCount(devMap.get(key).size());
 				subType.setProjects(devMap.get(key));
 				subTypeList.add(subType);
-			} else if ("DATA".equals(key)) {
+			} else if ("CLT team Aflossen".equals(key)) {
 				ProjectSubTypes subType = new ProjectSubTypes();
 				subType.setStreamName(key);
 				subType.setSteaamProjectCount(devMap.get(key).size());
 				subType.setProjects(devMap.get(key));
 				subTypeList.add(subType);
-			} else if ("MAINFRAME".equals(key)) {
+			} else if ("CLT team Rente".equals(key)) {
 				ProjectSubTypes subType = new ProjectSubTypes();
 				subType.setStreamName(key);
 				subType.setSteaamProjectCount(devMap.get(key).size());
 				subType.setProjects(devMap.get(key));
 				subTypeList.add(subType);
-			} else if ("PEGA".equals(key)) {
+			} else if ("CLT Welkom 1".equals(key)) {
 				ProjectSubTypes subType = new ProjectSubTypes();
 				subType.setStreamName(key);
 				subType.setSteaamProjectCount(devMap.get(key).size());
@@ -192,49 +192,49 @@ public class ProgramDashBoardServiceImpl implements ProgramDashBoardService {
 	}
 	private void processDevProjects(Project project, Map<String, List<ProjectDetails>> devMap) {
 		List<ProjectDetails> pDetailList = new ArrayList<>();
-		if ("JAVA".equals(project.getSubType())) {
-			if (!devMap.containsKey("JAVA")) {
+		if ("CLT Specials en Operations".equals(project.getSubType())) {
+			if (!devMap.containsKey("CLT Specials en Operations")) {
 				ProjectDetails pDet = processProject(project);
 				pDetailList.add(pDet);
 				devMap.put(project.getSubType(), pDetailList);
 			} else {
-				List<ProjectDetails> pDetList = devMap.get("JAVA");
+				List<ProjectDetails> pDetList = devMap.get("CLT Specials en Operations");
 				ProjectDetails pDet = processProject(project);
 				pDetList.add(pDet);
 				devMap.put(project.getSubType(), pDetList);
 			}
 
-		} else if ("DATA".equals(project.getSubType())) {
-			if (!devMap.containsKey("DATA")) {
+		} else if ("CLT team Aflossen".equals(project.getSubType())) {
+			if (!devMap.containsKey("CLT team Aflossen")) {
 				ProjectDetails pDet = processProject(project);
 				pDetailList.add(pDet);
 				devMap.put(project.getSubType(), pDetailList);
 			} else {
-				List<ProjectDetails> pDetList = devMap.get("DATA");
+				List<ProjectDetails> pDetList = devMap.get("CLT team Aflossen");
 				ProjectDetails pDet = processProject(project);
 				pDetList.add(pDet);
 				devMap.put(project.getSubType(), pDetList);
 			}
 
-		} else if ("MAINFRAME".equals(project.getSubType())) {
-			if (!devMap.containsKey("MAINFRAME")) {
+		} else if ("CLT team Rente".equals(project.getSubType())) {
+			if (!devMap.containsKey("CLT team Rente")) {
 				ProjectDetails pDet = processProject(project);
 				pDetailList.add(pDet);
 				devMap.put(project.getSubType(), pDetailList);
 			} else {
-				List<ProjectDetails> pDetList = devMap.get("MAINFRAME");
+				List<ProjectDetails> pDetList = devMap.get("CLT team Rente");
 				ProjectDetails pDet = processProject(project);
 				pDetList.add(pDet);
 				devMap.put(project.getSubType(), pDetList);
 			}
 
-		} else if ("PEGA".equals(project.getSubType())) {
-			if (!devMap.containsKey("PEGA")) {
+		} else if ("CLT Welkom 1".equals(project.getSubType())) {
+			if (!devMap.containsKey("CLT Welkom 1")) {
 				ProjectDetails pDet = processProject(project);
 				pDetailList.add(pDet);
 				devMap.put(project.getSubType(), pDetailList);
 			} else {
-				List<ProjectDetails> pDetList = devMap.get("PEGA");
+				List<ProjectDetails> pDetList = devMap.get("CLT Welkom 1");
 				ProjectDetails pDet = processProject(project);
 				pDetList.add(pDet);
 				devMap.put(project.getSubType(), pDetList);
