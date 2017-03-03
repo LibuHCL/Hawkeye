@@ -50,14 +50,14 @@ public class JiraDashBoardReader implements ItemReader<List<DashBoardValues>>{
 			    dBoardDetails = pmDao.getDashBoard(entry.getValue());
 			    dBoardDetails.setToolProjectId(entry.getKey());
 			    dVals.add(dBoardDetails);	
-			}
-			
+			}			
 			stepThrough=false;
-			} else {
-			stepThrough=true;
-			dVals = new ArrayList<>();			
-		}
-		return null; 	
+			return dVals;
+		} else {
+		stepThrough=true;
+		dVals = new ArrayList<>();			
+	}
+	return null; 	
 	}
 	
 }

@@ -12,12 +12,12 @@ public class SprintIssues implements Serializable{
 	private int sprintId;
 	private String issueId;
 	private String issueTypeId;
-	private String issueName;
 	private String issueType;
 	private String priorityId;
 	private String priorityName;
 	private int projectId;
 	private int toolProjectId;
+	private int storyPoint;
 	/**
 	 * @return the sprintId
 	 */
@@ -106,11 +106,11 @@ public class SprintIssues implements Serializable{
 	}
 	
 	
-	public String getIssueName() {
-		return issueName;
+	public int getStoryPoint() {
+		return storyPoint;
 	}
-	public void setIssueName(String issueName) {
-		this.issueName = issueName;
+	public void setStoryPoint(int storyPoint) {
+		this.storyPoint = storyPoint;
 	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
@@ -119,7 +119,7 @@ public class SprintIssues implements Serializable{
 	public String toString() {
 		return "SprintIssues [sprintId=" + sprintId + ", issueId=" + issueId + ", issueTypeId=" + issueTypeId
 				+ ", issueType=" + issueType + ", priorityId=" + priorityId
-				+ ", priorityName=" + priorityName + ", toolProjectId=" + toolProjectId+"]";
+				+ ", priorityName=" + priorityName + ", toolProjectId=" + toolProjectId+", storyPoint=" + storyPoint + "]";
 	}
 	
 	
