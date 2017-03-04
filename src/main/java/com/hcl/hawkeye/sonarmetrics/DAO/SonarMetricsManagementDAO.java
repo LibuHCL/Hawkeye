@@ -16,4 +16,6 @@ public interface SonarMetricsManagementDAO {
 
 	List<Trackers> getSonarMetricsData(Integer projectId);
 
+	List<Trackers> getSonarMetricsJobData(Integer projectId);
+
 }

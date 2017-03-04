@@ -81,5 +81,35 @@ public class SonarMetricsManagementDAOImpl implements SonarMetricsManagementDAO 
 			return sonarMetrics;
 		}
 	};
+	
+	@Override
+	public List<Trackers> getSonarMetricsJobData(Integer projectId) {
+		logger.info("Request to get the Sonar Metrics at project level");
+		List<Trackers> trackers = new ArrayList<Trackers>();
+		try {
+			//String fetchMetricsData = "SELECT * FROM CODE_QUALITY_TRACKER WHERE PROJECTID=? AND SPRINT IN(SELECT SPRINT FROM CODE_QUALITY_TRACKER WHERE PROJECTID=? ORDER BY CREATION_DATE DESC LIMIT 4)";
+			String fetchMetricsData = "SELECT BLOCKER_ISSUES AS blockers,TECHNICAL_DEBT AS TechDebt,COMPLEXITY AS Complexity,DUPLICATED_LINES_DENSITY AS DuplicateLines,CRITICAL_ISSUES AS CriticalIssues,COMMENTED_LINES AS CommentedLines,SPRINT AS Sprint FROM CODE_QUALITY  WHERE  PROJECTID=?  ORDER BY SCAN_DATE ASC  LIMIT 4";
+			List<Map<String, Object>> resultList = jdbcTemplate.queryForList(fetchMetricsData,new Object[] { projectId});
+			if(resultList  != null && resultList.size() >0){
+				for (Map<String, Object> row : resultList) {
+					Trackers tracker=new Trackers();
+					tracker.setSprint((String)row.get("Sprint"));
+					tracker.setBlockers((Integer) row.get("blockers"));
+					tracker.setTechnicalDebt((Double) row.get("TechDebt"));
+					tracker.setComplexity((Double) row.get("Complexity"));
+					tracker.setDuplicateLines((Double) row.get("DuplicateLines"));
+					tracker.setCritical((Integer) row.get("CriticalIssues"));
+					tracker.setCommentedLines((Integer) row.get("CommentedLines"));
+					trackers.add(tracker);
+		        } 
+			}
+		} catch (DataAccessException dae) {
+			Locale locale = new Locale("en", "IN");
+			String errorMsg = messageSource.getMessage("error.get.getsonarmetrics", new Object[] {}, locale);
+			logger.error(errorMsg, dae);
+			throw new SonarMetricsDataRetrievalException(errorMsg, dae);
+		}
+		return trackers;
+	}
 
 }

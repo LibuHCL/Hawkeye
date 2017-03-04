@@ -85,15 +85,15 @@ public class CodeQualityDAOImpl implements CodeQualityDAO {
 	@Override
 	public List<Resource> getAllSonarProjectDetails(String toolURL) {
 		
-		//String sonarRestUrl = env.getProperty("sonar.restUrl");
+		String sonarRestUrl = env.getProperty("sonar.restUrl");
 		String sonarMetricsList = env.getProperty("sonar.metricList");
 		String sonarResultFormat = env.getProperty("sonar.resultFormat");
 		RestTemplate restTemplate = new RestTemplate();
 		List<Resource> resourceList = new ArrayList<Resource>();
 		List<String> sonalURLList = getSonarURLList();
 		// Get the Static Analysis metrics from Sonar
-		for(String sonarRestUrl : sonalURLList ) {
-		StringBuilder sonarMetricRestUrl = new StringBuilder(toolURL);
+		for(String sonarServerUrl : sonalURLList ) {
+		StringBuilder sonarMetricRestUrl = new StringBuilder(sonarServerUrl);
 		sonarMetricRestUrl.append(sonarRestUrl).append(sonarResultFormat).append(sonarMetricsList);
 
 		logger.info("sonarMetricRestUrl: {}", sonarMetricRestUrl);
@@ -116,19 +116,24 @@ public class CodeQualityDAOImpl implements CodeQualityDAO {
 
 		Integer toolId = getToolId(resource, sprintName);
 
-		String deleteCodeQualityQuery = "Delete from CODE_QUALITY where PROJECTID = ? and SPRINT = ?";
-
-		int rows = jdbcTemplate.update(deleteCodeQualityQuery, new Object[] { resource.getId(), sprintName });
+		String deleteCodeQualityQuery = "Delete from CODE_QUALITY where PROJECTID = ? ";
+				if(null!=sprintName){
+					deleteCodeQualityQuery +="and SPRINT = ?";
+					jdbcTemplate.update(deleteCodeQualityQuery, new Object[] { resource.getId(), sprintName });
+				}
+				else{
+					jdbcTemplate.update(deleteCodeQualityQuery, new Object[] { resource.getId()});
+				}
 
 		String insertCodeQuality = "INSERT INTO CODE_QUALITY"
 				+ " (PROJECTID,PROJECTKEY,SPRINT,TECHNICAL_DEBT,BLOCKER_ISSUES,"
-				+ "CRITICAL_ISSUES,COMPLEXITY,COMMENTED_LINES,DUPLICATED_LINES_DENSITY,TOOL_ID ) "
-				+ "VALUES (?,?,?,?,?,?,?,?,?,?)";
+				+ "CRITICAL_ISSUES,COMPLEXITY,COMMENTED_LINES,DUPLICATED_LINES_DENSITY,TOOL_ID,SCAN_DATE ) "
+				+ "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 		jdbcTemplate.update(insertCodeQuality, new Object[] { resource.getId(), resource.getKey(), sprintName,
 				getValueForMetric("sqale_debt_ratio", resource), getValueForMetric("blocker_violations", resource),
 				getValueForMetric("critical_violations", resource), getValueForMetric("complexity", resource),
 				getValueForMetric("comment_lines", resource), getValueForMetric("duplicated_lines", resource),
-				toolId });
+				toolId,resource.getDate().indexOf("T") - 1 });
 	}
 
 	private Integer getToolId(Resource resource, String sprintName) {

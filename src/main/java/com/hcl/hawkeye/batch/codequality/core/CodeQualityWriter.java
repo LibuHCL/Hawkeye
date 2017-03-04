@@ -40,7 +40,8 @@ public class CodeQualityWriter implements ItemWriter<List<Resource>>{
 		logger.info("Requested to insert the details : {}", resources.size());		
 		for (List<Resource> resource : resources) {
 			codeQualityService.insertQualityDetails(resource);
-		}		
+		}
+		logger.info("Code quality job completed successfully : {}");
 	}
 
 }
