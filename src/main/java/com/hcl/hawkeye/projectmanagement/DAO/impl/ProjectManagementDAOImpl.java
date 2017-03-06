@@ -422,8 +422,7 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 			List<Map<String, Object>> issueList = jdbctemplate.queryForList(sql_getStoryPoints,new Object[] {projectId});
 			Map<String, VelocityOfProject> sprintVelocityMap = new HashMap<String, VelocityOfProject>();
 			Double completedValue = null ;
-			for (Map<String, Object> row : issueList) {
-				
+			for (Map<String, Object> row : issueList) {				
 				VelocityOfProject velocityOfProject = new VelocityOfProject();
 				velocityOfProject.setSprintId(Integer.parseInt(row.get("SPRINTID").toString()));
 				velocityOfProject.setSprintName(row.get("SPRINT_NAME").toString());
