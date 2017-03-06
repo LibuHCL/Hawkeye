@@ -83,10 +83,10 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 		
 		ProjectMetrics projMet = new ProjectMetrics();
 		//Set Project Details
-		//addProject(projMet,projectId);
+		addProject(projMet,projectId);
 		
 		//Set Project Metrics
-		//pmResultsList.add(addProjectMetrics(projectId));
+		pmResultsList.add(addProjectMetrics(projectId));
 		
 		//Set Engineering Metrics
 		pmResultsList.add(addEngineeringMetrics(projectId));
