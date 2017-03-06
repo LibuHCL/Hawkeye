@@ -33,7 +33,14 @@ public class BuildMetricsManagementDAOImpl implements BuildMetricsManagementDAO 
 		{   
 			ArrayList<Double> graphData = new ArrayList<Double>();
 			ArrayList<String> labels = new ArrayList<String>();
-			String getBuildDetailsPerdDay = "select count(BUILDID) from BUILDMANAGEMENT WHERE PROJECTID = ?  GROUP BY DATE(BUILDSTARTEDTIME) ORDER BY DATE(BUILDSTARTEDTIME) DESC LIMIT 14";
+			/*String getBuildDetailsPerdDay = "select count(BUILDID) from BUILDMANAGEMENT WHERE PROJECTID = ?  GROUP BY DATE(BUILDSTARTEDTIME) ORDER BY DATE(BUILDSTARTEDTIME) DESC LIMIT 14";*/
+			
+			/*
+			 * hardcoded  @curDate := '2017-02-20' for now, actually it should take  @curDate := NOW()
+			 */
+			
+			String getBuildDetailsPerdDay = "SELECT count(BM.BUILDID ) from ( SELECT @curDate := Date_Add(@curDate, interval 1 day) as MyBuildDate from ( SELECT @curDate := '2017-02-20' ) sqlvars, BUILDMANAGEMENT limit 14 ) AllDaysYouWant LEFT JOIN BUILDMANAGEMENT BM on Date(AllDaysYouWant.MyBuildDate) = Date(BM.BUILDSTARTEDTIME) WHERE PROJECTID = ? group by Date(BM.BUILDSTARTEDTIME) ORDER BY MyBuildDate DESC";
+					
 			Graph numberofbuilds = new Graph();
 			List<Map<String, Object>> buildList = jdbcTemplate.queryForList(getBuildDetailsPerdDay,	new Object[] {projectId });
 			System.out.println("buildList:"+buildList);
@@ -137,7 +144,10 @@ public class BuildMetricsManagementDAOImpl implements BuildMetricsManagementDAO 
 		System.out.println("graphData:"+graphData);
 		ArrayList<String> labels = new ArrayList<String>();
 		Graph buildDetList = new Graph();
-		String sql_det = "SELECT AVG(BUILDDURATIONINSECONDS) AS BUILDDURATION FROM BUILDMANAGEMENT WHERE PROJECTID=? AND BUILDSTARTEDTIME BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW() GROUP BY PROJECTID,BUILDSTARTEDTIME ORDER BY BUILDCOMPLETEDTIME DESC";
+		/*String sql_det = "SELECT AVG(BUILDDURATIONINSECONDS) AS BUILDDURATION FROM BUILDMANAGEMENT WHERE PROJECTID=? AND BUILDSTARTEDTIME BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW() GROUP BY PROJECTID,BUILDSTARTEDTIME ORDER BY BUILDCOMPLETEDTIME DESC";*/
+		
+		String sql_det = "SELECT AVG(BM.BUILDDURATIONINSECONDS ) as BUILDDURATION from ( SELECT @curDate := Date_Add(@curDate, interval 1 day) as MyBuildDate from ( SELECT @curDate := '2017-02-20' ) sqlvars, BUILDMANAGEMENT limit 14 ) AllDaysYouWant LEFT JOIN BUILDMANAGEMENT BM on Date(AllDaysYouWant.MyBuildDate) = Date(BM.BUILDSTARTEDTIME) WHERE PROJECTID = ?  group by Date(BM.BUILDSTARTEDTIME) ORDER BY MyBuildDate DESC";
+				
 		List<Map<String, Object>> resultList = jdbcTemplate.queryForList(sql_det, new Object[] {projectId});
 		if (resultList != null && resultList.size() > 0) {
 			for (Map<String, Object> row : resultList) {
