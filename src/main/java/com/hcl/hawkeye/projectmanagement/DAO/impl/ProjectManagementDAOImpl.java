@@ -389,7 +389,6 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 						+ " AND SMM.PROJECTID=SIM.PROJECTID AND SMM.SPRINTID =SIM.SPRINTID AND PMM.PROJECTID=? AND SMM.SPRINT_NAME != 'UAT' "
 						+ "AND SIM.ISSUE_TYPE ='Defect' GROUP BY SIM.PRIORITY_NAME,SMM.SPRINT_NAME; ";
 				List<Map<String, Object>> issueList = jdbctemplate.queryForList(sql_getIssues,new Object[] {projectId});
-				logger.info("@@@##############: {}", env.getProperty("project.priority.blocker"));
 				for (Map<String, Object> row : issueList) {
 					if((row.get("PRIORITY_NAME").toString()).equalsIgnoreCase(env.getProperty("project.priority.blocker"))){
 						blockerTypeIssues.put(row.get("SPRINT_NAME").toString(), Integer.parseInt(row.get("COUNT").toString()));
@@ -430,13 +429,11 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 				velocityOfProject.setSprintId(Integer.parseInt(row.get("SPRINTID").toString()));
 				velocityOfProject.setSprintName(row.get("SPRINT_NAME").toString());
 				velocityOfProject.setSprintState(row.get("SPRINT_STATUS").toString());
-				logger.info("@@@@@@@@@@@@@@@@@@@: {}", env.getProperty("story.point.new"));
 				if(env.getProperty("story.point.new").equalsIgnoreCase(row.get("ISSUE_STATUS").toString())){
 					completedValue = Double.valueOf(row.get("COUNT").toString());
 					velocityOfProject.setCompletedValue(completedValue);
 					sprintVelocityMap.put(velocityOfProject.getSprintName(), velocityOfProject);
 				}
-				logger.info("@@@@@@@@@@@@@@@@@@@: {}", env.getProperty("story.point.done"));
 				if(env.getProperty("story.point.done").equalsIgnoreCase(row.get("ISSUE_STATUS").toString())){			
 					sprintVelocityMap.get(velocityOfProject.getSprintName()).setEstimatedValue(completedValue+Double.valueOf(row.get("COUNT").toString()));
 					completedValue=0.0;
