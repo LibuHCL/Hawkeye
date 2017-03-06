@@ -2,6 +2,7 @@ package com.hcl.hawkeye.projectmanagement.DAO.impl;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -48,6 +50,9 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 	
 	@Autowired
 	JdbcTemplate jdbctemplate;
+	
+	@Autowired
+	Environment env;
 	
 	Gson gson = null;
 
@@ -383,9 +388,9 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 				List<Map<String, Object>> issueList = jdbctemplate.queryForList(sql_getIssues,new Object[] {projectId});
 				
 				for (Map<String, Object> row : issueList) {
-					if((row.get("PRIORITY_NAME").toString()).equals("High")){
+					if((row.get("PRIORITY_NAME").toString()).equalsIgnoreCase(env.getProperty("Blocker"))){
 						blockerTypeIssues.put(row.get("SPRINT_NAME").toString(), Integer.parseInt(row.get("COUNT").toString()));
-					}else if((row.get("PRIORITY_NAME").toString()).equals("Medium")){
+					}else if((row.get("PRIORITY_NAME").toString()).equalsIgnoreCase("Critical")){
 						criticalTypeIssues.put(row.get("SPRINT_NAME").toString(),  Integer.parseInt(row.get("COUNT").toString()));	
 					}
 				}
@@ -415,6 +420,7 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 			
 			try{
 			List<Map<String, Object>> issueList = jdbctemplate.queryForList(sql_getStoryPoints,new Object[] {projectId});
+			Map<String, VelocityOfProject> sprintVelocityMap = new HashMap<String, VelocityOfProject>();
 			Double completedValue = null ;
 			for (Map<String, Object> row : issueList) {
 				
@@ -422,17 +428,19 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 				velocityOfProject.setSprintId(Integer.parseInt(row.get("SPRINTID").toString()));
 				velocityOfProject.setSprintName(row.get("SPRINT_NAME").toString());
 				velocityOfProject.setSprintState(row.get("SPRINT_STATUS").toString());
-				if("Closed".equals(row.get("ISSUE_STATUS").toString())){
+				if("new".equalsIgnoreCase(row.get("ISSUE_STATUS").toString())){
 					completedValue = Double.valueOf(row.get("COUNT").toString());
 					velocityOfProject.setCompletedValue(completedValue);
+					sprintVelocityMap.put(velocityOfProject.getSprintName(), velocityOfProject);
 				}
-				if("Open".equals(row.get("ISSUE_STATUS").toString())){
-					velocityOfProject.setEstimatedValue(completedValue+Double.valueOf(row.get("COUNT").toString()));
+				if("done".equalsIgnoreCase(row.get("ISSUE_STATUS").toString())){			
+					sprintVelocityMap.get(velocityOfProject.getSprintName()).setEstimatedValue(completedValue+Double.valueOf(row.get("COUNT").toString()));
 					completedValue=0.0;
-				}
-				velocityList.add(velocityOfProject);
-							
+					
+				}	
+											
 			}				
+			velocityList.addAll(sprintVelocityMap.values());
 					
 		} catch (Exception e) {
 			String errorMsg=messageSource.getMessage("error.get.velocity", new Object[] {}, locale);
