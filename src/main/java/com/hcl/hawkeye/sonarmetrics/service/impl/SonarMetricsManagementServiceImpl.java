@@ -42,7 +42,7 @@ public class SonarMetricsManagementServiceImpl implements
 		Map<String, Graph> engMap = new HashMap<String, Graph>();
 		List<SonarMetrics> sonarMetrics = new ArrayList<SonarMetrics>();
 		List<Trackers> trackers = sonarMetricsManagementDAO
-				.getSonarMetricsData(projectId);
+				.getSonarMetricsJobData(projectId);
 		
 		Graph codeComplexityGraph = new Graph();
 		ArrayList<Double> codeComplexityGraphData = new ArrayList<Double>();
