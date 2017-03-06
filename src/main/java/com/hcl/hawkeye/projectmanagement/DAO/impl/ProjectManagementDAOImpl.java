@@ -418,7 +418,7 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 					+ "FROM PROJECT_METRICS_MANAGEMENT PMM,SPRINT_METRCIS_MANAGEMENT SMM,SPRINT_ISSUEMETRICS_MANAGEMENT SIM "
 					+ "WHERE PMM.PROJECTID=SMM.PROJECTID AND PMM.TOOL_PROJECT_ID =SMM.TOOL_PROJECT_ID AND SMM.TOOL_PROJECT_ID=SIM.TOOL_PROJECT_ID "
 					+ "AND SMM.PROJECTID=SIM.PROJECTID AND SMM.SPRINTID =SIM.SPRINTID AND PMM.PROJECTID=?  GROUP BY SIM.ISSUE_STATUS,SMM.SPRINT_NAME "
-					+ "ORDER BY SMM.SPRINT_NAME,SIM.ISSUE_STATUS"; 
+					+ "ORDER BY SMM.SPRINT_NAME,SIM.ISSUE_STATUS DESC"; 
 			
 			try{
 			List<Map<String, Object>> issueList = jdbctemplate.queryForList(sql_getStoryPoints,new Object[] {projectId});
@@ -440,7 +440,7 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 					
 				}	
 											
-			}				
+			}				 
 			velocityList.addAll(sprintVelocityMap.values());
 					
 		} catch (Exception e) {
