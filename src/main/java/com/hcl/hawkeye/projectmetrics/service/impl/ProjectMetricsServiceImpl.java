@@ -237,7 +237,7 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 		//Builds Avg Per day
 		Metrics buildAvgperday = new Metrics();
 		buildAvgperday.setKey(env.getProperty("buildkpi.name2"));
-		Graph escDetails2 = buildDAO.getBuildsPerDay(projectId);
+		Graph escDetails2 = buildDAO.getAvgBuildDuration(projectId);
 		if (null !=escDetails2 &&null != escDetails2.getGraphData()) {
 			buildAvgperday.setGraphdata(escDetails2.getGraphData());
 			}else {
