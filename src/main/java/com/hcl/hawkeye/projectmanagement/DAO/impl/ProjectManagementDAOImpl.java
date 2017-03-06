@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -38,9 +39,11 @@ import com.hcl.hawkeye.projectmanagement.DO.Velocityinfo;
  *
  */
 @Repository
+@PropertySource("classpath:ingkpi.properties")
 public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ProjectManagementDAOImpl.class);
+	
 	
 	@Autowired
 	MessageSource messageSource;
@@ -386,11 +389,11 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 						+ " AND SMM.PROJECTID=SIM.PROJECTID AND SMM.SPRINTID =SIM.SPRINTID AND PMM.PROJECTID=? AND SMM.SPRINT_NAME != 'UAT' "
 						+ "AND SIM.ISSUE_TYPE ='Defect' GROUP BY SIM.PRIORITY_NAME,SMM.SPRINT_NAME; ";
 				List<Map<String, Object>> issueList = jdbctemplate.queryForList(sql_getIssues,new Object[] {projectId});
-				
+				logger.info("@@@##############: {}", env.getProperty("project.priority.blocker"));
 				for (Map<String, Object> row : issueList) {
-					if((row.get("PRIORITY_NAME").toString()).equalsIgnoreCase(env.getProperty("Blocker"))){
+					if((row.get("PRIORITY_NAME").toString()).equalsIgnoreCase(env.getProperty("project.priority.blocker"))){
 						blockerTypeIssues.put(row.get("SPRINT_NAME").toString(), Integer.parseInt(row.get("COUNT").toString()));
-					}else if((row.get("PRIORITY_NAME").toString()).equalsIgnoreCase("Critical")){
+					}else if((row.get("PRIORITY_NAME").toString()).equalsIgnoreCase("project.priority.critical")){
 						criticalTypeIssues.put(row.get("SPRINT_NAME").toString(),  Integer.parseInt(row.get("COUNT").toString()));	
 					}
 				}
@@ -427,12 +430,14 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 				velocityOfProject.setSprintId(Integer.parseInt(row.get("SPRINTID").toString()));
 				velocityOfProject.setSprintName(row.get("SPRINT_NAME").toString());
 				velocityOfProject.setSprintState(row.get("SPRINT_STATUS").toString());
-				if("new".equalsIgnoreCase(row.get("ISSUE_STATUS").toString())){
+				logger.info("@@@@@@@@@@@@@@@@@@@: {}", env.getProperty("story.point.new"));
+				if(env.getProperty("story.point.new").equalsIgnoreCase(row.get("ISSUE_STATUS").toString())){
 					completedValue = Double.valueOf(row.get("COUNT").toString());
 					velocityOfProject.setCompletedValue(completedValue);
 					sprintVelocityMap.put(velocityOfProject.getSprintName(), velocityOfProject);
 				}
-				if("done".equalsIgnoreCase(row.get("ISSUE_STATUS").toString())){			
+				logger.info("@@@@@@@@@@@@@@@@@@@: {}", env.getProperty("story.point.done"));
+				if(env.getProperty("story.point.done").equalsIgnoreCase(row.get("ISSUE_STATUS").toString())){			
 					sprintVelocityMap.get(velocityOfProject.getSprintName()).setEstimatedValue(completedValue+Double.valueOf(row.get("COUNT").toString()));
 					completedValue=0.0;
 					
