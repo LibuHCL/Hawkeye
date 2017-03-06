@@ -14,6 +14,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import com.hcl.hawkeye.buildmanagement.DAO.BuildMetricsManagementDAO;
 import com.hcl.hawkeye.portfolio.DO.Graph;
 import com.hcl.hawkeye.portfolio.DO.Project;
 import com.hcl.hawkeye.programmanagement.service.ProgramManagementService;
@@ -69,6 +70,9 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 	
 	@Autowired
 	ProjectMetricsDAO projectMetricsDAO;
+	
+	@Autowired
+	BuildMetricsManagementDAO buildDAO;
 
 	@Override
 	public ProjectMetrics getProjMetricsData(int projectId) {
@@ -217,6 +221,18 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 		commnetMet.setGraphdata(engMap.get(env.getProperty("metric.commnetMet.progname")).getGraphData());
 		commnetMet.setLabels(engMap.get(env.getProperty("metric.commnetMet.progname")).getLabels());		
 		engMetrics.add(commnetMet);
+		
+		//Build Per day
+		Metrics buildperday = new Metrics();
+		buildperday.setKey(env.getProperty("buildkpi.name1"));
+		Graph escDetails = buildDAO.getBuildsPerDay(projectId);
+		if (null !=escDetails &&null != escDetails.getGraphData()) {
+			buildperday.setGraphdata(escDetails.getGraphData());
+			}else {
+			buildperday.setGraphdata(null);
+		}
+		buildperday.setLabels(escDetails.getLabels());
+		engMetrics.add(buildperday);
 		
 		pMetResults.setMetrics(engMetrics);
 		return pMetResults;
