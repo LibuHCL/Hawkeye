@@ -147,7 +147,8 @@ public class ProjectManagementServiceImpl implements ProjectManagementService {
 
 	@Override
 	public DefectTypes getDefectTypesOfProject(int projectId) {
-		DefectTypes dTypes= pmDAO.getDefectTypesOfProject(projectId);
+		//DefectTypes dTypes= pmDAO.getDefectTypesOfProject(projectId);
+		DefectTypes dTypes= pmDAO.getUatissues(projectId);
 		return dTypes;
 	}
 

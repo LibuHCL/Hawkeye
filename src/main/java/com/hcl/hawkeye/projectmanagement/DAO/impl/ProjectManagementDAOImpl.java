@@ -452,4 +452,44 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 		return velocityList;
 	}
 	
+	@Override
+	public DefectTypes getUatissues(int projectId) {
+		logger.info("Request to  getUatissues projects");
+		int invalidDefects = 0;
+		int uatDefects = 0;
+		DefectTypes dTypes = null;
+		Locale locale=new Locale("en", "IN");
+		String sql_getStoryPoints = "SELECT SMM.SPRINTID,SMM.SPRINT_NAME,SIM.ISSUE_TYPE,COUNT(SIM.ISSUE_ID) AS COUNT FROM PROJECT_METRICS_MANAGEMENT PMM,SPRINT_METRCIS_MANAGEMENT SMM, SPRINT_ISSUEMETRICS_MANAGEMENT SIM  "
+				+ "WHERE PMM.PROJECTID=SMM.PROJECTID AND PMM.TOOL_PROJECT_ID =SMM.TOOL_PROJECT_ID AND SMM.TOOL_PROJECT_ID=SIM.TOOL_PROJECT_ID AND SMM.PROJECTID=SIM.PROJECTID"
+				+ " AND SMM.SPRINTID =SIM.SPRINTID AND PMM.PROJECTID=? AND SIM.ISSUE_TYPE ='Defect' GROUP BY SMM.SPRINT_NAME"; 
+		
+		try{
+				List<Map<String, Object>> defectList = jdbctemplate.queryForList(sql_getStoryPoints,new Object[] {projectId});
+		
+				for (Map<String, Object> row : defectList) {	
+					if (null != row.get("SPRINT_NAME").toString()) { 
+						
+						if(!"UAT".equals(row.get("SPRINT_NAME").toString()))
+							invalidDefects= invalidDefects+ Integer.parseInt(row.get("COUNT").toString());
+						
+						if ( "UAT".equals(row.get("SPRINT_NAME").toString())) 
+							uatDefects = uatDefects + Integer.parseInt(row.get("COUNT").toString());
+					}
+				}
+					
+				dTypes = new DefectTypes();
+				dTypes.setInternalDefects(invalidDefects);
+				dTypes.setValidInternalDefects(invalidDefects);
+				dTypes.setUatDefects(uatDefects);
+				dTypes.setDefectLekage(uatDefects);
+			
+		} catch (Exception e) {
+			String errorMsg=messageSource.getMessage("error.get.defects", new Object[] {}, locale);
+			logger.error(errorMsg, e);
+			throw new NoProjectDetailsException(errorMsg, e);
+		}
+		return dTypes;
+	}
+	
+	
 }

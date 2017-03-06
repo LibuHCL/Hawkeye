@@ -112,4 +112,6 @@ public interface ProjectManagementDAO {
 
 	List<VelocityOfProject> getProductivityOfProject(int projectId);
 
+	DefectTypes getUatissues(int projectId);
+
 }
