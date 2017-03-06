@@ -83,10 +83,10 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 		
 		ProjectMetrics projMet = new ProjectMetrics();
 		//Set Project Details
-		addProject(projMet,projectId);
+		//addProject(projMet,projectId);
 		
 		//Set Project Metrics
-		pmResultsList.add(addProjectMetrics(projectId));
+		//pmResultsList.add(addProjectMetrics(projectId));
 		
 		//Set Engineering Metrics
 		pmResultsList.add(addEngineeringMetrics(projectId));
@@ -233,6 +233,18 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 		}
 		buildperday.setLabels(escDetails.getLabels());
 		engMetrics.add(buildperday);
+		
+		//Builds Avg Per day
+		Metrics buildAvgperday = new Metrics();
+		buildAvgperday.setKey(env.getProperty("buildkpi.name2"));
+		Graph escDetails2 = buildDAO.getBuildsPerDay(projectId);
+		if (null !=escDetails2 &&null != escDetails2.getGraphData()) {
+			buildAvgperday.setGraphdata(escDetails2.getGraphData());
+			}else {
+				buildAvgperday.setGraphdata(null);
+		}
+		buildAvgperday.setLabels(escDetails2.getLabels());
+		engMetrics.add(buildAvgperday);
 		
 		pMetResults.setMetrics(engMetrics);
 		return pMetResults;

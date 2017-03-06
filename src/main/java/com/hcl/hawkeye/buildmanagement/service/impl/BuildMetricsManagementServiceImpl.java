@@ -56,4 +56,12 @@ public class BuildMetricsManagementServiceImpl implements BuildMetricsManagement
 		return buildDAO.getTodayDetails(planKey,projectId);
 	}
 
+
+	@Override
+	public Graph getAvgBuildDuration(int projectId) {
+		// TODO Auto-generated method stub
+		return buildDAO.getAvgBuildDuration(projectId);
+	}
+
+
 }

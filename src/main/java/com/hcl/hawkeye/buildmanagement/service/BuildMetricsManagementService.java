@@ -14,6 +14,8 @@ public interface BuildMetricsManagementService {
 
 	public List<BuildStatisticsDetails> getTodayDetails(String planKey, int projectId);
 	
+	public Graph getAvgBuildDuration(int projectId);
+	
 	
 
 }

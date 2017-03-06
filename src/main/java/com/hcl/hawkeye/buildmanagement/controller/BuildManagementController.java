@@ -58,5 +58,12 @@ public class BuildManagementController {
     	return new ResponseEntity<List<BuildStatisticsDetails>> (metricdata, HttpStatus.CREATED);
     	
     }
+	@RequestMapping(value="/getAvgBuildDuration/{projectId}", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<Graph> getAvgBuildDuration(@PathVariable("projectId") int projectId) {
+		logger.info("Requesting api to get the getAvgBuildDuration");
+		Graph buildDetails = buildManagementService.getAvgBuildDuration(projectId);
+		return new ResponseEntity<Graph> (buildDetails, HttpStatus.CREATED);
+	}
 	
 }

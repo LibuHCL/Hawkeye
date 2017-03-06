@@ -129,6 +129,27 @@ public class BuildMetricsManagementDAOImpl implements BuildMetricsManagementDAO 
 	
 	}
 
-	
+	@Override
+	public Graph getAvgBuildDuration(int projectId) {
+		// TODO Auto-generated method stub
+		logger.info("Request to get the no.of builds per quarter for project : {}",+projectId);
+		ArrayList<Double> graphData = new ArrayList<Double>();
+		System.out.println("graphData:"+graphData);
+		ArrayList<String> labels = new ArrayList<String>();
+		Graph buildDetList = new Graph();
+		String sql_det = "SELECT AVG(BUILDDURATIONINSECONDS) AS BUILDDURATION FROM BUILDMANAGEMENT WHERE PROJECTID=? AND BUILDSTARTEDTIME BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW() GROUP BY PROJECTID,BUILDSTARTEDTIME ORDER BY BUILDCOMPLETEDTIME DESC";
+		List<Map<String, Object>> resultList = jdbcTemplate.queryForList(sql_det, new Object[] {projectId});
+		if (resultList != null && resultList.size() > 0) {
+			for (Map<String, Object> row : resultList) {
+				graphData.add(Double.parseDouble(String.valueOf(row.get("BUILDDURATION"))));
 
-}
+			}
+		}
+		daysLabels(labels);
+		buildDetList.setGraphData(graphData);
+		buildDetList.setLabels(labels);
+		System.out.println("graphdatachalla:"+graphData);
+		return buildDetList;
+	}
+
+	}
