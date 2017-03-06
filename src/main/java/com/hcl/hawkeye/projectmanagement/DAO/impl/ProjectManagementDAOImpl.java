@@ -389,10 +389,13 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 						+ " AND SMM.PROJECTID=SIM.PROJECTID AND SMM.SPRINTID =SIM.SPRINTID AND PMM.PROJECTID=? AND SMM.SPRINT_NAME != 'UAT' "
 						+ "AND SIM.ISSUE_TYPE ='Defect' GROUP BY SIM.PRIORITY_NAME,SMM.SPRINT_NAME; ";
 				List<Map<String, Object>> issueList = jdbctemplate.queryForList(sql_getIssues,new Object[] {projectId});
+				
 				for (Map<String, Object> row : issueList) {
 					if((row.get("PRIORITY_NAME").toString()).equalsIgnoreCase(env.getProperty("project.priority.blocker"))){
 						blockerTypeIssues.put(row.get("SPRINT_NAME").toString(), Integer.parseInt(row.get("COUNT").toString()));
-					}else if((row.get("PRIORITY_NAME").toString()).equalsIgnoreCase("project.priority.critical")){
+					} 
+					
+					if((row.get("PRIORITY_NAME").toString()).equalsIgnoreCase(env.getProperty("project.priority.critical"))){
 						criticalTypeIssues.put(row.get("SPRINT_NAME").toString(),  Integer.parseInt(row.get("COUNT").toString()));	
 					}
 				}
@@ -417,7 +420,7 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 			String sql_getStoryPoints = "SELECT SMM.SPRINTID,SMM.SPRINT_STATUS,SMM.SPRINT_NAME,SIM.ISSUE_STATUS,SUM(SIM.STORY_POINT) AS COUNT "
 					+ "FROM PROJECT_METRICS_MANAGEMENT PMM,SPRINT_METRCIS_MANAGEMENT SMM,SPRINT_ISSUEMETRICS_MANAGEMENT SIM "
 					+ "WHERE PMM.PROJECTID=SMM.PROJECTID AND PMM.TOOL_PROJECT_ID =SMM.TOOL_PROJECT_ID AND SMM.TOOL_PROJECT_ID=SIM.TOOL_PROJECT_ID "
-					+ "AND SMM.PROJECTID=SIM.PROJECTID AND SMM.SPRINTID =SIM.SPRINTID AND PMM.PROJECTID=?  GROUP BY SIM.ISSUE_STATUS,SMM.SPRINT_NAME "
+					+ "AND SMM.PROJECTID=SIM.PROJECTID AND SMM.SPRINTID =SIM.SPRINTID AND PMM.PROJECTID=? AND SMM.SPRINT_NAME !='UAT' GROUP BY SIM.ISSUE_STATUS,SMM.SPRINT_NAME "
 					+ "ORDER BY SMM.SPRINT_NAME,SIM.ISSUE_STATUS DESC"; 
 			
 			try{
