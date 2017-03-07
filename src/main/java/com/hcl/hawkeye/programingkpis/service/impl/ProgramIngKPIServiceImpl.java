@@ -345,7 +345,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				}
 				kv2.setColor(color);
 				kv2.setLabels(labelData);
-				kv2.setName(env.getProperty("tacticalKpi.name3"));
+				kv2.setName(env.getProperty("tacticalKpi.series3"));
 				kv2.setXlabel(env.getProperty("tacticalKpi.name3.xlabel"));
 				kv2.setYlabel(env.getProperty("tacticalKpi.name3.ylabel"));
 				kVList.add(kv2);
