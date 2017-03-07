@@ -314,7 +314,7 @@ public class ProgramIngKPIServiceImpl implements ProgramIngKPIService {
 				ArrayList<ArrayList<Integer>> graphData = new ArrayList<ArrayList<Integer>>();
 				List<Integer[]> grapData = new ArrayList<>();
 				ArrayList<Integer> graphDataValue = new ArrayList<Integer>();
-				graphDataValue.add(0);
+				//graphDataValue.add(0);
 				KPIValue kv2 = new KPIValue();
 				ArrayList<String> series = new ArrayList<String>();
 				ArrayList<String> color = updateColor("tacticalKpi.name3.color");
