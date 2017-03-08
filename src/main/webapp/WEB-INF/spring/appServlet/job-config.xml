@@ -6,6 +6,7 @@
 	xmlns:p="http://www.springframework.org/schema/p" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
 	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans	
@@ -18,6 +19,7 @@
     http://www.springframework.org/schema/batch/spring-batch.xsd
     http://www.springframework.org/schema/context 
     http://www.springframework.org/schema/context/spring-context.xsd 	
+    http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
 	http://www.springframework.org/schema/util 
 	http://www.springframework.org/schema/util/spring-util.xsd
     http://www.springframework.org/schema/jdbc 
@@ -60,12 +62,28 @@
 			</batch:step>		
 	</batch:job>
 	
+	<!-- Setting up the Build management spring batch job -->
+	<batch:job id="buildJob">
+		<batch:step id="identifyBuildStep">
+			<batch:tasklet>
+				<batch:chunk reader="builditemReader" writer="builditemWriter" commit-interval="3"></batch:chunk>
+			</batch:tasklet>
+			<batch:listeners>
+				<batch:listener ref="buildBatchListener"/>
+			</batch:listeners>
+		</batch:step>
+	</batch:job>
+	
 	<beans:bean id="jiraBatchListener" class="org.springframework.batch.core.listener.ExecutionContextPromotionListener">
    	 <beans:property name="keys" value="projectDetails"/>
 	</beans:bean>
 	
 	<beans:bean id="jiraSprintListener" class="org.springframework.batch.core.listener.ExecutionContextPromotionListener">
    	 <beans:property name="keys" value="sprintDetails"/>
+	</beans:bean>
+	
+	<beans:bean id="buildBatchListener" class="org.springframework.batch.core.listener.ExecutionContextPromotionListener">
+   	 <beans:property name="keys" value="buildManageDetails"/>
 	</beans:bean>
 	
 	<beans:bean id="itemReader" class="com.hcl.hawkeye.batch.jira.core.JiraDashBoardReader" />
@@ -78,8 +96,20 @@
 	<beans:bean id="issueWriter" class="com.hcl.hawkeye.batch.jira.core.JiraIssueWriter" />
 	
 	<beans:bean id="codeQualityReader" class="com.hcl.hawkeye.batch.codequality.core.CodeQualityReader"/>
-	<beans:bean id="codeQualityWriter" class="com.hcl.hawkeye.batch.codequality.core.CodeQualityWriter"/>	
+	<beans:bean id="codeQualityWriter" class="com.hcl.hawkeye.batch.codequality.core.CodeQualityWriter"/>
+	
+	<beans:bean id="builditemReader" class="com.hcl.hawkeye.batch.build.core.BuildPlanReader"/>
+	<beans:bean id="builditemWriter" class="com.hcl.hawkeye.batch.build.core.BuildPlanWriter"/>
+	
+	<beans:bean id="batchJobrunScheduler" class="com.hcl.hawkeye.batch.build.scheduler.JobScheduler" />
+	
+	<!-- Run every 90 days 30 03 01 */3 * || 15 mins /900 * * * * * -->
+	<!-- 
+	<task:scheduled-tasks>
+		<task:scheduled ref="batchJobrunScheduler" method="run" cron="0 0/5 * * * ?" />
+   	</task:scheduled-tasks> -->
    
+      
    <!--  <jdbc:initialize-database data-source="dataSource">
         <jdbc:script location="org/springframework/batch/core/schema-drop-mysql.sql" />
         <jdbc:script location="org/springframework/batch/core/schema-mysql.sql" />
