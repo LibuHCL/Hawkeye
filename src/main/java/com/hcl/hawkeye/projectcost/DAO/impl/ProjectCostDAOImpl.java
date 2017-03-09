@@ -45,10 +45,10 @@ public class ProjectCostDAOImpl implements ProjectCostDAO {
 				"Inside addProjectCostDetails method in ProjectCostDAOImpl::addProjectCostDetails(ProjectCostDetails cost) "
 						+ cost.getProjectID());
 
-		String projectCostDetailsInsert_SQL = "INSERT INTO PROJECT_COST(PROJECTID, PLANNED_COST, ACTUAL_COST) VALUES(?, ?, ?)";
+		String projectCostDetailsInsert_SQL = "INSERT INTO PROJECT_COST(PROJECT_ID, PLANNED_COST, ACTUAL_COST,ROI) VALUES(?, ?, ?,?)";
 		try {
 			jdbcTemplate.update(projectCostDetailsInsert_SQL,
-					new Object[] { cost.getProjectID(), cost.getPlannedCost(), cost.getActualCost() });
+					new Object[] { cost.getProjectID(), cost.getPlannedCost(), cost.getActualCost(),cost.getRoi() });
 		} catch (DataAccessException dae) {
 			Locale locale = new Locale("en", "IN");
 			String errorMsg = messageSource.getMessage("error.create.addProjectCost", new Object[] {}, locale);
