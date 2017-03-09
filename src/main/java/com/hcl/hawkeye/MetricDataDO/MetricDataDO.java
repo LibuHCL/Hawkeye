@@ -3,13 +3,30 @@ package com.hcl.hawkeye.MetricDataDO;
 public class MetricDataDO {
 	
 	private String metric_Name;
+	public MetricDataDO(String metric_Name, String metric_Desc, String graph_Type, String screen_Name, int company_Id,
+			String company_Name, int entity_Id) {
+		super();
+		this.metric_Name = metric_Name;
+		this.metric_Desc = metric_Desc;
+		this.graph_Type = graph_Type;
+		this.screen_Name = screen_Name;
+		this.company_Id = company_Id;
+		this.company_Name = company_Name;
+		this.entity_Id = entity_Id;
+	}
+	private String metric_Desc;
 	private String graph_Type;
 	private String screen_Name;
 	private int company_Id;
 	private String company_Name;
 	private int entity_Id;
 	
-	
+	public String getMetric_Desc() {
+		return metric_Desc;
+	}
+	public void setMetric_Desc(String metric_Desc) {
+		this.metric_Desc = metric_Desc;
+	}
     public MetricDataDO() {
 		// TODO Auto-generated constructor stub
 	}
@@ -49,19 +66,4 @@ public class MetricDataDO {
 	public void setEntity_Id(int entity_Id) {
 		this.entity_Id = entity_Id;
 	}
-	public MetricDataDO(String metric_Name, String graph_Type, String screen_Name, int company_Id, String company_Name,
-			int entity_Id) {
-		super();
-		this.metric_Name = metric_Name;
-		this.graph_Type = graph_Type;
-		this.screen_Name = screen_Name;
-		this.company_Id = company_Id;
-		this.company_Name = company_Name;
-		this.entity_Id = entity_Id;
-	}
-	
-	
-		
-	
-
 }

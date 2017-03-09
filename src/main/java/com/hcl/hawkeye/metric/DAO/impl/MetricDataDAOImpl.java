@@ -62,7 +62,7 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 				for (Map<String, Object> row : metricnameList) {
 					
 					MetricDataDO metricnm = new MetricDataDO();
-					metricnm.setMetric_Name((String)row.get("METRIC_NAME"));
+					metricnm.setMetric_Desc((String)row.get("METRIC_DESC"));
 					NameList.add(metricnm);
 					
 		        } 
@@ -111,7 +111,7 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 		try{
 			List<Map<String, Object>> list = jdbcTemplate.queryForList(getgrapth_SQL, new Object[] { screenName });
 			for (Map<String, Object> row : list) {
-				metricDetails.put((row.get("METRIC_NAME")).toString(), (row.get("GRAPH_TYPE")).toString());
+				metricDetails.put((row.get("METRIC_DESC")).toString(), (row.get("GRAPH_TYPE")).toString());
 			}
 		   }
 		
@@ -148,7 +148,7 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 			for (Map<String, Object> row : categoryList) {
 				MetricDataDO dd = new MetricDataDO();
 				dd.setScreen_Name((String) row.get("SCREEN_NAME"));
-				dd.setMetric_Name((String) row.get("METRIC_NAME"));
+				dd.setMetric_Desc((String) row.get("METRIC_DESC"));
 				metricDataList.add(dd);
 			}
 		}
@@ -172,6 +172,7 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 					
 					MetricData metricnm = new MetricData();
 					metricnm.setMetric_Name((String)row.get("METRIC_NAME"));
+					metricnm.setMetric_Desc((String)row.get("METRIC_DESC"));
 					metricnm.setGraph_Type((String)row.get("GRAPH_TYPE"));
 					metricnm.setScreen_Name((String)row.get("SCREEN_NAME"));
 					metricdata.add(metricnm);

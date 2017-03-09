@@ -61,11 +61,11 @@ public class MetricDataServiceImpl implements MetricDataService {
 		for (MetricDataDO metricDataDO : metricsData) {
 			 if (!dataList.containsKey(metricDataDO.getScreen_Name())) {
                  List<String> sData = new ArrayList<>();
-                 sData.add(metricDataDO.getMetric_Name());
+                 sData.add(metricDataDO.getMetric_Desc());
                  dataList.put(metricDataDO.getScreen_Name(), sData);
            } else {
                  List<String> sData = dataList.get(metricDataDO.getScreen_Name());
-                 sData.add(metricDataDO.getMetric_Name());
+                 sData.add(metricDataDO.getMetric_Desc());
                  dataList.put(metricDataDO.getScreen_Name(), sData);
            }
 		}
