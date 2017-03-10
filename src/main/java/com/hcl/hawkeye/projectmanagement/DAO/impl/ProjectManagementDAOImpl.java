@@ -437,8 +437,16 @@ public class ProjectManagementDAOImpl implements ProjectManagementDAO {
 					velocityOfProject.setCompletedValue(completedValue);
 					sprintVelocityMap.put(velocityOfProject.getSprintName(), velocityOfProject);
 				}
-				if(env.getProperty("story.point.done").equalsIgnoreCase(row.get("ISSUE_STATUS").toString())){			
-					sprintVelocityMap.get(velocityOfProject.getSprintName()).setEstimatedValue(completedValue+Double.valueOf(row.get("COUNT").toString()));
+				if(env.getProperty("story.point.done").equalsIgnoreCase(row.get("ISSUE_STATUS").toString())){	
+					if(null != completedValue){
+						sprintVelocityMap.get(velocityOfProject.getSprintName()).setEstimatedValue(completedValue+Double.valueOf(row.get("COUNT").toString()));
+					}
+					else if(null != sprintVelocityMap.get(velocityOfProject.getSprintName())){
+						sprintVelocityMap.get(velocityOfProject.getSprintName()).setEstimatedValue(Double.valueOf(row.get("COUNT").toString()));
+					}else {
+						velocityOfProject.setEstimatedValue(Double.valueOf(row.get("COUNT").toString()));
+						sprintVelocityMap.put(velocityOfProject.getSprintName(),velocityOfProject);
+					}
 					completedValue=0.0;
 					
 				}	
