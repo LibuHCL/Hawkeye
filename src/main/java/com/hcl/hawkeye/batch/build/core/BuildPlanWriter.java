@@ -60,7 +60,6 @@ public class BuildPlanWriter implements ItemWriter<List<BuildStatisticsDetails>>
 					resultList.add(result);
 				}
 			}
-
 		}
 		try {
 			boolean insertStatus = buildBatchDAO.insertBuildStatisticsDetails(resultList);

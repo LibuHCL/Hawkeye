@@ -68,10 +68,13 @@ public class BuildBatchServiceImpl implements BuildBatchService {
 				buildStatisticsDetails.setType(specificPlanresult.getPlan().getType());
 				buildStatisticsDetails.setPlanShortName(specificPlanresult.getPlan().getShortName());
 				buildStatisticsDetails.setProjectName(specificPlanresult.getProjectName());
+				buildStatisticsDetails.setIsBuilding("false");
+				buildStatisticsDetails.setIsActive("false");
+				buildStatisticsDetails.setBuildName(specificPlanresult.getProjectName());
 				buildStatisticsDetails.setBuildStartedTime(specificPlanresult.getPrettyBuildStartedTime().replace("T", " ")); 
+				buildStatisticsDetails.setBuildCompletedTime(specificPlanresult.getPrettyBuildCompletedTime().replace("T", " "));  
 				buildStatisticsDetails.setBuildDurationInSeconds(Integer.valueOf(specificPlanresult.getBuildDurationInSeconds()));
 				buildStatisticsDetails.setVcsrevisionKey(specificPlanresult.getVcsRevisionKey());
-				buildStatisticsDetails.setBuildCompletedTime(specificPlanresult.getPrettyBuildCompletedTime().replace("T", " "));  
 				buildStatisticsDetails.setBuildTestSummary(specificPlanresult.getBuildTestSummary());
 				buildStatisticsDetails.setBuildReason(specificPlanresult.getBuildReason().toString());
 				buildstatsList.add(buildStatisticsDetails);
