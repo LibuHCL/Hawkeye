@@ -249,7 +249,7 @@ public class ProjectMetricsServiceImpl implements ProjectMetricsService{
 		//Commits Per day
 				Metrics commitsPerDay = new Metrics();
 				commitsPerDay.setKey(env.getProperty("commitskpi.name"));
-				Graph commitDetails = buildDAO.getAvgBuildDuration(projectId);
+				Graph commitDetails = buildDAO.getCommitsPerDay(projectId);
 				if (null !=commitDetails &&null != commitDetails.getGraphData()) {
 					commitsPerDay.setGraphdata(commitDetails.getGraphData());
 					}else {

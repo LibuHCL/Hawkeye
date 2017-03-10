@@ -74,7 +74,7 @@ public class BuildMetricsManagementDAOImpl implements BuildMetricsManagementDAO 
 			String getCommitsDetailsPerDay = "SELECT count(CR.ID ) from ( SELECT @curDate := Date_Add(@curDate, interval 1 day) "
 					+ "as MyCommitDate from ( SELECT @curDate := NOW() - INTERVAL 15 DAY ) sqlvars, CODE_REPO_MANAGEMENT limit 14 ) "
 					+ "AllDaysYouWant LEFT JOIN CODE_REPO_MANAGEMENT CR on Date(AllDaysYouWant.MyCommitDate) = "
-					+ "Date(CR.COMMIT_DATE) AND PROJECT_ID IN(NULL,27) group by Date(CR.COMMIT_DATE) ORDER BY MyCommitDate DESC";
+					+ "Date(CR.COMMIT_DATE) AND PROJECT_ID IN(NULL, ?) group by Date(CR.COMMIT_DATE) ORDER BY MyCommitDate DESC";
 					
 			Graph numberofCommits = new Graph();
 			List<Map<String, Object>> buildList = jdbcTemplate.queryForList(getCommitsDetailsPerDay,	new Object[] {projectId });
