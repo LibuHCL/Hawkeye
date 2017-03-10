@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Repository;
 
 import com.hcl.hawkeye.batch.jira.DAO.JiraBatchUpdateDAO;
 import com.hcl.hawkeye.batch.jira.DO.Project;
+import com.hcl.hawkeye.batch.jira.DO.ProjectToolMapping;
 import com.hcl.hawkeye.batch.jira.DO.SprintIssues;
 import com.hcl.hawkeye.projectmanagement.DO.ProjectValues;
 
@@ -31,9 +33,6 @@ public class JiraBatchUpdateDAOImpl implements JiraBatchUpdateDAO {
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
-
-	@Autowired
-	MessageSource messageSource;
 
 	@Override
 	public boolean insertProjectDetails(Project pj) {
@@ -110,22 +109,28 @@ public class JiraBatchUpdateDAOImpl implements JiraBatchUpdateDAO {
 	}
 
 	@Override
-	public Map<Integer,String> getProjects() {
-
-		String url = null;
-		Locale locale = new Locale("en", "IN");
-
-		String sql_getProjects = "SELECT PTM.PROJECT_ID,PTM.TOOL_PROJECT_ID,DSC.TOOL_HOST,DSC.TOOL_URL,DSC.TOOL_NAME,DSC.TOOL_TYPE,DSC.USERNAME,DSC.PASSWORD "
-				+ "FROM DEVOPS_SERVER_CONFIG DSC, PROJECT_TOOL_MAPPING PTM WHERE PTM.TOOL_ID=DSC.TOOLID AND DSC.TOOL_NAME='JIRA'";
-		Map<Integer,String> projectURLList = new HashMap<Integer,String>();
+	public List<ProjectToolMapping> getProjects() {
+		
+		String sql_getProjects = "SELECT VALUE.PROJECT_ID  ,VALUE.TOOL_PROJECT_ID,VALUE.TOOL_URL,VALUE.TOOL_NAME,VALUE.TOOL_TYPE,VALUE.USERNAME,VALUE.PASSWORD, "
+								+"(SELECT  IF(( SELECT COUNT(1) FROM PROJECT_METRICS_MANAGEMENT WHERE PROJECTID =VALUE.PROJECT_ID AND TOOL_PROJECT_ID =VALUE.TOOL_PROJECT_ID)=1,"
+								+ "'available','notavailable')) AS PROJECTSTATUS FROM "
+								+"(SELECT PTM.PROJECT_ID ,PTM.TOOL_PROJECT_ID,DSC.TOOL_HOST,DSC.TOOL_URL,DSC.TOOL_NAME,DSC.TOOL_TYPE,DSC.USERNAME,DSC.PASSWORD "
+								+"FROM DEVOPS_SERVER_CONFIG DSC, PROJECT_TOOL_MAPPING PTM WHERE PTM.TOOL_ID=DSC.TOOLID AND DSC.TOOL_NAME='JIRA') AS VALUE;";
+		
+		List<ProjectToolMapping> projectURLList = new ArrayList<ProjectToolMapping>();
+		
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql_getProjects);
 		for (Map<String, Object> row : list) {
-			if (((String) row.get("TOOL_NAME")).equals("JIRA")) {
-				url = (String) row.get("TOOL_URL")
-						+ messageSource.getMessage("jira.agile.rest.api.board", new Object[] {}, locale)
-						+ row.get("TOOL_PROJECT_ID").toString();
-			}
-			projectURLList.put(Integer.parseInt((row.get("PROJECT_ID")).toString()),url);
+			ProjectToolMapping ptm = new ProjectToolMapping();
+			ptm.setProjectId(Integer.parseInt((row.get("PROJECT_ID")).toString()));
+			ptm.setToolProjectId(Integer.parseInt((row.get("PROJECT_ID")).toString()));
+			ptm.setUrl((String) row.get("TOOL_URL"));
+			ptm.setToolName((String) row.get("TOOL_NAME"));
+			ptm.setToolType((String) row.get("TOOL_TYPE"));
+			ptm.setUserName((String) row.get("USERNAME"));
+			ptm.setPassword((String) row.get("PASSWORD"));
+			ptm.setProjectStatus((String) row.get("PROJECTSTATUS"));
+			projectURLList.add(ptm);
 		}
 
 		return projectURLList;
