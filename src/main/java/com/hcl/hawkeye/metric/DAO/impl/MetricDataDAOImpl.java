@@ -63,6 +63,7 @@ public class MetricDataDAOImpl implements MetricDataDAO {
 					
 					MetricDataDO metricnm = new MetricDataDO();
 					metricnm.setMetric_Desc((String)row.get("METRIC_DESC"));
+					metricnm.setMetric_Name((String)row.get("METRIC_NAME"));
 					NameList.add(metricnm);
 					
 		        } 
