@@ -60,6 +60,7 @@ public class JiraDashBoardReader implements ItemReader<List<DashBoardValues>>{
 					dBoardDetails.setSelf(messageSource.getMessage("jira.agile.rest.api.board.url", new Object[]{}, locale)+ptm.getToolProjectId());
 				}
 				dBoardDetails.setToolProjectId(ptm.getProjectId());
+				dBoardDetails.setProjectStatus(ptm.getProjectStatus());
 				dVals.add(dBoardDetails);	
 			}			
 			stepThrough=false;

@@ -24,7 +24,7 @@ public class JiraDashBoardWriter implements ItemWriter<List<DashBoardValues>> {
 	JiraBatchUpdateDAO jbDAO;
 
 	List<Project> projList = new ArrayList<>();
-	
+	List<Project> projListDbinsert = new ArrayList<>();
 	
 	@Override
 	public void write(List<? extends List<DashBoardValues>> details) throws Exception {
@@ -38,11 +38,14 @@ public class JiraDashBoardWriter implements ItemWriter<List<DashBoardValues>> {
 					pj.setName(dashBoardValues.getName());
 					pj.setType(dashBoardValues.getType());
 					pj.setJiraUrl(dashBoardValues.getSelf());
+					pj.setProjectStatus(dashBoardValues.getProjectStatus());
+					if(dashBoardValues.getProjectStatus().equals("notavailable"))
+						projListDbinsert.add(pj);
 					projList.add(pj);
 				}
 			}
 		}
-		boolean status = jbDAO.insertProjectDetails(projList);
+		boolean status = jbDAO.insertProjectDetails(projListDbinsert);
 		if (status) {
 			logger.info("Success!!!!");
 		}
