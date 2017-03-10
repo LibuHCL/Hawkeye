@@ -3,7 +3,6 @@ package com.hcl.hawkeye.batch.build.DAO.impl;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Locale;
 
@@ -90,7 +89,7 @@ public class BuildBatchDAOImpl implements BuildBatchDAO{
 					ps.setString(16, buildDet.getBuildName());
 					ps.setString(17, buildDet.getIsBuilding());
 					ps.setTimestamp(18, HawkEyeUtils.getTimeStamp(buildDet.getBuildStartedTime()));
-					ps.setTimestamp(19, Timestamp.valueOf(buildDet.getBuildCompletedTime()));
+					ps.setTimestamp(19, HawkEyeUtils.getTimeStamp(buildDet.getBuildCompletedTime()));
 					ps.setDouble(20, buildDet.getBuildDurationInSeconds());
 					ps.setString(21, buildDet.getVcsrevisionKey());
 					ps.setString(22, buildDet.getBuildTestSummary());

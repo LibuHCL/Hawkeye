@@ -14,6 +14,7 @@ public class DashBoardValues implements Serializable {
 	private String type;	
 	private String jiraUrl;
 	private int toolProjectId;
+	private String projectStatus;
 
 	/**
 	 * @return the id
@@ -92,6 +93,16 @@ public class DashBoardValues implements Serializable {
 
 	public void setToolProjectId(int toolProjectId) {
 		this.toolProjectId = toolProjectId;
+	}
+	
+	
+
+	public String getProjectStatus() {
+		return projectStatus;
+	}
+
+	public void setProjectStatus(String projectStatus) {
+		this.projectStatus = projectStatus;
 	}
 
 	/* (non-Javadoc)

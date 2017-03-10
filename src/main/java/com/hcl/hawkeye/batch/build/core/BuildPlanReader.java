@@ -26,12 +26,9 @@ public class BuildPlanReader implements ItemReader<List<BuildStatisticsDetails>>
 	public List<BuildStatisticsDetails> read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
 		logger.info("Started gettign the Build Config details using Spring ItemReader");
 		List<BuildManageConfig> buildManConfList = buildBatchService.getBuildConfig();
-		
 		for(BuildManageConfig buildManConf : buildManConfList){
 				buildBatchService.getRestDataFromTool(buildManConf);
 		}
-		
-		
 		return null; 
 	}
 }

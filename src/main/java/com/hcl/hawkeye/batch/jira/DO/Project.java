@@ -13,6 +13,7 @@ public class Project implements Serializable{
 	private String name;
 	private String type;
 	private String jiraUrl;
+	private String projectStatus;
 	/**
 	 * @return the id
 	 */
@@ -63,6 +64,14 @@ public class Project implements Serializable{
 	}
 	public void setToolProjectId(int toolProjectId) {
 		this.toolProjectId = toolProjectId;
+	}
+	
+	
+	public String getProjectStatus() {
+		return projectStatus;
+	}
+	public void setProjectStatus(String projectStatus) {
+		this.projectStatus = projectStatus;
 	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
