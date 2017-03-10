@@ -16,4 +16,6 @@ public interface BuildMetricsManagementDAO {
 	
 	Graph getAvgBuildDuration(int projectId);
 
+	Graph getCommitsPerDay(int projectId);
+
 }
