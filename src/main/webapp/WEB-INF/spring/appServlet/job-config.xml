@@ -74,6 +74,17 @@
 		</batch:step>
 	</batch:job>
 	
+	<batch:job id="gitJob">
+		<batch:step id="gitCommitBatchStep">
+			<batch:tasklet>
+				<batch:chunk reader="gitCommitItemReader" writer="gitCommitItemWriter" commit-interval="1"/>
+			</batch:tasklet>
+			<batch:listeners>
+				<batch:listener ref="gitBatchListener"/>
+			</batch:listeners>
+			</batch:step>		
+	</batch:job>
+	
 	<beans:bean id="jiraBatchListener" class="org.springframework.batch.core.listener.ExecutionContextPromotionListener">
    	 <beans:property name="keys" value="projectDetails"/>
 	</beans:bean>
@@ -84,6 +95,10 @@
 	
 	<beans:bean id="buildBatchListener" class="org.springframework.batch.core.listener.ExecutionContextPromotionListener">
    	 <beans:property name="keys" value="buildManageDetails"/>
+	</beans:bean>
+	
+	<beans:bean id="gitBatchListener" class="org.springframework.batch.core.listener.ExecutionContextPromotionListener">
+   	 <beans:property name="keys" value="codeRepoManageDetails"/>
 	</beans:bean>
 	
 	<beans:bean id="itemReader" class="com.hcl.hawkeye.batch.jira.core.JiraDashBoardReader" />
@@ -100,6 +115,9 @@
 	
 	<beans:bean id="builditemReader" class="com.hcl.hawkeye.batch.build.core.BuildPlanReader"/>
 	<beans:bean id="builditemWriter" class="com.hcl.hawkeye.batch.build.core.BuildPlanWriter"/>
+	
+	<beans:bean id="gitCommitItemReader" class="com.hcl.hawkeye.batch.coderepo.core.GitCommitItemReader"/>
+	<beans:bean id="gitCommitItemWriter" class="com.hcl.hawkeye.batch.coderepo.core.GitCommitItemWriter"/>
 	
 	<beans:bean id="batchJobrunScheduler" class="com.hcl.hawkeye.batch.build.scheduler.JobScheduler" />
 	
