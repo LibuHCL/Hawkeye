@@ -73,16 +73,19 @@
 	
 	 <beans:bean id="runScheduler" class="com.hcl.hawkeye.batch.jira.service.impl.JiraBatchJobServiceImpl" />
 	 <beans:bean id="runQualityScheduler" class="com.hcl.hawkeye.batch.codequality.service.impl.CodeQualityBatchJobServiceImpl" />
-
+	<beans:bean id="gitJobrunScheduler" class="com.hcl.hawkeye.batch.coderepo.service.impl.GitBatchJobServiceImpl" />
 	<task:scheduled-tasks>
 		<task:scheduled ref="runScheduler" method="runJobScheduler" cron="0 0 0/3 1/1 * ? *"/>
 		<!-- "0 0 12 1/1 * ?" -->
-   </task:scheduled-tasks>
+   	</task:scheduled-tasks>
    
        <task:scheduled-tasks>
               <task:scheduled ref="runQualityScheduler" method="runJobScheduler" cron="0 0 0/4 1/1 * ? *"/>
-   </task:scheduled-tasks>
+   	</task:scheduled-tasks>
    
+   	<task:scheduled-tasks>
+		<task:scheduled ref="gitJobrunScheduler" method="runJobScheduler" cron="0 0 0/4 1/1 * ? *" />
+   	</task:scheduled-tasks> 
     
 	
 </beans:beans>
