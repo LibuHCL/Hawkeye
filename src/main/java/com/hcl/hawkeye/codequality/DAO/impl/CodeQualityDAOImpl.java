@@ -147,7 +147,7 @@ public class CodeQualityDAOImpl implements CodeQualityDAO {
 				new Object[] { resource.getId() });
 
 		for (Map<String, Object> row : toolIdList) {
-			toolId = (Integer) row.get("TOOLID");
+			toolId = ((Long) row.get("TOOLID")).intValue();
 			break;
 		}
 
@@ -161,7 +161,7 @@ public class CodeQualityDAOImpl implements CodeQualityDAO {
 				+ "  DEVOPS_SERVER_CONFIG DEVOPSCONFIG " + " WHERE " + " PROJTABMAP.TOOL_PROJECT_ID = ? "
 				+ "   AND PROJTABMAP.TOOL_ID = DEVOPSCONFIG.TOOLID " + " AND DEVOPSCONFIG.TOOL_NAME = 'JIRA') "
 				+ " AND (? BETWEEN SPRINTMETRICS.START_DATE AND SPRINTMETRICS.END_DATE); ";
-
+		System.out.println("resource date: "+ resource.getDate().substring(0, resource.getDate().indexOf("T") - 1));
 		List<Map<String, Object>> sprintNameList = jdbcTemplate.queryForList(fetchSprintNameQuery, new Object[] {
 				resource.getId(), resource.getDate().substring(0, resource.getDate().indexOf("T") - 1) });
 

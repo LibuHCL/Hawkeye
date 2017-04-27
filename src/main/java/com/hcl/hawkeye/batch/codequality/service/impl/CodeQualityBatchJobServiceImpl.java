@@ -15,6 +15,7 @@ import org.springframework.batch.core.repository.JobExecutionAlreadyRunningExcep
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.hcl.hawkeye.batch.codequality.service.CodeQualityBatchJobService;
@@ -31,7 +32,7 @@ public class CodeQualityBatchJobServiceImpl implements  CodeQualityBatchJobServi
 	Job codeQualityJob;
 	
 
-	//@Scheduled(cron="${jira.spring.job.cron.expression}")
+	@Scheduled(cron="${jira.spring.job.cron.expression}")
 	@Override
 	public void runJobScheduler() {
 		logger.info("Requested for batch process to get code quality ");

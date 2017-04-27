@@ -15,6 +15,7 @@ import org.springframework.batch.core.repository.JobExecutionAlreadyRunningExcep
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import com.hcl.hawkeye.batch.jira.service.JiraBatchJobService;
 
@@ -29,7 +30,7 @@ public class JiraBatchJobServiceImpl implements JiraBatchJobService{
 	Job jiraJob;
 	
 	@Override
-	//@Scheduled(cron="${jira.spring.job.cron.expression}")
+	@Scheduled(cron="${jira.spring.job.cron.expression}")
 	public void runJobScheduler() {
 		logger.info("Requested for batch process to get Jira data with Project Id ");
 		JobParameters jobParameters = new JobParametersBuilder().addString("date", new Date().toString()).toJobParameters();
