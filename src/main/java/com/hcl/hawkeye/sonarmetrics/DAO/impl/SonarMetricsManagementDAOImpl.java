@@ -19,7 +19,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-
 import com.hcl.hawkeye.sonarmetrics.exception.SonarMetricsDataRetrievalException;
 import com.hcl.hawkeye.sonarmetrics.DAO.SonarMetricsManagementDAO;
 import com.hcl.hawkeye.sonarmetrics.DO.Metrics;
@@ -43,18 +42,22 @@ public class SonarMetricsManagementDAOImpl implements SonarMetricsManagementDAO 
 	@Override
 	public List<Trackers> getSonarMetricsData(Integer projectId) {
 		logger.info("Request to get the Sonar Metrics at project level");
-		//SonarMetrics sonarMetrics = new SonarMetrics();
+		// SonarMetrics sonarMetrics = new SonarMetrics();
 		List<SonarMetrics> sonarMetrics = new ArrayList<SonarMetrics>();
 		List<Trackers> trackers = new ArrayList<Trackers>();
 		try {
-			//String fetchMetricsData = "SELECT * FROM CODE_QUALITY_TRACKER WHERE PROJECTID=? AND SPRINT IN(SELECT SPRINT FROM CODE_QUALITY_TRACKER WHERE PROJECTID=? ORDER BY CREATION_DATE DESC LIMIT 4)";
+			// String fetchMetricsData = "SELECT * FROM CODE_QUALITY_TRACKER
+			// WHERE PROJECTID=? AND SPRINT IN(SELECT SPRINT FROM
+			// CODE_QUALITY_TRACKER WHERE PROJECTID=? ORDER BY CREATION_DATE
+			// DESC LIMIT 4)";
 			String fetchMetricsData = "SELECT BLOCKER_ISSUES AS blockers,TECHNICAL_DEBT AS TechDebt,COMPLEXITY AS Complexity,DUPLICATED_LINES_DENSITY AS DuplicateLines,CRITICAL_ISSUES AS CriticalIssues,COMMENTED_LINES AS CommentedLines,SPRINT AS Sprint FROM CODE_QUALITY_TRACKER  WHERE  PROJECTID=?  ORDER BY CREATION_DATE ASC  LIMIT 4";
-			List<Map<String, Object>> resultList = jdbcTemplate.queryForList(fetchMetricsData,new Object[] { projectId});
-			if(resultList  != null && resultList.size() >0){
+			List<Map<String, Object>> resultList = jdbcTemplate.queryForList(fetchMetricsData,
+					new Object[] { projectId });
+			if (resultList != null && resultList.size() > 0) {
 				for (Map<String, Object> row : resultList) {
 					Metrics metrics = new Metrics();
-					Trackers tracker=new Trackers();
-					tracker.setSprint((String)row.get("Sprint"));
+					Trackers tracker = new Trackers();
+					tracker.setSprint((String) row.get("Sprint"));
 					tracker.setBlockers((Integer) row.get("blockers"));
 					tracker.setTechnicalDebt((Double) row.get("TechDebt"));
 					tracker.setComplexity((Double) row.get("Complexity"));
@@ -62,7 +65,7 @@ public class SonarMetricsManagementDAOImpl implements SonarMetricsManagementDAO 
 					tracker.setCritical((Integer) row.get("CriticalIssues"));
 					tracker.setCommentedLines((Integer) row.get("CommentedLines"));
 					trackers.add(tracker);
-		        } 
+				}
 			}
 		} catch (DataAccessException dae) {
 			Locale locale = new Locale("en", "IN");
@@ -81,19 +84,30 @@ public class SonarMetricsManagementDAOImpl implements SonarMetricsManagementDAO 
 			return sonarMetrics;
 		}
 	};
-	
+
 	@Override
 	public List<Trackers> getSonarMetricsJobData(Integer projectId) {
 		logger.info("Request to get the Sonar Metrics at project level");
 		List<Trackers> trackers = new ArrayList<Trackers>();
 		try {
-			//String fetchMetricsData = "SELECT * FROM CODE_QUALITY_TRACKER WHERE PROJECTID=? AND SPRINT IN(SELECT SPRINT FROM CODE_QUALITY_TRACKER WHERE PROJECTID=? ORDER BY CREATION_DATE DESC LIMIT 4)";
-			String fetchMetricsData = "SELECT BLOCKER_ISSUES AS blockers,TECHNICAL_DEBT AS TechDebt,COMPLEXITY AS Complexity,DUPLICATED_LINES_DENSITY AS DuplicateLines,CRITICAL_ISSUES AS CriticalIssues,COMMENTED_LINES AS CommentedLines,SPRINT AS Sprint FROM CODE_QUALITY  WHERE  PROJECTID=?  ORDER BY SCAN_DATE ASC  LIMIT 4";
-			List<Map<String, Object>> resultList = jdbcTemplate.queryForList(fetchMetricsData,new Object[] { projectId});
-			if(resultList  != null && resultList.size() >0){
+			// String fetchMetricsData = "SELECT * FROM CODE_QUALITY_TRACKER
+			// WHERE PROJECTID=? AND SPRINT IN(SELECT SPRINT FROM
+			// CODE_QUALITY_TRACKER WHERE PROJECTID=? ORDER BY CREATION_DATE
+			// DESC LIMIT 4)";
+			String fetchMetricsData = "SELECT BLOCKER_ISSUES AS blockers,TECHNICAL_DEBT AS TechDebt,COMPLEXITY AS "
+					+ "Complexity,DUPLICATED_LINES_DENSITY AS DuplicateLines,"
+					+ "CRITICAL_ISSUES AS CriticalIssues,COMMENTED_LINES AS CommentedLines,"
+					+ "SPRINT AS Sprint FROM CODE_QUALITY  WHERE  PROJECTID IN"
+					+ " (SELECT    TOOL_PROJECT_ID    FROM    PROJECT_TOOL_MAPPING PROJTABMAP,  "
+					+ " DEVOPS_SERVER_CONFIG DEVOPSCONFIG    WHERE    PROJTABMAP.PROJECT_ID = ? "
+					+ " AND PROJTABMAP.TOOL_ID = DEVOPSCONFIG.TOOLID    AND DEVOPSCONFIG.TOOL_NAME = 'SONAR')"
+					+ "  ORDER BY SCAN_DATE ASC  LIMIT 4";
+			List<Map<String, Object>> resultList = jdbcTemplate.queryForList(fetchMetricsData,
+					new Object[] { projectId });
+			if (resultList != null && resultList.size() > 0) {
 				for (Map<String, Object> row : resultList) {
-					Trackers tracker=new Trackers();
-					tracker.setSprint((String)row.get("Sprint"));
+					Trackers tracker = new Trackers();
+					tracker.setSprint((String) row.get("Sprint"));
 					tracker.setBlockers((Integer) row.get("blockers"));
 					tracker.setTechnicalDebt((Double) row.get("TechDebt"));
 					tracker.setComplexity((Double) row.get("Complexity"));
@@ -101,7 +115,7 @@ public class SonarMetricsManagementDAOImpl implements SonarMetricsManagementDAO 
 					tracker.setCritical((Integer) row.get("CriticalIssues"));
 					tracker.setCommentedLines((Integer) row.get("CommentedLines"));
 					trackers.add(tracker);
-		        } 
+				}
 			}
 		} catch (DataAccessException dae) {
 			Locale locale = new Locale("en", "IN");

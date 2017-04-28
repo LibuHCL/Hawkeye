@@ -75,12 +75,12 @@
 	 <beans:bean id="runQualityScheduler" class="com.hcl.hawkeye.batch.codequality.service.impl.CodeQualityBatchJobServiceImpl" />
 
 	<task:scheduled-tasks>
-		<task:scheduled ref="runScheduler" method="runJobScheduler" cron="0 0 0/3 1/1 * ? *"/>
-		<!-- "0 0 12 1/1 * ?" -->
+		<task:scheduled ref="runScheduler" method="runJobScheduler" cron="0 0 */3 ? * *"/>
+		<!-- "0 0 12 1/1 * ?" -->		
    </task:scheduled-tasks>
    
        <task:scheduled-tasks>
-              <task:scheduled ref="runQualityScheduler" method="runJobScheduler" cron="0 0 0/4 1/1 * ? *"/>
+              <task:scheduled ref="runQualityScheduler" method="runJobScheduler" cron="0 0 * ? * *"/>
    </task:scheduled-tasks>
    
     

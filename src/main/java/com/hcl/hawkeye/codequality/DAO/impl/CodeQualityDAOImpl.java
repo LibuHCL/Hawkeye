@@ -156,11 +156,16 @@ public class CodeQualityDAOImpl implements CodeQualityDAO {
 
 	private String getSprintName(Resource resource) {
 		String sprintName = null;
-		String fetchSprintNameQuery = " SELECT SPRINT_NAME FROM SPRINT_METRCIS_MANAGEMENT SPRINTMETRICS WHERE PROJECTID IN"
-				+ " (SELECT " + " PROJECT_ID " + " FROM " + " PROJECT_TOOL_MAPPING PROJTABMAP,  "
-				+ "  DEVOPS_SERVER_CONFIG DEVOPSCONFIG " + " WHERE " + " PROJTABMAP.TOOL_PROJECT_ID = ? "
-				+ "   AND PROJTABMAP.TOOL_ID = DEVOPSCONFIG.TOOLID " + " AND DEVOPSCONFIG.TOOL_NAME = 'JIRA') "
-				+ " AND (? BETWEEN SPRINTMETRICS.START_DATE AND SPRINTMETRICS.END_DATE); ";
+		String fetchSprintNameQuery = " SELECT SPRINT_NAME, DATE(SPRINTMETRICS.START_DATE), SPRINTMETRICS.END_DATE FROM SPRINT_METRCIS_MANAGEMENT SPRINTMETRICS WHERE PROJECTID IN " +
+				   " ( " +
+		                 " SELECT PROJTABMAP2.TOOL_PROJECT_ID " +
+		                  "  FROM    PROJECT_TOOL_MAPPING PROJTABMAP, "+ 
+		                   " PROJECT_TOOL_MAPPING PROJTABMAP2,DEVOPS_SERVER_CONFIG DEVOPSCONFIG "+    
+		                   " WHERE    PROJTABMAP.TOOL_PROJECT_ID = ? AND DEVOPSCONFIG.TOOL_NAME = 'JIRA' "+
+		                   " AND PROJTABMAP.PROJECT_ID = PROJTABMAP2.PROJECT_ID "+                   
+						   " AND PROJTABMAP2.TOOL_ID = DEVOPSCONFIG.TOOLID " +
+		                   " ) "+ 
+						 " AND (? BETWEEN DATE(SPRINTMETRICS.START_DATE) AND DATE(SPRINTMETRICS.END_DATE)); ";
 		System.out.println("resource date: "+ resource.getDate().substring(0, resource.getDate().indexOf("T") - 1));
 		List<Map<String, Object>> sprintNameList = jdbcTemplate.queryForList(fetchSprintNameQuery, new Object[] {
 				resource.getId(), resource.getDate().substring(0, resource.getDate().indexOf("T") - 1) });
