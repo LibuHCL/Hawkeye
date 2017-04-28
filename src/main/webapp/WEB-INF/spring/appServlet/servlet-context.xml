@@ -39,8 +39,8 @@
 	
 	<beans:bean id="dataSourceNew" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
 		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<beans:property name="url" value="jdbc:mysql://labs.hclets.com:33306/HawkEye_Schema" />
-		<!-- <beans:property name="url" value="jdbc:mysql://localhost:3306/HawkEye_Schema" /> -->
+		<!-- <beans:property name="url" value="jdbc:mysql://labs.hclets.com:33306/HawkEye_Schema" />  -->
+		 <beans:property name="url" value="jdbc:mysql://localhost:3306/HawkEye_Schema" />
 		<beans:property name="username" value="root" />
 		<beans:property name="password" value="Hcl123$" />
 		<beans:property name="initialSize" value="5" />
@@ -73,8 +73,9 @@
 	
 	 <beans:bean id="runScheduler" class="com.hcl.hawkeye.batch.jira.service.impl.JiraBatchJobServiceImpl" />
 	 <beans:bean id="runQualityScheduler" class="com.hcl.hawkeye.batch.codequality.service.impl.CodeQualityBatchJobServiceImpl" />
-
+	<beans:bean id="gitJobrunScheduler" class="com.hcl.hawkeye.batch.coderepo.service.impl.GitBatchJobServiceImpl" />
 	<task:scheduled-tasks>
+
 		<task:scheduled ref="runScheduler" method="runJobScheduler" cron="0 0 */3 ? * *"/>
 		<!-- "0 0 12 1/1 * ?" -->		
    </task:scheduled-tasks>
@@ -82,7 +83,7 @@
        <task:scheduled-tasks>
               <task:scheduled ref="runQualityScheduler" method="runJobScheduler" cron="0 0 * ? * *"/>
    </task:scheduled-tasks>
-   
+
     
 	
 </beans:beans>
