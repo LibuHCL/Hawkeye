@@ -74,6 +74,7 @@
 	 <beans:bean id="runScheduler" class="com.hcl.hawkeye.batch.jira.service.impl.JiraBatchJobServiceImpl" />
 	 <beans:bean id="runQualityScheduler" class="com.hcl.hawkeye.batch.codequality.service.impl.CodeQualityBatchJobServiceImpl" />
 	<beans:bean id="gitJobrunScheduler" class="com.hcl.hawkeye.batch.coderepo.service.impl.GitBatchJobServiceImpl" />
+	<beans:bean id="bambooJobrunScheduler" class="com.hcl.hawkeye.batch.build.scheduler.JobScheduler" />
 	<task:scheduled-tasks>
 
 		<task:scheduled ref="runScheduler" method="runJobScheduler" cron="0 0 */3 ? * *"/>
@@ -87,6 +88,10 @@
 	<task:scheduled-tasks>
 		<task:scheduled ref="gitJobrunScheduler" method="runJobScheduler" cron="0 0/5 * * * ?" />
    	</task:scheduled-tasks> 
+   	
+   	<task:scheduled-tasks>
+              <task:scheduled ref="bambooJobrunScheduler" method="run" cron="0 0 * ? * *"/>
+   </task:scheduled-tasks>
 
     
 	
