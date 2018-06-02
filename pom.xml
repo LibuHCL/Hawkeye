@@ -16,6 +16,9 @@
 		<spring.oxm.version>4.0.5.RELEASE</spring.oxm.version>
 		 <org.quartz.version>2.1.6</org.quartz.version>
 	</properties>
+	
+	 
+ 
 	 
 	<dependencies>
 		<!-- Spring -->
@@ -49,6 +52,12 @@
 			<artifactId>aspectjrt</artifactId>
 			<version>${org.aspectj-version}</version>
 		</dependency>
+		
+		<dependency>
+<groupId>com.google.code.gson</groupId>
+<artifactId>gson</artifactId>
+<version>2.2.4</version>
+</dependency>
 
 		<!-- Logging -->
 		<dependency>
